@@ -90,6 +90,12 @@
             padding: 20px;
             box-shadow: 0 5px 15px var(--shadow);
         }
+        .lessons-panel{
+            background-color: red;
+            height: 85vh!important ;
+            overflow: scroll;
+        }
+
 
         .progress-info {
             display: flex;
@@ -129,6 +135,7 @@
 
         /* Lessons Panel */
         .lessons-panel {
+          
             background: var(--card-bg);
             border-radius: 20px;
             padding: 25px;
@@ -560,27 +567,34 @@
         const lessons = [
             {
                 id: 1,
+                title: "Tổng quan về ngôn ngữ lập trình",
+                description: "Tổng quan về ngôn ngữ lập trình",
+                content: ` <a href="./ls1.html"><img style="width:100%" src="./img/tq.png" alt=""></a>`,
+                tags: []
+            },
+            {
+                id: 2,
                 title: "Giới thiệu JavaScript & Toán tử",
                 description: "Làm quen với JavaScript và các toán tử cơ bản",
                 content: ` <a href="./ls2.html"><img style="width:100%" src="./img/94baec10-bece-4e70-84d9-87a12e8f7b45.png" alt=""></a>`,
                 tags: []
             },
             {
-                id: 2,
+                id: 3,
                 title: "Câu lệnh điều kiện",
                 description: "Sử dụng if, else, switch để điều khiển luồng chương trình",
                 content: ` <a href="./ls3.html"><img style="width:100%" src="./img/conditional.png" alt=""></a>`,
                 tags: ["Cơ bản", "Nhập môn"]
             },
             {
-                id: 3,
+                id: 4,
                 title: "Vòng lặp",
                 description: "Sử dụng for, while, do...while để lặp lại các thao tác",
                 content: ` <a href="./ls4.html"><img style="width:100%" src="./img/loop.png" alt=""></a>`,
                 tags: ["Cơ bản", "Logic"]
             },
             {
-                id: 4,
+                id: 5,
                 title: "Thực hành",
                 description: "Bài tập thực hành vòng lặp và điều kiện",
                 content: `
@@ -632,28 +646,28 @@
                 tags: ["Thực hành", "Bài tập"]
             },
             {
-                id: 5,
+                id: 6,
                 title: "Mảng",
                 description: "Làm việc với mảng - cấu trúc dữ liệu quan trọng",
                 content: ` <a href="./LS5.html"><img style="width:100%" src="./img/array.png" alt=""></a>`,
                 tags: ["Cơ bản", "Dữ liệu"]
             },
             {
-                id: 6,
+                id: 7,
                 title: "Object",
                 description: "Làm việc với đối tượng trong JavaScript",
                 content: ` <a href="./LS6.html"><img style="width:100%" src="./img/object.png" alt=""></a>`,
                 tags: ["Cơ bản", "Dữ liệu"]
             },
             {
-                id: 7,
+                id: 8,
                 title: "Hàm",
                 description: "Tạo và sử dụng hàm trong JavaScript",
                 content: ` <a href="./ls8.html"><img style="width:100%" src="./img/fuction.png" alt=""></a>`,
                 tags: ["Quan trọng", "Chức năng"]
             },
             {
-                id: 8,
+                id: 9,
                 title: "Thực hành",
                 description: "Bài tập thực hành về hàm và đối tượng",
                 content: `
@@ -708,28 +722,28 @@
                 tags: ["Thực hành", "Ứng dụng"]
             },
             {
-                id: 9,
+                id: 10,
                 title: "DOM",
                 description: "Thao tác với DOM - Mô hình đối tượng tài liệu",
                 content: ` <a href="./ls9.html"><img style="width:100%" src="./img/Dom.png" alt=""></a>`,
                 tags: ["Quan trọng", "Frontend"]
             },
             {
-                id: 10,
+                id: 11,
                 title: "Sự kiện & Tương tác",
                 description: "Xử lý sự kiện và tạo tương tác người dùng",
                 content: ` <a href="./LS10.html"><img style="width:100%" src="./img/event.png" alt=""></a>`,
                 tags: ["Tương tác", "Frontend"]
             },
             {
-                id: 11,
+                id: 12,
                 title: "ES6",
                 description: "ECMASCRIPT 2015",
                 content: ` <a href="./LS12.html"><img style="width:100%" src="./img/es6.png" alt=""></a>`,
                 tags: ["Frontend"]
             },
             {
-                id: 12,
+                id: 13,
                 title: "Thực hành",
                 description: "Dự án tổng hợp cuối khóa",
                 content: `
