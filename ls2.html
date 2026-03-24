@@ -1,0 +1,2525 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BÀI 1: BIẾN, KIỂU DỮ LIỆU VÀ TOÁN TỬ TRONG JAVASCRIPT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --info: #17a2b8;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+
+        body {
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 80vh;
+        }
+
+        .sidebar {
+            height: 80vh;
+            overflow: scroll;
+            background: var(--light);
+            padding: 20px;
+            border-right: 3px solid var(--secondary);
+        }
+
+        .nav-list {
+            list-style: none;
+            position: sticky;
+            top: 20px;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--secondary);
+            color: white;
+            transform: translateX(5px);
+            border-color: var(--secondary);
+        }
+
+        .main-content {
+            padding: 30px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: var(--accent);
+            margin: 25px 0 15px;
+            padding-left: 15px;
+            border-left: 4px solid var(--accent);
+        }
+
+        h4 {
+            color: var(--info);
+            margin: 20px 0 10px;
+        }
+
+        h5 {
+            font-size: 15px;
+            color: rgb(231, 50, 50);
+            margin: 15px 0 8px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul,
+        ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            line-height: 1.4;
+            border: 2px solid #444;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn {
+            background: #555;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .keyword {
+            color: #569cd6;
+        }
+
+        .string {
+            color: #ce9178;
+        }
+
+        .comment {
+            color: #6a9955;
+        }
+
+        .number {
+            color: #b5cea8;
+        }
+
+        .class-name {
+            color: #4ec9b0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: var(--secondary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid var(--info);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .interactive-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #e9ecef;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 5px;
+        }
+
+        .btn-run {
+            background: var(--success);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background: white;
+            border-left: 4px solid var(--warning);
+            display: none;
+        }
+
+        .result.active {
+            display: block;
+        }
+
+        .result-content {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border: 1px solid #e9ecef;
+            white-space: pre-wrap;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+        }
+        #examplesHome h2{
+            border: none;
+        }
+        #examplesHome>div{
+            border-bottom: 2px solid green;
+        }
+        @media (max-width: 768px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-right: none;
+                border-bottom: 3px solid var(--secondary);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-code"></i>BÀI 1: BIẾN, KIỂU DỮ LIỆU VÀ TOÁN TỬ </h1>
+        </header>
+
+        <div class="content-wrapper">
+            <nav class="sidebar">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#intro" class="nav-link active"><i class="fas fa-home"></i> Giới
+                            thiệu</a></li>
+                    <li class="nav-item"><a href="#variables" class="nav-link"><i class="fas fa-cube"></i> Biến
+                            (Variables)</a></li>
+                    <li class="nav-item"><a href="#data-types" class="nav-link"><i class="fas fa-database"></i> Kiểu dữ
+                            liệu</a></li>
+                    <li class="nav-item"><a href="#operators" class="nav-link"><i class="fas fa-calculator"></i> Toán
+                            tử</a></li>
+                    <li class="nav-item"><a href="#examples" class="nav-link"><i class="fas fa-code"></i> Ví dụ thực
+                            hành</a></li>
+                    <li class="nav-item"><a href="#examplesHome" class="nav-link"><i class="fas fa-code"></i> Bài
+                            tập</a></li>
+                </ul>
+            </nav>
+
+            <main class="main-content">
+                <!-- PHẦN GIỚI THIỆU -->
+                <section id="intro" class="section active">
+                    <h2><i class="fas fa-home"></i> GIỚI THIỆU</h2>
+
+                    <h3>1.1 Tổng quan</h3>
+                    <p><strong>Trong JavaScript, biến (variables), kiểu dữ liệu (data types) và toán tử (operators) đóng
+                            vai trò quan trọng trong việc xây dựng và thực thi mã.</strong></p>
+
+                    <h4>Mục đích học tập:</h4>
+                    <ul>
+                        <li><strong>Hiểu và sử dụng biến:</strong> Cách khai báo, phạm vi và sử dụng biến trong
+                            JavaScript</li>
+                        <li><strong>Nắm vững kiểu dữ liệu:</strong> Các kiểu dữ liệu cơ bản và phức tạp trong JavaScript
+                        </li>
+                        <li><strong>Thành thạo toán tử:</strong> Sử dụng các toán tử để thao tác với dữ liệu</li>
+                        <li><strong>Thực hành ứng dụng:</strong> Áp dụng kiến thức vào các ví dụ thực tế</li>
+                    </ul>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Lưu ý quan trọng</h4>
+                        <p>JavaScript là ngôn ngữ lập trình động (dynamically typed), có nghĩa là kiểu dữ liệu của biến
+                            được xác định tại thời điểm chạy, không phải tại thời điểm biên dịch. Điều này mang lại sự
+                            linh hoạt nhưng cũng đòi hỏi cẩn thận khi làm việc với dữ liệu.</p>
+                    </div>
+                </section>
+
+                <!-- PHẦN BIẾN -->
+                <section id="variables" class="section">
+                    <h2><i class="fas fa-cube"></i> BIẾN (VARIABLES)</h2>
+
+                    <h3>1.1.1 Khái niệm và loại biến</h3>
+                    <p><strong>Định nghĩa:</strong> Biến được dùng để lưu trữ dữ liệu trong chương trình JavaScript.</p>
+
+                    <h4>Các loại biến trong JavaScript:</h4>
+                    <ul>
+                        <li><strong>var</strong> - Khai báo biến với phạm vi function (cũ)</li>
+                        <li><strong>let</strong> - Khai báo biến với phạm vi block (ES6+)</li>
+                        <li><strong>const</strong> - Khai báo hằng số với phạm vi block (ES6+)</li>
+                    </ul>
+
+                    <h4>1. var - Function Scope</h4>
+                    <p><strong>Phạm vi:</strong> var có phạm vi hoạt động là function-scope. Điều này có nghĩa là, khi
+                        bạn khai báo một biến bằng var bên trong một hàm, bạn không thể truy cập biến đó bên ngoài hàm.
+                    </p>
+                    <p><strong>Tái gán:</strong> Có thể tái gán giá trị mới cho biến.</p>
+                    <p><strong>Khởi tạo:</strong> Khi một biến được khai báo bằng var nhưng chưa được gán giá trị, giá
+                        trị của nó là undefined.</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ sử dụng var</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// Khai báo ở mức toàn cục</span><br>
+                        <span class="keyword">var</span> globalVar = <span class="string">"I am globally
+                            scoped"</span>;<br>
+                        <br>
+                        <span class="keyword">function</span> exampleVarFunction() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Khai báo ở mức function-scope</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">var</span> localVar = <span class="string">"I am
+                            function scoped"</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(globalVar); <span class="comment">// Output: "I am globally
+                            scoped"</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(localVar); <span class="comment">// Output: "I am function
+                            scoped"</span><br>
+                        }<br>
+                        <br>
+                        exampleVarFunction();<br>
+                        console.log(globalVar); <span class="comment">// Output: "I am globally scoped"</span><br>
+                        <span class="comment">// console.log(localVar); // Lỗi: localVar không được định nghĩa ở mức
+                            toàn cục</span>
+                    </div>
+
+                    <h4>2. let - Block Scope</h4>
+                    <p><strong>Phạm vi:</strong> let có phạm vi hoạt động là block-scope. Điều này có nghĩa là, nó chỉ
+                        có thể truy cập trong khối mã (bên trong {}) mà nó được khai báo.</p>
+                    <p><strong>Tái gán:</strong> Có thể tái gán giá trị mới cho biến.</p>
+                    <p><strong>Khởi tạo:</strong> Không tự động khởi tạo. Nếu truy cập biến let trước khi gán giá trị,
+                        sẽ nhận được lỗi.</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ sử dụng let</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> globalLet = <span class="string">"I can be accessed anywhere in
+                            this script"</span>;<br>
+                        <br>
+                        <span class="keyword">if</span> (<span class="keyword">true</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">let</span> blockLet = <span class="string">"I am
+                            block scoped"</span>; <span class="comment">// Khai báo trong một khối mã</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(globalLet); <span class="comment">// Output: "I can be
+                            accessed anywhere in this script"</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(blockLet); <span class="comment">// Output: "I am block
+                            scoped"</span><br>
+                        }<br>
+                        <br>
+                        console.log(globalLet); <span class="comment">// Output: "I can be accessed anywhere in this
+                            script"</span><br>
+                        <span class="comment">// console.log(blockLet); // Lỗi: blockLet không được định nghĩa bên ngoài
+                            khối mã của nó</span>
+                    </div>
+
+                    <h4>3. const - Hằng số</h4>
+                    <p><strong>Phạm vi:</strong> Giống như let, const cũng có phạm vi block-scope.</p>
+                    <p><strong>Tái gán:</strong> Không thể tái gán giá trị mới cho biến.</p>
+                    <p><strong>Khởi tạo:</strong> Phải gán giá trị cho biến khi khai báo.</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ sử dụng const</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> globalConst = <span class="string">"I am a constant value and
+                            cannot be changed"</span>;<br>
+                        <br>
+                        <span class="keyword">if</span> (<span class="keyword">true</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">const</span> blockConst = <span class="string">"I
+                            am also block scoped and unchangeable"</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(globalConst); <span class="comment">// Output: "I am a
+                            constant value and cannot be changed"</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(blockConst); <span class="comment">// Output: "I am also
+                            block scoped and unchangeable"</span><br>
+                        }<br>
+                        <br>
+                        console.log(globalConst); <span class="comment">// Output: "I am a constant value and cannot be
+                            changed"</span><br>
+                        <span class="comment">// console.log(blockConst); // Lỗi: blockConst không được định nghĩa bên
+                            ngoài khối mã của nó</span><br>
+                        <span class="comment">// globalConst = "Try to change"; // Lỗi: không thể gán giá trị mới cho
+                            biến const</span>
+                    </div>
+
+                    <div class="note">
+                        <h4><i class="fas fa-exclamation-circle"></i> Quy tắc đặt tên biến:</h4>
+                        <ul>
+                            <li>Tên biến cần bắt đầu bằng một chữ cái, dấu gạch dưới (_) hoặc dấu $</li>
+                            <li>Không được bắt đầu bằng số</li>
+                            <li>Tên biến phân biệt chữ hoa chữ thường</li>
+                            <li>Không sử dụng từ khóa của JavaScript làm tên biến</li>
+                            <li>Sử dụng camelCase cho tên biến (ví dụ: firstName, totalAmount)</li>
+                        </ul>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm với biến</h4>
+                        <div class="input-group">
+                            <label for="varType">Chọn loại biến:</label>
+                            <select id="varType">
+                                <option value="var">var - Function Scope</option>
+                                <option value="let">let - Block Scope</option>
+                                <option value="const">const - Hằng số</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="varName">Tên biến:</label>
+                            <input type="text" id="varName" value="myVariable" placeholder="Nhập tên biến">
+                        </div>
+                        <div class="input-group">
+                            <label for="varValue">Giá trị:</label>
+                            <input type="text" id="varValue" value="Hello World" placeholder="Nhập giá trị">
+                        </div>
+                        <button class="btn" onclick="testVariables()">
+                            <i class="fas fa-play"></i> Chạy thử nghiệm
+                        </button>
+                        <div class="result" id="varResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="varResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN KIỂU DỮ LIỆU -->
+                <!-- PHẦN KIỂU DỮ LIỆU -->
+                <section id="data-types" class="section">
+                    <h2><i class="fas fa-database"></i> KIỂU DỮ LIỆU (DATA TYPES)</h2>
+
+                    <h3>1.2 Khái niệm và phân loại</h3>
+                    <p><strong>Định nghĩa:</strong> Kiểu dữ liệu là một khái niệm cơ bản trong lập trình, chỉ ra loại
+                        hoặc đặc điểm của một giá trị hoặc biến.</p>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Tại sao cần kiểu dữ liệu?</h4>
+                        <ul>
+                            <li><strong>Phân loại giá trị:</strong> Giúp xác định và phân loại dữ liệu</li>
+                            <li><strong>Hiệu quả bộ nhớ:</strong> Mỗi kiểu dữ liệu sử dụng lượng bộ nhớ cụ thể</li>
+                            <li><strong>Kiểm tra loại:</strong> Đảm bảo tính đúng đắn của chương trình</li>
+                            <li><strong>Xác định hành vi:</strong> Các phép toán hoạt động khác nhau theo kiểu dữ liệu
+                            </li>
+                            <li><strong>Hỗ trợ lập trình:</strong> Giúp lập trình viên hiểu rõ loại giá trị biến đang
+                                lưu trữ</li>
+                        </ul>
+                    </div>
+
+                    <h3>1.2.1 Kiểu dữ liệu nguyên thủy (Primitive Types)</h3>
+
+                    <h4>1. Number - Kiểu số</h4>
+                    <p><strong>Định nghĩa:</strong> Đại diện cho số nguyên hoặc số thực.</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ cơ bản về Number</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> age = <span class="number">25</span>; <span class="comment">//
+                            một số nguyên</span><br>
+                        <span class="keyword">let</span> average = <span class="number">5.5</span>; <span
+                            class="comment">// một số thực</span><br>
+                        <span class="keyword">let</span> negative = <span class="number">-10</span>; <span
+                            class="comment">// số âm</span><br>
+                        <span class="keyword">let</span> hex = <span class="number">0xFF</span>; <span
+                            class="comment">// số hệ 16 (255)</span><br>
+                        <span class="keyword">let</span> octal = <span class="number">0o377</span>; <span
+                            class="comment">// số hệ 8 (255)</span><br>
+                        <span class="keyword">let</span> binary = <span class="number">0b11111111</span>; <span
+                            class="comment">// số hệ 2 (255)</span>
+                    </div>
+
+                    <h5>1.1 Phương thức toString()</h5>
+                    <p><strong>Mô tả:</strong> Chuyển đổi số thành chuỗi</p>
+                    <p><strong>Cú pháp:</strong> <code>number.toString([radix])</code></p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ toString()</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> num = <span class="number">123</span>;<br>
+                        console.log(num.toString()); <span class="comment">// "123"</span><br>
+                        console.log((<span class="number">255</span>).toString(<span class="number">16</span>)); <span
+                            class="comment">// "ff" - chuyển sang hệ 16</span><br>
+                        console.log((<span class="number">255</span>).toString(<span class="number">2</span>)); <span
+                            class="comment">// "11111111" - chuyển sang hệ 2</span><br>
+                        console.log((<span class="number">255</span>).toString(<span class="number">8</span>)); <span
+                            class="comment">// "377" - chuyển sang hệ 8</span>
+                    </div>
+
+                    <div class="info-box">
+                        <h5><i class="fas fa-info-circle"></i> Phân tích:</h5>
+                        <ul>
+                            <li>Tham số <code>radix</code> là tùy chọn (2-36), mặc định là 10</li>
+                            <li>Trả về chuỗi biểu diễn số trong hệ cơ số được chỉ định</li>
+                            <li>Có thể dùng với số thực và số nguyên</li>
+                        </ul>
+                    </div>
+
+                    <h5>1.2 Phương thức toFixed()</h5>
+                    <p><strong>Mô tả:</strong> Làm tròn số với số chữ số thập phân cố định</p>
+                    <p><strong>Cú pháp:</strong> <code>number.toFixed([digits])</code></p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ toFixed()</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> floatNum = <span class="number">1.23456</span>;<br>
+                        console.log(floatNum.toFixed(<span class="number">2</span>)); <span class="comment">//
+                            "1.23"</span><br>
+                        console.log(floatNum.toFixed(<span class="number">0</span>)); <span class="comment">//
+                            "1"</span><br>
+                        console.log(floatNum.toFixed(<span class="number">5</span>)); <span class="comment">//
+                            "1.23456"</span><br>
+                        <br>
+                        <span class="keyword">let</span> price = <span class="number">9.99</span>;<br>
+                        console.log(<span class="string">"$"</span> + price.toFixed(<span class="number">2</span>));
+                        <span class="comment">// "$9.99"</span>
+                    </div>
+
+                    <div class="info-box">
+                        <h5><i class="fas fa-info-circle"></i> Phân tích:</h5>
+                        <ul>
+                            <li>Tham số <code>digits</code> là số chữ số sau dấu thập phân (0-20)</li>
+                            <li>Trả về chuỗi, không phải số</li>
+                            <li>Tự động làm tròn theo quy tắc làm tròn số</li>
+                            <li>Dùng số âm sẽ báo lỗi</li>
+                        </ul>
+                    </div>
+
+                    <h5>1.3 Phương thức toPrecision()</h5>
+                    <p><strong>Mô tả:</strong> Định dạng số với độ chính xác cụ thể</p>
+                    <p><strong>Cú pháp:</strong> <code>number.toPrecision([precision])</code></p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ toPrecision()</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> num = <span class="number">123.456</span>;<br>
+                        console.log(num.toPrecision(<span class="number">5</span>)); <span class="comment">//
+                            "123.46"</span><br>
+                        console.log(num.toPrecision(<span class="number">2</span>)); <span class="comment">//
+                            "1.2e+2"</span><br>
+                        console.log(num.toPrecision(<span class="number">7</span>)); <span class="comment">//
+                            "123.4560"</span>
+                    </div>
+
+                    <div class="info-box">
+                        <h5><i class="fas fa-info-circle"></i> Phân tích:</h5>
+                        <ul>
+                            <li>Tham số <code>precision</code> là số chữ số có nghĩa (1-21)</li>
+                            <li>Trả về chuỗi biểu diễn số với độ chính xác được chỉ định</li>
+                            <li>Có thể trả về dạng khoa học nếu cần</li>
+                            <li>Khác với <code>toFixed()</code>: xác định tổng số chữ số có nghĩa</li>
+                        </ul>
+                    </div>
+
+                    <h5>1.4 Hàm Number()</h5>
+                    <p><strong>Mô tả:</strong> Ép kiểu giá trị về kiểu Number</p>
+                    <p><strong>Cú pháp:</strong> <code>Number(value)</code></p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ Number()</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> str1 = <span class="string">"123.45"</span>;<br>
+                        <span class="keyword">let</span> str2 = <span class="string">"123.45abc"</span>;<br>
+                        <span class="keyword">let</span> str3 = <span class="string">"abc"</span>;<br>
+                        <span class="keyword">let</span> str4 = <span class="string">""</span>;<br>
+                        <span class="keyword">let</span> bool = <span class="keyword">true</span>;<br>
+                        <br>
+                        console.log(<span class="class-name">Number</span>(str1)); <span class="comment">//
+                            123.45</span><br>
+                        console.log(<span class="class-name">Number</span>(str2)); <span class="comment">// NaN (Not a
+                            Number)</span><br>
+                        console.log(<span class="class-name">Number</span>(str3)); <span class="comment">//
+                            NaN</span><br>
+                        console.log(<span class="class-name">Number</span>(str4)); <span class="comment">// 0</span><br>
+                        console.log(<span class="class-name">Number</span>(bool)); <span class="comment">// 1 (true → 1,
+                            false → 0)</span><br>
+                        console.log(<span class="class-name">Number</span>(<span class="keyword">null</span>)); <span
+                            class="comment">// 0</span><br>
+                        console.log(<span class="class-name">Number</span>(<span class="keyword">undefined</span>));
+                        <span class="comment">// NaN</span>
+                    </div>
+
+                    <div class="info-box">
+                        <h5><i class="fas fa-info-circle"></i> Phân tích:</h5>
+                        <ul>
+                            <li>Chuyển đổi bất kỳ giá trị nào sang kiểu Number</li>
+                            <li>Trả về NaN nếu không thể chuyển đổi</li>
+                            <li>Chuỗi trống và null chuyển thành 0</li>
+                            <li>undefined chuyển thành NaN</li>
+                            <li>Boolean: true → 1, false → 0</li>
+                        </ul>
+                    </div>
+
+                    <h5>1.5 Hàm parseInt() và parseFloat()</h5>
+                    <p><strong>Mô tả:</strong> Phân tích chuỗi thành số nguyên hoặc số thực</p>
+                    <p><strong>Cú pháp:</strong> <code>parseInt(string, [radix])</code> |
+                        <code>parseFloat(string)</code>
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ parseInt() và parseFloat()</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// parseInt - Chuyển chuỗi thành số nguyên</span><br>
+                        console.log(<span class="class-name">parseInt</span>(<span class="string">"123"</span>)); <span
+                            class="comment">// 123</span><br>
+                        console.log(<span class="class-name">parseInt</span>(<span class="string">"123abc"</span>));
+                        <span class="comment">// 123</span><br>
+                        console.log(<span class="class-name">parseInt</span>(<span class="string">"abc123"</span>));
+                        <span class="comment">// NaN</span><br>
+                        console.log(<span class="class-name">parseInt</span>(<span class="string">"1010"</span>, <span
+                            class="number">2</span>)); <span class="comment">// 10 (chuyển từ hệ 2)</span><br>
+                        console.log(<span class="class-name">parseInt</span>(<span class="string">"FF"</span>, <span
+                            class="number">16</span>)); <span class="comment">// 255 (chuyển từ hệ 16)</span><br>
+                        <br>
+                        <span class="comment">// parseFloat - Chuyển chuỗi thành số thực</span><br>
+                        console.log(<span class="class-name">parseFloat</span>(<span class="string">"123.45"</span>));
+                        <span class="comment">// 123.45</span><br>
+                        console.log(<span class="class-name">parseFloat</span>(<span
+                            class="string">"123.45abc"</span>)); <span class="comment">// 123.45</span><br>
+                        console.log(<span class="class-name">parseFloat</span>(<span
+                            class="string">"abc123.45"</span>)); <span class="comment">// NaN</span>
+                    </div>
+
+                    <div class="info-box">
+                        <h5><i class="fas fa-info-circle"></i> Phân tích:</h5>
+                        <ul>
+                            <li><strong>parseInt()</strong>: Đọc chuỗi từ trái sang phải, dừng khi gặp ký tự không phải
+                                số</li>
+                            <li><strong>parseFloat()</strong>: Tương tự nhưng cho phép dấu thập phân và ký tự 'e' (khoa
+                                học)</li>
+                            <li>Cả hai trả về NaN nếu ký tự đầu tiên không phải số</li>
+                            <li><code>parseInt()</code> có thể nhận tham số radix (2-36) để chỉ định hệ cơ số</li>
+                        </ul>
+                    </div>
+
+                    <h5>1.6 Hàm isNaN() và isFinite()</h5>
+                    <p><strong>Mô tả:</strong> Kiểm tra giá trị số</p>
+                    <p><strong>Cú pháp:</strong> <code>isNaN(value)</code> | <code>isFinite(value)</code></p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ isNaN() và isFinite()</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// isNaN() - Kiểm tra xem có phải là NaN không</span><br>
+                        console.log(<span class="class-name">isNaN</span>(<span class="number">123</span>)); <span
+                            class="comment">// false</span><br>
+                        console.log(<span class="class-name">isNaN</span>(<span class="string">"123"</span>)); <span
+                            class="comment">// false (chuyển đổi được)</span><br>
+                        console.log(<span class="class-name">isNaN</span>(<span class="string">"abc"</span>)); <span
+                            class="comment">// true</span><br>
+                        console.log(<span class="class-name">isNaN</span>(<span class="keyword">NaN</span>)); <span
+                            class="comment">// true</span><br>
+                        <br>
+                        <span class="comment">// isFinite() - Kiểm tra xem có phải số hữu hạn không</span><br>
+                        console.log(<span class="class-name">isFinite</span>(<span class="number">123</span>)); <span
+                            class="comment">// true</span><br>
+                        console.log(<span class="class-name">isFinite</span>(<span class="string">"123"</span>)); <span
+                            class="comment">// true</span><br>
+                        console.log(<span class="class-name">isFinite</span>(<span class="class-name">Infinity</span>));
+                        <span class="comment">// false</span><br>
+                        console.log(<span class="class-name">isFinite</span>(<span class="string">"abc"</span>)); <span
+                            class="comment">// false</span>
+                    </div>
+
+                    <div class="info-box">
+                        <h5><i class="fas fa-info-circle"></i> Phân tích:</h5>
+                        <ul>
+                            <li><strong>isNaN()</strong>: Kiểm tra xem giá trị có phải NaN (sau khi chuyển đổi sang số)
+                            </li>
+                            <li><strong>isFinite()</strong>: Kiểm tra xem giá trị có phải số hữu hạn (không phải
+                                Infinity/-Infinity/NaN)</li>
+                            <li><code>Number.isNaN()</code> và <code>Number.isFinite()</code> là phiên bản nghiêm ngặt
+                                hơn (không tự chuyển đổi kiểu)</li>
+                            <li><code>isFinite(null)</code> trả về true (vì null chuyển thành 0)</li>
+                        </ul>
+                    </div>
+
+                    <h4>2. String - Kiểu chuỗi</h4>
+                    <p><strong>Định nghĩa:</strong> Đại diện cho chuỗi ký tự.</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ cơ bản về String</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> name = <span class="string">"John Doe"</span>; <span
+                            class="comment">// sử dụng dấu nháy kép</span><br>
+                        <span class="keyword">let</span> greeting = <span class="string">'Hello'</span>; <span
+                            class="comment">// sử dụng dấu nháy đơn</span><br>
+                        <span class="keyword">let</span> templateStr = <span class="string">`My name is ${name}`</span>;
+                        <span class="comment">// template string (ES6)</span><br>
+                        <span class="keyword">let</span> multiLine = <span class="string">`Line 1<br>
+                            Line 2<br>
+                            Line 3`</span>; <span class="comment">// chuỗi nhiều dòng</span>
+                    </div>
+
+                    <h5>2.1 Phương thức charAt() và charCodeAt()</h5>
+                    <p><strong>Mô tả:</strong> Truy cập ký tự trong chuỗi</p>
+                    <p><strong>Cú pháp:</strong> <code>string.charAt(index)</code> |
+                        <code>string.charCodeAt(index)</code>
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ charAt() và charCodeAt()</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> str = <span class="string">"Hello"</span>;<br>
+                        <br>
+                        <span class="comment">// charAt() - Lấy ký tự tại vị trí</span><br>
+                        console.log(str.charAt(<span class="number">0</span>)); <span class="comment">// "H"</span><br>
+                        console.log(str.charAt(<span class="number">4</span>)); <span class="comment">// "o"</span><br>
+                        console.log(str.charAt(<span class="number">10</span>)); <span class="comment">// "" (chuỗi rỗng
+                            nếu vượt độ dài)</span><br>
+                        <br>
+                        <span class="comment">// charCodeAt() - Mã ASCII của ký tự</span><br>
+                        console.log(str.charCodeAt(<span class="number">0</span>)); <span class="comment">// 72 (mã
+                            'H')</span><br>
+                        console.log(str.charCodeAt(<span class="number">1</span>)); <span class="comment">// 101 (mã
+                            'e')</span><br>
+                        <br>
+                        <span class="comment">// Cách viết hiện đại (ES5+)</span><br>
+                        console.log(str[<span class="number">0</span>]); <span class="comment">// "H"</span><br>
+                        console.log(str[<span class="number">4</span>]); <span class="comment">// "o"</span>
+                    </div>
+
+                    <div class="info-box">
+                        <h5><i class="fas fa-info-circle"></i> Phân tích:</h5>
+                        <ul>
+                            <li><strong>charAt()</strong>: Trả về ký tự tại vị trí chỉ định</li>
+                            <li><strong>charCodeAt()</strong>: Trả về mã Unicode của ký tự tại vị trí chỉ định</li>
+                            <li>Chỉ số bắt đầu từ 0 (0 là ký tự đầu tiên)</li>
+                            <li>Nếu chỉ số vượt quá độ dài chuỗi, <code>charAt()</code> trả về chuỗi rỗng,
+                                <code>charCodeAt()</code> trả về NaN
+                            </li>
+                            <li>ES5+ có thể dùng cú pháp <code>string[index]</code> tương tự <code>charAt()</code></li>
+                        </ul>
+                    </div>
+
+                    <h5>2.2 Phương thức indexOf() và lastIndexOf()</h5>
+                    <p><strong>Mô tả:</strong> Tìm vị trí của chuỗi con</p>
+                    <p><strong>Cú pháp:</strong> <code>string.indexOf(searchValue, [fromIndex])</code> |
+                        <code>string.lastIndexOf(searchValue, [fromIndex])</code>
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ indexOf() và lastIndexOf()</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> str = <span class="string">"Hello World, welcome to the
+                            World"</span>;<br>
+                        <br>
+                        <span class="comment">// indexOf() - Tìm từ đầu chuỗi</span><br>
+                        console.log(str.indexOf(<span class="string">"World"</span>)); <span class="comment">//
+                            6</span><br>
+                        console.log(str.indexOf(<span class="string">"world"</span>)); <span class="comment">// -1 (phân
+                            biệt hoa thường)</span><br>
+                        console.log(str.indexOf(<span class="string">"o"</span>)); <span class="comment">// 4</span><br>
+                        console.log(str.indexOf(<span class="string">"o"</span>, <span class="number">5</span>)); <span
+                            class="comment">// 7 (tìm từ vị trí 5)</span><br>
+                        <br>
+                        <span class="comment">// lastIndexOf() - Tìm từ cuối chuỗi</span><br>
+                        console.log(str.lastIndexOf(<span class="string">"World"</span>)); <span class="comment">//
+                            28</span><br>
+                        console.log(str.lastIndexOf(<span class="string">"o"</span>)); <span class="comment">//
+                            29</span><br>
+                        console.log(str.lastIndexOf(<span class="string">"o"</span>, <span class="number">25</span>));
+                        <span class="comment">// 23</span><br>
+                        <br>
+                        <span class="comment">// Kiểm tra sự tồn tại</span><br>
+                        <span class="keyword">if</span> (str.indexOf(<span class="string">"World"</span>) !== -<span
+                            class="number">1</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Tìm thấy 'World'"</span>);<br>
+                        }
+                    </div>
+
+                    <div class="info-box">
+                        <h5><i class="fas fa-info-circle"></i> Phân tích:</h5>
+                        <ul>
+                            <li><strong>indexOf()</strong>: Trả về vị trí đầu tiên tìm thấy chuỗi con</li>
+                            <li><strong>lastIndexOf()</strong>: Trả về vị trí cuối cùng tìm thấy chuỗi con</li>
+                            <li>Trả về -1 nếu không tìm thấy</li>
+                            <li>Tham số thứ hai (fromIndex) là vị trí bắt đầu tìm kiếm</li>
+                            <li>Phân biệt chữ hoa chữ thường</li>
+                            <li>Có thể dùng để kiểm tra sự tồn tại của chuỗi con</li>
+                        </ul>
+                    </div>
+
+                    <h5>2.3 Phương thức includes(), startsWith(), endsWith()</h5>
+                    <p><strong>Mô tả:</strong> Kiểm tra chuỗi con (ES6)</p>
+                    <p><strong>Cú pháp:</strong> <code>string.includes(searchString, [position])</code> |
+                        <code>string.startsWith(searchString, [position])</code> |
+                        <code>string.endsWith(searchString, [length])</code>
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ includes(), startsWith(), endsWith()</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> str = <span class="string">"Hello World"</span>;<br>
+                        <br>
+                        <span class="comment">// includes() - Kiểm tra có chứa chuỗi con không</span><br>
+                        console.log(str.includes(<span class="string">"World"</span>)); <span class="comment">//
+                            true</span><br>
+                        console.log(str.includes(<span class="string">"world"</span>)); <span class="comment">// false
+                            (phân biệt hoa thường)</span><br>
+                        console.log(str.includes(<span class="string">"o W"</span>)); <span class="comment">//
+                            true</span><br>
+                        console.log(str.includes(<span class="string">"Hello"</span>, <span class="number">1</span>));
+                        <span class="comment">// false (tìm từ vị trí 1)</span><br>
+                        <br>
+                        <span class="comment">// startsWith() - Kiểm tra bắt đầu bằng chuỗi con</span><br>
+                        console.log(str.startsWith(<span class="string">"Hello"</span>)); <span class="comment">//
+                            true</span><br>
+                        console.log(str.startsWith(<span class="string">"World"</span>)); <span class="comment">//
+                            false</span><br>
+                        console.log(str.startsWith(<span class="string">"World"</span>, <span class="number">6</span>));
+                        <span class="comment">// true (từ vị trí 6)</span><br>
+                        <br>
+                        <span class="comment">// endsWith() - Kiểm tra kết thúc bằng chuỗi con</span><br>
+                        console.log(str.endsWith(<span class="string">"World"</span>)); <span class="comment">//
+                            true</span><br>
+                        console.log(str.endsWith(<span class="string">"Hello"</span>)); <span class="comment">//
+                            false</span><br>
+                        console.log(str.endsWith(<span class="string">"Hello"</span>, <span class="number">5</span>));
+                        <span class="comment">// true (chỉ xét 5 ký tự đầu)</span>
+                    </div>
+
+                    <div class="info-box">
+                        <h5><i class="fas fa-info-circle"></i> Phân tích:</h5>
+                        <ul>
+                            <li><strong>includes()</strong>: Trả về true nếu chuỗi chứa chuỗi con</li>
+                            <li><strong>startsWith()</strong>: Trả về true nếu chuỗi bắt đầu bằng chuỗi con</li>
+                            <li><strong>endsWith()</strong>: Trả về true nếu chuỗi kết thúc bằng chuỗi con</li>
+                            <li>Trả về boolean (true/false), không trả về vị trí</li>
+                            <li>Tham số thứ hai cho phép chỉ định vị trí bắt đầu/độ dài kiểm tra</li>
+                            <li>Phân biệt chữ hoa chữ thường</li>
+                        </ul>
+                    </div>
+
+                    <h5>2.4 Phương thức slice(), substring(), substr()</h5>
+                    <p><strong>Mô tả:</strong> Cắt chuỗi con từ chuỗi</p>
+                    <p><strong>Cú pháp:</strong> <code>string.slice(start, [end])</code> |
+                        <code>string.substring(start, [end])</code> | <code>string.substr(start, [length])</code>
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ slice(), substring(), substr()</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> str = <span class="string">"Hello World"</span>;<br>
+                        <br>
+                        <span class="comment">// slice() - Cắt chuỗi theo vị trí (nhận số âm)</span><br>
+                        console.log(str.slice(<span class="number">0</span>, <span class="number">5</span>)); <span
+                            class="comment">// "Hello"</span><br>
+                        console.log(str.slice(<span class="number">6</span>)); <span class="comment">// "World" (từ vị
+                            trí 6 đến hết)</span><br>
+                        console.log(str.slice(-<span class="number">5</span>)); <span class="comment">// "World" (5 ký
+                            tự từ cuối)</span><br>
+                        console.log(str.slice(<span class="number">6</span>, -<span class="number">1</span>)); <span
+                            class="comment">// "Worl" (từ 6 đến ký tự cuối trừ 1)</span><br>
+                        <br>
+                        <span class="comment">// substring() - Tương tự slice nhưng không nhận số âm</span><br>
+                        console.log(str.substring(<span class="number">0</span>, <span class="number">5</span>)); <span
+                            class="comment">// "Hello"</span><br>
+                        console.log(str.substring(<span class="number">6</span>)); <span class="comment">//
+                            "World"</span><br>
+                        console.log(str.substring(<span class="number">6</span>, <span class="number">11</span>)); <span
+                            class="comment">// "World"</span><br>
+                        console.log(str.substring(<span class="number">11</span>, <span class="number">6</span>)); <span
+                            class="comment">// "World" (tự động đổi chỗ)</span><br>
+                        <br>
+                        <span class="comment">// substr() - Cắt từ vị trí với độ dài (cũ, không nên dùng)</span><br>
+                        console.log(str.substr(<span class="number">6</span>, <span class="number">5</span>)); <span
+                            class="comment">// "World" (từ vị trí 6, lấy 5 ký tự)</span><br>
+                        console.log(str.substr(-<span class="number">5</span>, <span class="number">5</span>)); <span
+                            class="comment">// "World" (5 ký tự từ cuối)</span>
+                    </div>
+
+                    <div class="info-box">
+                        <h5><i class="fas fa-info-circle"></i> Phân tích:</h5>
+                        <ul>
+                            <li><strong>slice()</strong>: Linh hoạt nhất, hỗ trợ số âm (đếm từ cuối)</li>
+                            <li><strong>substring()</strong>: Không hỗ trợ số âm, tự động đổi chỗ nếu start > end</li>
+                            <li><strong>substr()</strong>: Dùng độ dài thay vì vị trí kết thúc (không nên dùng nữa)</li>
+                            <li>Chỉ số bắt đầu từ 0</li>
+                            <li>Kết quả không bao gồm ký tự tại vị trí end</li>
+                            <li>Nên dùng <code>slice()</code> cho hầu hết trường hợp</li>
+                        </ul>
+                    </div>
+
+                    <h5>2.5 Phương thức toUpperCase() và toLowerCase()</h5>
+                    <p><strong>Mô tả:</strong> Chuyển đổi chữ hoa/chữ thường</p>
+                    <p><strong>Cú pháp:</strong> <code>string.toUpperCase()</code> | <code>string.toLowerCase()</code>
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ toUpperCase() và toLowerCase()</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> str = <span class="string">"Hello World"</span>;<br>
+                        <br>
+                        <span class="comment">// toUpperCase() - Chuyển thành chữ hoa</span><br>
+                        console.log(str.toUpperCase()); <span class="comment">// "HELLO WORLD"</span><br>
+                        console.log(<span class="string">"héllo"</span>.toUpperCase()); <span class="comment">// "HÉLLO"
+                            (hỗ trợ Unicode)</span><br>
+                        <br>
+                        <span class="comment">// toLowerCase() - Chuyển thành chữ thường</span><br>
+                        console.log(str.toLowerCase()); <span class="comment">// "hello world"</span><br>
+                        console.log(<span class="string">"HÉLLO"</span>.toLowerCase()); <span class="comment">//
+                            "héllo"</span><br>
+                        <br>
+                        <span class="comment">// Ứng dụng: So sánh không phân biệt hoa thường</span><br>
+                        <span class="keyword">let</span> input = <span class="string">"YES"</span>;<br>
+                        <span class="keyword">if</span> (input.toLowerCase() === <span class="string">"yes"</span>)
+                        {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Người dùng đồng ý"</span>);<br>
+                        }
+                    </div>
+
+                    <div class="info-box">
+                        <h5><i class="fas fa-info-circle"></i> Phân tích:</h5>
+                        <ul>
+                            <li><strong>toUpperCase()</strong>: Chuyển tất cả ký tự thành chữ hoa</li>
+                            <li><strong>toLowerCase()</strong>: Chuyển tất cả ký tự thành chữ thường</li>
+                            <li>Trả về chuỗi mới, không thay đổi chuỗi gốc</li>
+                            <li>Hỗ trợ Unicode/đa ngôn ngữ</li>
+                            <li>Thường dùng để chuẩn hóa dữ liệu nhập hoặc so sánh không phân biệt hoa thường</li>
+                            <li>Không ảnh hưởng đến ký tự không phải chữ cái</li>
+                        </ul>
+                    </div>
+
+                    <h5>2.6 Phương thức trim(), trimStart(), trimEnd()</h5>
+                    <p><strong>Mô tả:</strong> Xóa khoảng trắng ở đầu/cuối chuỗi</p>
+                    <p><strong>Cú pháp:</strong> <code>string.trim()</code> | <code>string.trimStart()</code> |
+                        <code>string.trimEnd()</code>
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ trim(), trimStart(), trimEnd()</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> spaced = <span class="string">" Hello World "</span>;<br>
+                        <span class="keyword">let</span> tabString = <span class="string">"\tHello\n"</span>;<br>
+                        <br>
+                        <span class="comment">// trim() - Xóa khoảng trắng cả đầu và cuối</span><br>
+                        console.log(<span class="string">"'"</span> + spaced.trim() + <span class="string">"'"</span>);
+                        <span class="comment">// 'Hello World'</span><br>
+                        console.log(<span class="string">"'"</span> + tabString.trim() + <span
+                            class="string">"'"</span>); <span class="comment">// 'Hello'</span><br>
+                        <br>
+                        <span class="comment">// trimStart() (hoặc trimLeft()) - Xóa khoảng trắng đầu</span><br>
+                        console.log(<span class="string">"'"</span> + spaced.trimStart() + <span
+                            class="string">"'"</span>); <span class="comment">// 'Hello World '</span><br>
+                        <br>
+                        <span class="comment">// trimEnd() (hoặc trimRight()) - Xóa khoảng trắng cuối</span><br>
+                        console.log(<span class="string">"'"</span> + spaced.trimEnd() + <span
+                            class="string">"'"</span>); <span class="comment">// ' Hello World'</span><br>
+                        <br>
+                        <span class="comment">// Ứng dụng: Xử lý input người dùng</span><br>
+                        <span class="keyword">let</span> userInput = <span class="string">" john@example.com
+                            "</span>;<br>
+                        <span class="keyword">let</span> cleanedInput = userInput.trim();<br>
+                        console.log(<span class="string">`Email: ${cleanedInput}`</span>); <span class="comment">//
+                            "Email: john@example.com"</span>
+                    </div>
+
+                    <div class="info-box">
+                        <h5><i class="fas fa-info-circle"></i> Phân tích:</h5>
+                        <ul>
+                            <li><strong>trim()</strong>: Xóa khoảng trắng cả đầu và cuối chuỗi</li>
+                            <li><strong>trimStart()/trimLeft()</strong>: Xóa khoảng trắng ở đầu chuỗi</li>
+                            <li><strong>trimEnd()/trimRight()</strong>: Xóa khoảng trắng ở cuối chuỗi</li>
+                            <li>Khoảng trắng bao gồm: space, tab, newline, và các ký tự whitespace Unicode</li>
+                            <li>Trả về chuỗi mới, không thay đổi chuỗi gốc</li>
+                            <li>Rất quan trọng khi xử lý input người dùng</li>
+                            <li><code>trimLeft()</code> và <code>trimRight()</code> là tên cũ, nên dùng
+                                <code>trimStart()</code> và <code>trimEnd()</code>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <h5>2.7 Phương thức padStart() và padEnd()</h5>
+                    <p><strong>Mô tả:</strong> Thêm ký tự vào đầu/cuối chuỗi cho đủ độ dài (ES2017)</p>
+                    <p><strong>Cú pháp:</strong> <code>string.padStart(targetLength, [padString])</code> |
+                        <code>string.padEnd(targetLength, [padString])</code>
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ padStart() và padEnd()</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// padStart() - Thêm vào đầu chuỗi</span><br>
+                        console.log(<span class="string">"5"</span>.padStart(<span class="number">3</span>, <span
+                            class="string">"0"</span>)); <span class="comment">// "005"</span><br>
+                        console.log(<span class="string">"123"</span>.padStart(<span class="number">5</span>, <span
+                            class="string">"0"</span>)); <span class="comment">// "00123"</span><br>
+                        console.log(<span class="string">"abc"</span>.padStart(<span class="number">6</span>, <span
+                            class="string">"-"</span>)); <span class="comment">// "---abc"</span><br>
+                        console.log(<span class="string">"hello"</span>.padStart(<span class="number">3</span>, <span
+                            class="string">"*"</span>)); <span class="comment">// "hello" (độ dài đã đủ)</span><br>
+                        <br>
+                        <span class="comment">// padEnd() - Thêm vào cuối chuỗi</span><br>
+                        console.log(<span class="string">"5"</span>.padEnd(<span class="number">3</span>, <span
+                            class="string">"0"</span>)); <span class="comment">// "500"</span><br>
+                        console.log(<span class="string">"Hello"</span>.padEnd(<span class="number">10</span>, <span
+                            class="string">"!"</span>)); <span class="comment">// "Hello!!!!!"</span><br>
+                        console.log(<span class="string">"abc"</span>.padEnd(<span class="number">5</span>, <span
+                            class="string">"123"</span>)); <span class="comment">// "abc12"</span><br>
+                        <br>
+                        <span class="comment">// Ứng dụng: Định dạng số và văn bản</span><br>
+                        <span class="keyword">let</span> numbers = [<span class="number">1</span>, <span
+                            class="number">12</span>, <span class="number">123</span>, <span
+                            class="number">1234</span>];<br>
+                        numbers.forEach(num =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(num.toString().padStart(<span class="number">6</span>, <span
+                            class="string">" "</span>));<br>
+                        });<br>
+                        <span class="comment">// Kết quả:</span><br>
+                        <span class="comment">// " 1"</span><br>
+                        <span class="comment">// " 12"</span><br>
+                        <span class="comment">// " 123"</span><br>
+                        <span class="comment">// " 1234"</span>
+                    </div>
+
+                    <div class="info-box">
+                        <h5><i class="fas fa-info-circle"></i> Phân tích:</h5>
+                        <ul>
+                            <li><strong>padStart()</strong>: Thêm ký tự vào đầu cho đến khi đạt độ dài target</li>
+                            <li><strong>padEnd()</strong>: Thêm ký tự vào cuối cho đến khi đạt độ dài target</li>
+                            <li><code>targetLength</code>: Độ dài chuỗi mong muốn sau khi pad</li>
+                            <li><code>padString</code>: Chuỗi dùng để pad (mặc định là space)</li>
+                            <li>Nếu chuỗi đã dài hơn targetLength, trả về chuỗi gốc</li>
+                            <li>padString sẽ được lặp lại nếu cần</li>
+                            <li>Rất hữu ích để định dạng hiển thị</li>
+                        </ul>
+                    </div>
+
+                    <h5>2.8 Phương thức split()</h5>
+                    <p><strong>Mô tả:</strong> Chia chuỗi thành mảng các chuỗi con</p>
+                    <p><strong>Cú pháp:</strong> <code>string.split([separator], [limit])</code></p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ split()</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> str = <span
+                            class="string">"apple,banana,orange,grape"</span>;<br>
+                        <br>
+                        <span class="comment">// Chia bằng dấu phẩy</span><br>
+                        console.log(str.split(<span class="string">","</span>));<br>
+                        <span class="comment">// Kết quả: ["apple", "banana", "orange", "grape"]</span><br>
+                        <br>
+                        <span class="comment">// Giới hạn số phần tử</span><br>
+                        console.log(str.split(<span class="string">","</span>, <span class="number">2</span>));<br>
+                        <span class="comment">// Kết quả: ["apple", "banana"]</span><br>
+                        <br>
+                        <span class="comment">// Chia bằng regex</span><br>
+                        <span class="keyword">let</span> sentence = <span class="string">"Hello World! How are
+                            you?"</span>;<br>
+                        console.log(sentence.split(/\s+/));<br>
+                        <span class="comment">// Kết quả: ["Hello", "World!", "How", "are", "you?"]</span><br>
+                        <br>
+                        <span class="comment">// Chia từng ký tự</span><br>
+                        console.log(<span class="string">"Hello"</span>.split(<span class="string">""</span>));<br>
+                        <span class="comment">// Kết quả: ["H", "e", "l", "l", "o"]</span><br>
+                        <br>
+                        <span class="comment">// Ứng dụng: Tách tên từ full name</span><br>
+                        <span class="keyword">let</span> fullName = <span class="string">"Nguyen Van A"</span>;<br>
+                        <span class="keyword">let</span> nameParts = fullName.split(<span class="string">"
+                            "</span>);<br>
+                        console.log(<span class="string">`Họ: ${nameParts[0]}`</span>); <span class="comment">// "Họ:
+                            Nguyen"</span><br>
+                        console.log(<span class="string">`Tên đệm: ${nameParts[1]}`</span>); <span class="comment">//
+                            "Tên đệm: Van"</span><br>
+                        console.log(<span class="string">`Tên: ${nameParts[2]}`</span>); <span class="comment">// "Tên:
+                            A"</span>
+                    </div>
+
+                    <div class="info-box">
+                        <h5><i class="fas fa-info-circle"></i> Phân tích:</h5>
+                        <ul>
+                            <li><code>separator</code>: Chuỗi hoặc regex dùng để chia (nếu bỏ trống, trả về mảng chứa
+                                toàn bộ chuỗi)</li>
+                            <li><code>limit</code>: Giới hạn số phần tử trong mảng kết quả</li>
+                            <li>Trả về mảng các chuỗi con</li>
+                            <li>Chuỗi separator không được bao gồm trong kết quả</li>
+                            <li>Nếu separator là chuỗi rỗng, chia thành từng ký tự</li>
+                            <li>Có thể kết hợp với <code>join()</code> để thay thế chuỗi</li>
+                            <li>Rất hữu ích để phân tích CSV, log files, v.v.</li>
+                        </ul>
+                    </div>
+
+                    <h5>2.9 Phương thức replace() và replaceAll()</h5>
+                    <p><strong>Mô tả:</strong> Thay thế chuỗi con trong chuỗi</p>
+                    <p><strong>Cú pháp:</strong> <code>string.replace(searchValue, replaceValue)</code> |
+                        <code>string.replaceAll(searchValue, replaceValue)</code>
+                    </p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ replace() và replaceAll()</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> str = <span class="string">"Hello World! World is
+                            beautiful."</span>;<br>
+                        <br>
+                        <span class="comment">// replace() - Thay thế lần đầu tiên</span><br>
+                        console.log(str.replace(<span class="string">"World"</span>, <span
+                            class="string">"Universe"</span>));<br>
+                        <span class="comment">// Kết quả: "Hello Universe! World is beautiful."</span><br>
+                        <br>
+                        <span class="comment">// replace() với regex flag g (toàn cục)</span><br>
+                        console.log(str.replace(/World/g, <span class="string">"Universe"</span>));<br>
+                        <span class="comment">// Kết quả: "Hello Universe! Universe is beautiful."</span><br>
+                        <br>
+                        <span class="comment">// replaceAll() - Thay thế tất cả (ES2021)</span><br>
+                        console.log(str.replaceAll(<span class="string">"World"</span>, <span
+                            class="string">"Universe"</span>));<br>
+                        <span class="comment">// Kết quả: "Hello Universe! Universe is beautiful."</span><br>
+                        <br>
+                        <span class="comment">// Sử dụng hàm callback</span><br>
+                        console.log(<span class="string">"hello world"</span>.replace(/\w+/g, (match) =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> match.charAt(<span
+                            class="number">0</span>).toUpperCase() + match.slice(<span class="number">1</span>);<br>
+                        }));<br>
+                        <span class="comment">// Kết quả: "Hello World"</span><br>
+                        <br>
+                        <span class="comment">// Ứng dụng: Định dạng số điện thoại</span><br>
+                        <span class="keyword">let</span> phone = <span class="string">"0123456789"</span>;<br>
+                        <span class="keyword">let</span> formattedPhone = phone.replace(/(\d{3})(\d{3})(\d{4})/, <span
+                            class="string">"$1-$2-$3"</span>);<br>
+                        console.log(formattedPhone); <span class="comment">// "012-345-6789"</span>
+                    </div>
+
+                    <div class="info-box">
+                        <h5><i class="fas fa-info-circle"></i> Phân tích:</h5>
+                        <ul>
+                            <li><strong>replace()</strong>: Thay thế lần xuất hiện đầu tiên của searchValue</li>
+                            <li><strong>replaceAll()</strong>: Thay thế tất cả lần xuất hiện của searchValue</li>
+                            <li><code>searchValue</code>: Có thể là chuỗi hoặc regex</li>
+                            <li><code>replaceValue</code>: Có thể là chuỗi hoặc hàm callback</li>
+                            <li>Trả về chuỗi mới, không thay đổi chuỗi gốc</li>
+                            <li>Với regex, có thể sử dụng capture groups ($1, $2, ...)</li>
+                            <li>Hàm callback nhận các tham số: match, p1, p2, ..., offset, string</li>
+                            <li><code>replaceAll()</code> yêu cầu searchValue là chuỗi hoặc regex với flag 'g'</li>
+                        </ul>
+                    </div>
+
+                    <h5>2.10 Template Literals (ES6)</h5>
+                    <p><strong>Mô tả:</strong> Chuỗi mẫu với khả năng nhúng biểu thức</p>
+                    <p><strong>Cú pháp:</strong> <code>`string text ${expression} string text`</code></p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ Template Literals</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> name = <span class="string">"John"</span>;<br>
+                        <span class="keyword">let</span> age = <span class="number">30</span>;<br>
+                        <span class="keyword">let</span> price = <span class="number">19.99</span>;<br>
+                        <br>
+                        <span class="comment">// Nhúng biến</span><br>
+                        console.log(<span class="string">`My name is ${name} and I am ${age} years old`</span>);<br>
+                        <span class="comment">// Kết quả: "My name is John and I am 30 years old"</span><br>
+                        <br>
+                        <span class="comment">// Tính toán trong template</span><br>
+                        console.log(<span class="string">`Next year I will be ${age + 1} years old`</span>);<br>
+                        <span class="comment">// Kết quả: "Next year I will be 31 years old"</span><br>
+                        <br>
+                        <span class="comment">// Gọi hàm trong template</span><br>
+                        console.log(<span class="string">`Name in uppercase: ${name.toUpperCase()}`</span>);<br>
+                        <span class="comment">// Kết quả: "Name in uppercase: JOHN"</span><br>
+                        <br>
+                        <span class="comment">// Template string nhiều dòng</span><br>
+                        <span class="keyword">let</span> multiLine = <span class="string">`<br>
+                            Customer Information:<br>
+                            --------------------<br>
+                            Name: ${name}<br>
+                            Age: ${age}<br>
+                            Price: $${price.toFixed(2)}<br>
+                            `</span>;<br>
+                        console.log(multiLine);<br>
+                        <br>
+                        <span class="comment">// Tagged templates</span><br>
+                        <span class="keyword">function</span> highlight(strings, ...values) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">let</span> result = <span
+                            class="string">""</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;strings.forEach((string, i) =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result += string;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (i &lt;
+                        values.length) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result += <span
+                            class="string">`&lt;strong&gt;${values[i]}&lt;/strong&gt;`</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> result;<br>
+                        }<br>
+                        <br>
+                        <span class="keyword">let</span> message = highlight<span class="string">`Hello ${name}, you are
+                            ${age} years old`</span>;<br>
+                        console.log(message);<br>
+                        <span class="comment">// Kết quả: "Hello &lt;strong&gt;John&lt;/strong&gt;, you are
+                            &lt;strong&gt;30&lt;/strong&gt; years old"</span>
+                    </div>
+
+                    <div class="info-box">
+                        <h5><i class="fas fa-info-circle"></i> Phân tích:</h5>
+                        <ul>
+                            <li>Được bao quanh bởi backticks (`) thay vì nháy đơn/nháy kép</li>
+                            <li>Cho phép nhúng biểu thức JavaScript với cú pháp <code>${expression}</code></li>
+                            <li>Hỗ trợ chuỗi nhiều dòng mà không cần ký tự đặc biệt</li>
+                            <li>Có thể lồng nhau (nested templates)</li>
+                            <li>Tagged templates cho phép xử lý template với hàm tùy chỉnh</li>
+                            <li>Biểu thức bên trong <code>${}</code> có thể là bất kỳ biểu thức JavaScript hợp lệ nào
+                            </li>
+                            <li>Tự động chuyển đổi giá trị thành chuỗi</li>
+                            <li>Hiệu quả hơn và dễ đọc hơn nối chuỗi thông thường</li>
+                        </ul>
+                    </div>
+
+                    <h4>3. Boolean - Kiểu logic</h4>
+                    <p><strong>Định nghĩa:</strong> Chỉ có hai giá trị: <code>true</code> hoặc <code>false</code>.</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ về Boolean</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> isOnline = <span class="keyword">true</span>;<br>
+                        <span class="keyword">let</span> hasLicense = <span class="keyword">false</span>;<br>
+                        <span class="keyword">let</span> isGreater = (<span class="number">5</span> > <span
+                            class="number">3</span>); <span class="comment">// true</span><br>
+                        <span class="keyword">let</span> isEqual = (<span class="number">5</span> === <span
+                            class="string">"5"</span>); <span class="comment">// false</span><br>
+                        <br>
+                        <span class="comment">// Ép kiểu về Boolean</span><br>
+                        console.log(<span class="class-name">Boolean</span>(<span class="number">1</span>)); <span
+                            class="comment">// true</span><br>
+                        console.log(<span class="class-name">Boolean</span>(<span class="number">0</span>)); <span
+                            class="comment">// false</span><br>
+                        console.log(<span class="class-name">Boolean</span>(<span class="string">"Hello"</span>)); <span
+                            class="comment">// true</span><br>
+                        console.log(<span class="class-name">Boolean</span>(<span class="string">""</span>)); <span
+                            class="comment">// false</span><br>
+                        console.log(<span class="class-name">Boolean</span>(<span class="keyword">null</span>)); <span
+                            class="comment">// false</span><br>
+                        console.log(<span class="class-name">Boolean</span>(<span class="keyword">undefined</span>));
+                        <span class="comment">// false</span><br>
+                        console.log(<span class="class-name">Boolean</span>(<span class="class-name">NaN</span>)); <span
+                            class="comment">// false</span>
+                    </div>
+
+                    <div class="info-box">
+                        <h5><i class="fas fa-info-circle"></i> Phân tích:</h5>
+                        <ul>
+                            <li>Chỉ có hai giá trị: <code>true</code> (đúng) và <code>false</code> (sai)</li>
+                            <li>Dùng trong các biểu thức điều kiện và vòng lặp</li>
+                            <li>Các giá trị "falsy" (chuyển thành false): <code>false</code>, <code>0</code>,
+                                <code>-0</code>, <code>0n</code>, <code>""</code>, <code>null</code>,
+                                <code>undefined</code>, <code>NaN</code>
+                            </li>
+                            <li>Các giá trị "truthy" (chuyển thành true): Mọi giá trị khác falsy</li>
+                            <li>Toán tử logic: <code>&&</code> (AND), <code>||</code> (OR), <code>!</code> (NOT)</li>
+                            <li>Hàm <code>Boolean()</code> dùng để ép kiểu bất kỳ giá trị nào về boolean</li>
+                            <li>Boolean là immutable (không thể thay đổi giá trị true/false)</li>
+                        </ul>
+                    </div>
+
+                    <h4>4. Undefined và Null</h4>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>4.1 Undefined - Biến chưa được gán giá trị</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> testVar; <span class="comment">// khai báo nhưng chưa gán giá
+                            trị</span><br>
+                        console.log(testVar); <span class="comment">// undefined</span><br>
+                        console.log(<span class="keyword">typeof</span> testVar); <span class="comment">//
+                            "undefined"</span><br>
+                        <br>
+                        <span class="keyword">let</span> obj = {};<br>
+                        console.log(obj.nonExistent); <span class="comment">// undefined (thuộc tính không tồn
+                            tại)</span><br>
+                        <br>
+                        <span class="keyword">function</span> noReturn() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// không có return</span><br>
+                        }<br>
+                        console.log(noReturn()); <span class="comment">// undefined</span>
+                    </div>
+
+                    <div class="info-box">
+                        <h5><i class="fas fa-info-circle"></i> Phân tích:</h5>
+                        <ul>
+                            <li>Là giá trị mặc định của biến đã khai báo nhưng chưa được gán giá trị</li>
+                            <li>Là giá trị trả về của hàm không có return statement</li>
+                            <li>Là giá trị của thuộc tính không tồn tại trong object</li>
+                            <li><code>typeof undefined</code> trả về <code>"undefined"</code></li>
+                            <li>Không nên gán undefined một cách thủ công, dùng null thay thế</li>
+                            <li>Là giá trị falsy (chuyển thành false trong ngữ cảnh boolean)</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>4.2 Null - Giá trị không tồn tại</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> emptyValue = <span class="keyword">null</span>; <span
+                            class="comment">// gán giá trị null</span><br>
+                        console.log(emptyValue); <span class="comment">// null</span><br>
+                        console.log(<span class="keyword">typeof</span> emptyValue); <span class="comment">// "object"
+                            (đây là bug của JavaScript)</span><br>
+                        <br>
+                        <span class="comment">// So sánh undefined và null</span><br>
+                        console.log(<span class="keyword">null</span> == <span class="keyword">undefined</span>); <span
+                            class="comment">// true (chỉ so sánh giá trị)</span><br>
+                        console.log(<span class="keyword">null</span> === <span class="keyword">undefined</span>); <span
+                            class="comment">// false (so sánh cả kiểu dữ liệu)</span>
+                    </div>
+
+                    <div class="info-box">
+                        <h5><i class="fas fa-info-circle"></i> Phân tích:</h5>
+                        <ul>
+                            <li>Là giá trị đại diện cho "không có giá trị" hoặc "không tồn tại"</li>
+                            <li>Phải được gán một cách rõ ràng, không phải giá trị mặc định</li>
+                            <li><code>typeof null</code> trả về <code>"object"</code> (là bug nổi tiếng của JavaScript)
+                            </li>
+                            <li>Để kiểm tra null, dùng <code>value === null</code></li>
+                            <li>Là giá trị falsy (chuyển thành false trong ngữ cảnh boolean)</li>
+                            <li>Thường dùng để chỉ định rõ ràng rằng một biến không có giá trị</li>
+                            <li>Khác với undefined: null là giá trị được gán, undefined là trạng thái mặc định</li>
+                        </ul>
+                    </div>
+
+                    <!-- Tiếp tục với các phần khác theo cùng định dạng... -->
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Kiểm tra kiểu dữ liệu</h4>
+                        <div class="input-group">
+                            <label for="dataTypeValue">Nhập giá trị để kiểm tra kiểu:</label>
+                            <input type="text" id="dataTypeValue" value="Hello World" placeholder="Nhập giá trị bất kỳ">
+                        </div>
+                        <div class="input-group">
+                            <label for="checkMethod">Chọn phương thức kiểm tra:</label>
+                            <select id="checkMethod">
+                                <option value="typeof">typeof - Kiểu dữ liệu cơ bản</option>
+                                <option value="instanceof">instanceof - Kiểm tra đối tượng</option>
+                                <option value="constructor">constructor - Hàm tạo</option>
+                                <option value="isNaN">isNaN() - Kiểm tra NaN</option>
+                                <option value="isArray">Array.isArray() - Kiểm tra mảng</option>
+                            </select>
+                        </div>
+                        <button class="btn" onclick="checkDataType()">
+                            <i class="fas fa-search"></i> Kiểm tra kiểu dữ liệu
+                        </button>
+                        <div class="result" id="dataTypeResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="dataTypeResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <script>
+                    // Hàm kiểm tra kiểu dữ liệu nâng cao
+                    function checkDataType() {
+                        const input = document.getElementById('dataTypeValue').value;
+                        const method = document.getElementById('checkMethod').value;
+
+                        const result = document.getElementById('dataTypeResult');
+                        const output = document.getElementById('dataTypeResultContent');
+
+                        result.classList.add('active');
+
+                        let outputText = `=== KIỂM TRA KIỂU DỮ LIỆU NÂNG CAO ===\n\n`;
+                        outputText += `Giá trị nhập: "${input}"\n`;
+                        outputText += `Phương thức: ${method}\n\n`;
+
+                        // Phân tích giá trị
+                        let evaluatedValue;
+
+                        try {
+                            // Thử đánh giá giá trị
+                            if (input === 'true' || input === 'false') {
+                                evaluatedValue = input === 'true';
+                            } else if (input === 'null') {
+                                evaluatedValue = null;
+                            } else if (input === 'undefined') {
+                                evaluatedValue = undefined;
+                            } else if (!isNaN(input) && input.trim() !== '') {
+                                evaluatedValue = parseFloat(input);
+                                if (Number.isInteger(evaluatedValue) && !input.includes('.')) {
+                                    evaluatedValue = parseInt(input);
+                                }
+                            } else if (input.startsWith('[') && input.endsWith(']')) {
+                                evaluatedValue = eval(input);
+                            } else if (input.startsWith('{') && input.endsWith('}')) {
+                                evaluatedValue = eval(`(${input})`);
+                            } else {
+                                evaluatedValue = input;
+                            }
+
+                            outputText += `Giá trị đã phân tích: ${evaluatedValue}\n`;
+                            outputText += `Kiểu dữ liệu: ${typeof evaluatedValue}\n\n`;
+
+                            switch (method) {
+                                case 'typeof':
+                                    outputText += `=== KẾT QUẢ typeof ===\n`;
+                                    outputText += `typeof: ${typeof evaluatedValue}\n`;
+                                    outputText += `\nGiải thích:\n`;
+                                    outputText += `- "number": Number, NaN\n`;
+                                    outputText += `- "string": String\n`;
+                                    outputText += `- "boolean": Boolean\n`;
+                                    outputText += `- "undefined": Undefined\n`;
+                                    outputText += `- "object": Object, Array, Date, null\n`;
+                                    outputText += `- "function": Function\n`;
+                                    outputText += `- "symbol": Symbol\n`;
+                                    outputText += `- "bigint": BigInt\n`;
+                                    break;
+
+                                case 'instanceof':
+                                    outputText += `=== KẾT QUẢ instanceof ===\n`;
+                                    if (evaluatedValue instanceof Object) {
+                                        outputText += `Là instance của Object: true\n`;
+                                    } else {
+                                        outputText += `Là instance của Object: false\n`;
+                                    }
+
+                                    if (Array.isArray(evaluatedValue)) {
+                                        outputText += `Là instance của Array: true\n`;
+                                    }
+
+                                    if (evaluatedValue instanceof Date) {
+                                        outputText += `Là instance của Date: true\n`;
+                                    }
+
+                                    if (evaluatedValue instanceof RegExp) {
+                                        outputText += `Là instance của RegExp: true\n`;
+                                    }
+                                    break;
+
+                                case 'constructor':
+                                    outputText += `=== KẾT QUẢ constructor ===\n`;
+                                    if (evaluatedValue && evaluatedValue.constructor) {
+                                        outputText += `Constructor: ${evaluatedValue.constructor.name}\n`;
+                                        outputText += `Hàm tạo: ${evaluatedValue.constructor}\n`;
+                                    } else {
+                                        outputText += `Không có constructor (primitive type hoặc null/undefined)\n`;
+                                    }
+                                    break;
+
+                                case 'isNaN':
+                                    outputText += `=== KẾT QUẢ isNaN() ===\n`;
+                                    outputText += `isNaN(${input}): ${isNaN(evaluatedValue)}\n`;
+                                    outputText += `Number.isNaN(${input}): ${Number.isNaN(evaluatedValue)}\n`;
+                                    outputText += `\nSự khác biệt:\n`;
+                                    outputText += `- isNaN(): Chuyển đổi giá trị sang số trước khi kiểm tra\n`;
+                                    outputText += `- Number.isNaN(): Không chuyển đổi, chỉ kiểm tra giá trị NaN\n`;
+                                    break;
+
+                                case 'isArray':
+                                    outputText += `=== KẾT QUẢ Array.isArray() ===\n`;
+                                    outputText += `Array.isArray(${input}): ${Array.isArray(evaluatedValue)}\n`;
+                                    outputText += `\nLưu ý: Sử dụng Array.isArray() thay vì instanceof Array\n`;
+                                    break;
+                            }
+
+                        } catch (error) {
+                            outputText += `Lỗi: ${error.message}\n`;
+                            outputText += `\nGợi ý: Nhập giá trị hợp lệ như:\n`;
+                            outputText += `- Chuỗi: "Hello"\n`;
+                            outputText += `- Số: 123 hoặc 123.45\n`;
+                            outputText += `- Boolean: true hoặc false\n`;
+                            outputText += `- Mảng: [1, 2, 3]\n`;
+                            outputText += `- Object: {name: "John"}\n`;
+                        }
+
+                        output.textContent = outputText;
+                    }
+                </script>
+
+                <!-- PHẦN TOÁN TỬ -->
+                <section id="operators" class="section">
+                    <h2><i class="fas fa-calculator"></i> TOÁN TỬ (OPERATORS)</h2>
+
+                    <h3>1.3 Khái niệm và phân loại toán tử</h3>
+                    <p><strong>Định nghĩa:</strong> Toán tử là một ký hiệu dùng để thực hiện một (hoặc nhiều) hành động
+                        trên một (hoặc nhiều) giá trị hoặc biến.</p>
+
+                    <h3>1.3.1 Toán tử số học (Arithmetic Operators)</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Toán tử</th>
+                                    <th>Mô tả</th>
+                                    <th>Ví dụ (a=5, b=3)</th>
+                                    <th>Kết quả</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>+</td>
+                                    <td>Cộng</td>
+                                    <td>a + b</td>
+                                    <td>8</td>
+                                </tr>
+                                <tr>
+                                    <td>-</td>
+                                    <td>Trừ</td>
+                                    <td>a - b</td>
+                                    <td>2</td>
+                                </tr>
+                                <tr>
+                                    <td>*</td>
+                                    <td>Nhân</td>
+                                    <td>a * b</td>
+                                    <td>15</td>
+                                </tr>
+                                <tr>
+                                    <td>/</td>
+                                    <td>Chia</td>
+                                    <td>a / b</td>
+                                    <td>1.666...</td>
+                                </tr>
+                                <tr>
+                                    <td>%</td>
+                                    <td>Chia lấy dư</td>
+                                    <td>a % b</td>
+                                    <td>2</td>
+                                </tr>
+                                <tr>
+                                    <td>++</td>
+                                    <td>Tăng 1 đơn vị</td>
+                                    <td>a++</td>
+                                    <td>6 (sau khi tăng)</td>
+                                </tr>
+                                <tr>
+                                    <td>--</td>
+                                    <td>Giảm 1 đơn vị</td>
+                                    <td>b--</td>
+                                    <td>2 (sau khi giảm)</td>
+                                </tr>
+                                <tr>
+                                    <td>**</td>
+                                    <td>Lũy thừa</td>
+                                    <td>a ** 2</td>
+                                    <td>25</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>1.3.2 Toán tử so sánh (Comparison Operators)</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Toán tử</th>
+                                    <th>Mô tả</th>
+                                    <th>Ví dụ</th>
+                                    <th>Kết quả</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>==</td>
+                                    <td>So sánh giá trị</td>
+                                    <td>5 == "5"</td>
+                                    <td>true</td>
+                                </tr>
+                                <tr>
+                                    <td>===</td>
+                                    <td>So sánh giá trị và kiểu</td>
+                                    <td>5 === "5"</td>
+                                    <td>false</td>
+                                </tr>
+                                <tr>
+                                    <td>!=</td>
+                                    <td>Không bằng (giá trị)</td>
+                                    <td>5 != "5"</td>
+                                    <td>false</td>
+                                </tr>
+                                <tr>
+                                    <td>!==</td>
+                                    <td>Không bằng (giá trị và kiểu)</td>
+                                    <td>5 !== "5"</td>
+                                    <td>true</td>
+                                </tr>
+                                <tr>
+                                    <td>></td>
+                                    <td>Lớn hơn</td>
+                                    <td>5 > 3</td>
+                                    <td>true</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        << /td>
+                                    <td>Nhỏ hơn</td>
+                                    <td>5 < 3</td>
+                                    <td>false</td>
+                                </tr>
+                                <tr>
+                                    <td>>=</td>
+                                    <td>Lớn hơn hoặc bằng</td>
+                                    <td>5 >= 5</td>
+                                    <td>true</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <=< /td>
+                                    <td>Nhỏ hơn hoặc bằng</td>
+                                    <td>5 <= 6</td>
+                                    <td>true</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>1.3.3 Toán tử logic (Logical Operators)</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Toán tử</th>
+                                    <th>Mô tả</th>
+                                    <th>Ví dụ</th>
+                                    <th>Kết quả</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>&&</td>
+                                    <td>VÀ (AND)</td>
+                                    <td>true && false</td>
+                                    <td>false</td>
+                                </tr>
+                                <tr>
+                                    <td>||</td>
+                                    <td>HOẶC (OR)</td>
+                                    <td>true || false</td>
+                                    <td>true</td>
+                                </tr>
+                                <tr>
+                                    <td>!</td>
+                                    <td>PHỦ ĐỊNH (NOT)</td>
+                                    <td>!true</td>
+                                    <td>false</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>1.3.4 Toán tử gán (Assignment Operators)</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Toán tử</th>
+                                    <th>Mô tả</th>
+                                    <th>Ví dụ (x=10)</th>
+                                    <th>Kết quả</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>=</td>
+                                    <td>Gán</td>
+                                    <td>x = 10</td>
+                                    <td>10</td>
+                                </tr>
+                                <tr>
+                                    <td>+=</td>
+                                    <td>Cộng và gán</td>
+                                    <td>x += 5</td>
+                                    <td>15</td>
+                                </tr>
+                                <tr>
+                                    <td>-=</td>
+                                    <td>Trừ và gán</td>
+                                    <td>x -= 3</td>
+                                    <td>12</td>
+                                </tr>
+                                <tr>
+                                    <td>*=</td>
+                                    <td>Nhân và gán</td>
+                                    <td>x *= 2</td>
+                                    <td>24</td>
+                                </tr>
+                                <tr>
+                                    <td>/=</td>
+                                    <td>Chia và gán</td>
+                                    <td>x /= 4</td>
+                                    <td>6</td>
+                                </tr>
+                                <tr>
+                                    <td>%=</td>
+                                    <td>Chia lấy dư và gán</td>
+                                    <td>x %= 5</td>
+                                    <td>1</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>1.3.5 Toán tử điều kiện (Ternary Operator)</h3>
+                    <p>Cú pháp: <code>condition ? valueIfTrue : valueIfFalse</code></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ về toán tử điều kiện</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> age = <span class="number">18</span>;<br>
+                        <span class="keyword">let</span> type = (age >= <span class="number">18</span>) ? <span
+                            class="string">"Adult"</span> : <span class="string">"Minor"</span>;<br>
+                        console.log(type); <span class="comment">// Output: "Adult"</span><br>
+                        <br>
+                        age = <span class="number">15</span>;<br>
+                        type = (age >= <span class="number">18</span>) ? <span class="string">"Adult"</span> : <span
+                            class="string">"Minor"</span>;<br>
+                        console.log(type); <span class="comment">// Output: "Minor"</span>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm với toán tử</h4>
+                        <div class="input-group">
+                            <label for="operatorType">Chọn loại toán tử:</label>
+                            <select id="operatorType">
+                                <option value="arithmetic">Số học (+, -, *, /)</option>
+                                <option value="comparison">So sánh (==, ===, >, <)< /option>
+                                <option value="logical">Logic (&&, ||, !)</option>
+                                <option value="ternary">Điều kiện (?:)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="operand1">Toán hạng 1:</label>
+                            <input type="text" id="operand1" value="5" placeholder="Nhập giá trị 1">
+                        </div>
+                        <div class="input-group">
+                            <label for="operand2">Toán hạng 2:</label>
+                            <input type="text" id="operand2" value="3" placeholder="Nhập giá trị 2">
+                        </div>
+                        <button class="btn" onclick="testOperators()">
+                            <i class="fas fa-calculator"></i> Tính toán
+                        </button>
+                        <div class="result" id="operatorResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="operatorResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN VÍ DỤ THỰC HÀNH -->
+                <section id="examples" class="section">
+                    <h2><i class="fas fa-code"></i> VÍ DỤ THỰC HÀNH</h2>
+
+                    <h3>1.4 Ứng dụng thực tế</h3>
+
+                    <h4>Ví dụ 1: Tính toán đơn giản</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ tính toán</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// Khai báo biến</span><br>
+                        <span class="keyword">const</span> PI = <span class="number">3.14159</span>;<br>
+                        <span class="keyword">let</span> radius = <span class="number">5</span>;<br>
+                        <br>
+                        <span class="comment">// Tính diện tích hình tròn</span><br>
+                        <span class="keyword">let</span> area = PI * radius * radius;<br>
+                        console.log(<span class="string">`Diện tích hình tròn bán kính ${radius} là:
+                            ${area.toFixed(2)}`</span>);<br>
+                        <br>
+                        <span class="comment">// Tính chu vi hình tròn</span><br>
+                        <span class="keyword">let</span> circumference = <span class="number">2</span> * PI *
+                        radius;<br>
+                        console.log(<span class="string">`Chu vi hình tròn bán kính ${radius} là:
+                            ${circumference.toFixed(2)}`</span>);
+                    </div>
+
+                    <h4>Ví dụ 2: Xử lý chuỗi</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ xử lý chuỗi</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> firstName = <span class="string">"nguyen"</span>;<br>
+                        <span class="keyword">let</span> lastName = <span class="string">"van a"</span>;<br>
+                        <br>
+                        <span class="comment">// Chuẩn hóa tên</span><br>
+                        <span class="keyword">let</span> normalizedFirstName = firstName.charAt(<span
+                            class="number">0</span>).toUpperCase() + firstName.slice(<span class="number">1</span>);<br>
+                        <span class="keyword">let</span> normalizedLastName = lastName.split(<span class="string">"
+                            "</span>).map(word =&gt; <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;word.charAt(<span class="number">0</span>).toUpperCase() +
+                        word.slice(<span class="number">1</span>)<br>
+                        ).join(<span class="string">" "</span>);<br>
+                        <br>
+                        console.log(<span class="string">`Tên đầy đủ: ${normalizedFirstName}
+                            ${normalizedLastName}`</span>);<br>
+                        console.log(<span class="string">`Email: ${firstName}.${lastName.replace(" ",
+                            "")}@company.com`</span>);
+                    </div>
+
+
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Tổng hợp ví dụ</h4>
+                        <div class="input-group">
+                            <label for="exampleType">Chọn ví dụ:</label>
+                            <select id="exampleType">
+                                <option value="calculation">Tính toán hình học</option>
+                                <option value="string">Xử lý chuỗi tên</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="exampleInput">Nhập giá trị:</label>
+                            <input type="text" id="exampleInput" value="5" placeholder="Nhập giá trị cho ví dụ">
+                        </div>
+                        <button class="btn btn-run" onclick="runExample()">
+                            <i class="fas fa-play"></i> Chạy ví dụ
+                        </button>
+                        <div class="result" id="exampleResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="exampleResultContent"></div>
+                        </div>
+                    </div>
+
+                    <div class="success-box">
+                        <h4><i class="fas fa-check-circle"></i> Tóm tắt bài học:</h4>
+                        <ul>
+                            <li>Biến (var, let, const) dùng để lưu trữ dữ liệu</li>
+                            <li>Kiểu dữ liệu nguyên thủy: Number, String, Boolean, Undefined, Null, Symbol, BigInt</li>
+                            <li>Kiểu dữ liệu phức tạp: Object</li>
+                            <li>Toán tử: số học, so sánh, logic, gán, điều kiện</li>
+                            <li>Thực hành với các ví dụ ứng dụng thực tế</li>
+                        </ul>
+                    </div>
+                </section>
+                <section id="examplesHome" class="section">
+                    <!-- BÀI TẬP 1: Diện tích, thể tích -->
+                    <div id="bai1">
+                        <h2>Bài tập 1: Diện tích, thể tích</h2>
+                        <p>Viết chương trình nhập từ bàn phím 1 số nguyên dương từ bàn phím và in ra kết quả tính diện
+                            tích, thể tích của hình cầu đó:</p>
+                        <p>Hướng dẫn: S = 4πR² và V = 4/3(πR³)</p>
+                    </div>
+
+                    <hr>
+
+                    <!-- BÀI TẬP 2: Kiểm tra chẵn lẻ -->
+                    <div id="bai2">
+                        <h2>Bài tập 2: Kiểm tra chẵn lẻ</h2>
+                        <p>Cho một số nguyên dương N không quá 5 chữ số, hãy kiểm tra và in ra số đó chẵn hay lẻ. Nếu
+                            chẵn ghi ra chữ CHAN, nếu ngược lại ghi ra chữ LE.</p>
+
+                        <h3>Input</h3>
+                        <p>Chỉ có một dòng ghi số N</p>
+
+                        <h3>Output</h3>
+                        <p>Ghi ra kết quả trên một dòng.</p>
+
+                        <table border="1" cellpadding="10" cellspacing="0">
+                            <tr>
+                                <th>Input</th>
+                                <th>Output</th>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>CHAN</td>
+                            </tr>
+                            <tr>
+                                <td>9999</td>
+                                <td>LE</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <hr>
+
+                    <!-- BÀI TẬP 3: Tìm thứ trong tuần -->
+                    <div id="bai3">
+                        <h2>Bài tập 3: Tìm thứ trong tuần dựa vào ngày tháng năm</h2>
+                        <p>Công thức:</p>
+                        <p>n = (ngày + 2*tháng + (3*(tháng+1)) div 5 + năm + (năm div 4)) mod 7</p>
+                        <p>Trong đó, div là phép chia lấy số nguyên và mod là phép chia lấy số dư.</p>
+                        <p>Nếu : n = 0 → Chủ Nhật, n = 1 → Thứ 2, n = 2 → Thứ 3…</p>
+                        <p>Hãy viết viết chương trình cho phép người dùng nhập vào 3 giá trị ngày tháng năm bằng hàm
+                            prompt, sau đó in ra màn hình số thứ tự ngày trong tuần đó.</p>
+
+                        <table border="1" cellpadding="10" cellspacing="0">
+                            <tr>
+                                <th colspan="3">Input</th>
+                                <th>Output (n)</th>
+                            </tr>
+                            <tr>
+                                <th>Day</th>
+                                <th>Month</th>
+                                <th>Year</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <td>13</td>
+                                <td>6</td>
+                                <td>2023</td>
+                                <td>2</td>
+                            </tr>
+                            <tr>
+                                <td>12</td>
+                                <td>10</td>
+                                <td>2023</td>
+                                <td>4</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <hr>
+
+                    <!-- BÀI TẬP 4: Số phát lộc -->
+                    <div id="bai4">
+                        <h2>Bài tập 4: Số phát lộc</h2>
+                        <p>Một số kết thúc bởi hai chữ số 86 được gọi là số phát lộc. Cho một số nguyên dương không quá
+                            500 chữ số, hãy kiểm tra số đó có phải số phát lộc hay không.</p>
+
+                        <h3>Input</h3>
+                        <p>Mỗi bộ test ghi số nguyên dương cần kiểm tra (không quá 500 chữ số)</p>
+
+                        <h3>Output</h3>
+                        <p>Ghi ra kết quả kiểm tra tương ứng (YES hoặc NO)</p>
+
+                        <table border="1" cellpadding="10" cellspacing="0">
+                            <tr>
+                                <th>Input</th>
+                                <th>Output</th>
+                            </tr>
+                            <tr>
+                                <td>1539786</td>
+                                <td>YES</td>
+                            </tr>
+                            <tr>
+                                <td>1234789</td>
+                                <td>NO</td>
+                            </tr>
+                            <tr>
+                                <td>8686</td>
+                                <td>YES</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <hr>
+
+                    <!-- BÀI TẬP 5: Phép cộng -->
+                    <div id="bai5">
+                        <h2>Bài tập 5: Phép cộng</h2>
+                        <p>Cho một phép toán có dạng a + b = c với a,b,c chỉ là các số nguyên dương có một chữ số. Hãy
+                            kiểm tra xem phép toán đó có đúng hay không.</p>
+
+                        <h3>Input</h3>
+                        <p>Chỉ có một dòng ghi ra phép toán (gồm đúng 9 ký tự)</p>
+
+                        <h3>Output</h3>
+                        <p>Ghi ra YES nếu phép toán đó đúng. Ghi ra NO nếu sai.</p>
+
+                        <table border="1" cellpadding="10" cellspacing="0">
+                            <tr>
+                                <th colspan="2">Sample test</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Test 1</strong><br>
+                                    Input: 1 + 2 = 3<br>
+                                    Output: YES
+                                </td>
+                                <td>
+                                    <strong>Test 2</strong><br>
+                                    Input: 2 + 2 = 5<br>
+                                    Output: NO
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <hr>
+
+                    <!-- BÀI TẬP NÂNG CAO - Bài 6: Đầu cuối -->
+                    <div id="bai6">
+                        <h2>Bài tập 6: Đầu cuối</h2>
+                        <p>Viết chương trình kiểm tra xem số nguyên dương N có thỏa mãn tính chất: nếu ta lấy hai chữ số
+                            đầu và hai chữ số cuối của nó thì sẽ tạo ra số có hai chữ số giống nhau hay không?</p>
+
+                        <h3>Input</h3>
+                        <p>Mỗi test là 1 số nguyên dương N có ít nhất 4 chữ số, nhưng không quá 18 chữ số.</p>
+
+                        <h3>Output</h3>
+                        <p>Ghi ra YES hoặc NO</p>
+
+                        <table border="1" cellpadding="10" cellspacing="0">
+                            <tr>
+                                <th>Input</th>
+                                <th>Output</th>
+                            </tr>
+                            <tr>
+                                <td>12321</td>
+                                <td>NO</td>
+                            </tr>
+                            <tr>
+                                <td>1234512</td>
+                                <td>YES</td>
+                            </tr>
+                            <tr>
+                                <td>10233211111</td>
+                                <td>NO</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <hr>
+
+                    <!-- BÀI TẬP NÂNG CAO - Bài 7: Nhận biết số bí mật -->
+                    <div id="bai7">
+                        <h2>Bài 7: Nhận biết số bí mật</h2>
+                        <p>Viết chương trình kiểm tra xem số nguyên dương N có thỏa mãn tính chất sau không: chữ số đầu
+                            tiên cộng với chữ số cuối cùng bằng chữ số thứ hai cộng với chữ số kế cuối.</p>
+
+                        <h3>Input</h3>
+                        <p>Mỗi test là một số nguyên dương N có ít nhất 4 chữ số và không quá 9 chữ số.</p>
+
+                        <h3>Output</h3>
+                        <p>Ghi ra YES nếu tính chất trên thỏa mãn, ngược lại ghi ra NO.</p>
+
+                        <table border="1" cellpadding="10" cellspacing="0">
+                            <tr>
+                                <th>Input</th>
+                                <th>Output</th>
+                            </tr>
+                            <tr>
+                                <td>1234</td>
+                                <td>YES</td>
+                            </tr>
+                            <tr>
+                                <td>5675</td>
+                                <td>NO</td>
+                            </tr>
+                            <tr>
+                                <td>8929</td>
+                                <td>NO</td>
+                            </tr>
+                        </table>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <footer>
+            <p>Bài 1: Biến, Kiểu dữ liệu và Toán tử &copy; GV: Nguyễn Đình Mạnh</p>
+        </footer>
+    </div>
+
+    <script>
+        // Xử lý điều hướng
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    // Xóa class active từ tất cả các link và section
+                    navLinks.forEach(item => item.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+
+                    // Thêm class active cho link được click
+                    this.classList.add('active');
+
+                    // Hiển thị section tương ứng
+                    const targetId = this.getAttribute('href').substring(1);
+                    document.getElementById(targetId).classList.add('active');
+                });
+            });
+        });
+
+        // Hàm copy code
+        function copyCode(button) {
+            const codeBlock = button.parentElement.parentElement;
+            const text = codeBlock.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Đã copy!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        // Thử nghiệm với biến
+        function testVariables() {
+            const varType = document.getElementById('varType').value;
+            const varName = document.getElementById('varName').value.trim() || 'myVariable';
+            const varValue = document.getElementById('varValue').value;
+
+            const result = document.getElementById('varResult');
+            const output = document.getElementById('varResultContent');
+
+            result.classList.add('active');
+
+            let outputText = `=== THỬ NGHIỆM KHAI BÁO BIẾN ===\n\n`;
+
+            try {
+                // Tạo biến động
+                if (varType === 'var') {
+                    eval(`var ${varName} = ${JSON.stringify(varValue)};`);
+                    outputText += `Khai báo: var ${varName} = "${varValue}";\n`;
+                    outputText += `Kiểu: ${typeof eval(varName)}\n`;
+                    outputText += `Giá trị: ${eval(varName)}\n`;
+                } else if (varType === 'let') {
+                    eval(`let ${varName} = ${JSON.stringify(varValue)};`);
+                    outputText += `Khai báo: let ${varName} = "${varValue}";\n`;
+                    outputText += `Kiểu: ${typeof eval(varName)}\n`;
+                    outputText += `Giá trị: ${eval(varName)}\n`;
+                } else if (varType === 'const') {
+                    eval(`const ${varName} = ${JSON.stringify(varValue)};`);
+                    outputText += `Khai báo: const ${varName} = "${varValue}";\n`;
+                    outputText += `Kiểu: ${typeof eval(varName)}\n`;
+                    outputText += `Giá trị: ${eval(varName)}\n`;
+                    outputText += `\nLưu ý: Không thể thay đổi giá trị của const\n`;
+                }
+
+                outputText += `\n=== THÔNG TIN BIẾN ===\n`;
+                outputText += `- Tên biến: ${varName}\n`;
+                outputText += `- Loại biến: ${varType}\n`;
+                outputText += `- Giá trị: "${varValue}"\n`;
+                outputText += `- Kiểu dữ liệu: ${typeof varValue}\n`;
+
+                if (varType === 'const') {
+                    outputText += `\n⚠️ Lưu ý: Biến const không thể được gán lại giá trị`;
+                }
+
+            } catch (error) {
+                outputText += `Lỗi: ${error.message}\n`;
+                outputText += `\nGợi ý: Kiểm tra tên biến hợp lệ (bắt đầu bằng chữ cái, _, $)`;
+            }
+
+            output.textContent = outputText;
+        }
+
+        // Kiểm tra kiểu dữ liệu
+        function checkDataType() {
+            const input = document.getElementById('dataTypeValue').value;
+            const result = document.getElementById('dataTypeResult');
+            const output = document.getElementById('dataTypeResultContent');
+
+            result.classList.add('active');
+
+            let outputText = `=== KIỂM TRA KIỂU DỮ LIỆU ===\n\n`;
+            outputText += `Giá trị nhập: "${input}"\n\n`;
+
+            // Thử phân tích kiểu dữ liệu
+            let parsedValue;
+            let dataType = 'string';
+
+            // Kiểm tra số
+            if (!isNaN(input) && input.trim() !== '') {
+                parsedValue = parseFloat(input);
+                if (Number.isInteger(parsedValue)) {
+                    dataType = 'number (integer)';
+                } else {
+                    dataType = 'number (float)';
+                }
+            }
+
+            // Kiểm tra boolean
+            if (input.toLowerCase() === 'true' || input.toLowerCase() === 'false') {
+                parsedValue = input.toLowerCase() === 'true';
+                dataType = 'boolean';
+            }
+
+            // Kiểm tra null/undefined
+            if (input.toLowerCase() === 'null') {
+                parsedValue = null;
+                dataType = 'null';
+            } else if (input.toLowerCase() === 'undefined') {
+                parsedValue = undefined;
+                dataType = 'undefined';
+            }
+
+            outputText += `Kiểu dữ liệu: ${dataType}\n`;
+            outputText += `typeof: ${typeof parsedValue}\n\n`;
+
+            outputText += `=== THÔNG TIN CHI TIẾT ===\n`;
+            outputText += `- Độ dài: ${input.length} ký tự\n`;
+
+            if (dataType.includes('number')) {
+                outputText += `- Là số hợp lệ: ${!isNaN(parsedValue)}\n`;
+                outputText += `- Giá trị số: ${parsedValue}\n`;
+                outputText += `- Là số nguyên: ${Number.isInteger(parsedValue)}\n`;
+            }
+
+            if (dataType === 'string') {
+                outputText += `- Chuỗi in hoa: "${input.toUpperCase()}"\n`;
+                outputText += `- Chuỗi in thường: "${input.toLowerCase()}"\n`;
+                outputText += `- Cắt 10 ký tự đầu: "${input.substring(0, 10)}"\n`;
+            }
+
+            output.textContent = outputText;
+        }
+
+        // Thử nghiệm với toán tử
+        function testOperators() {
+            const operatorType = document.getElementById('operatorType').value;
+            const operand1 = document.getElementById('operand1').value;
+            const operand2 = document.getElementById('operand2').value;
+
+            const result = document.getElementById('operatorResult');
+            const output = document.getElementById('operatorResultContent');
+
+            result.classList.add('active');
+
+            let outputText = `=== THỬ NGHIỆM TOÁN TỬ ===\n\n`;
+            outputText += `Loại toán tử: ${operatorType}\n`;
+            outputText += `Toán hạng 1: ${operand1}\n`;
+            outputText += `Toán hạng 2: ${operand2}\n\n`;
+
+            let val1, val2;
+
+            // Chuyển đổi kiểu dữ liệu phù hợp
+            if (operatorType === 'arithmetic' || operatorType === 'comparison') {
+                val1 = parseFloat(operand1) || operand1;
+                val2 = parseFloat(operand2) || operand2;
+            } else if (operatorType === 'logical') {
+                val1 = operand1.toLowerCase() === 'true';
+                val2 = operand2.toLowerCase() === 'true';
+            } else {
+                val1 = operand1;
+                val2 = operand2;
+            }
+
+            try {
+                switch (operatorType) {
+                    case 'arithmetic':
+                        outputText += `=== KẾT QUẢ TÍNH TOÁN ===\n`;
+                        outputText += `${val1} + ${val2} = ${val1 + val2}\n`;
+                        outputText += `${val1} - ${val2} = ${val1 - val2}\n`;
+                        outputText += `${val1} * ${val2} = ${val1 * val2}\n`;
+                        if (val2 != 0) {
+                            outputText += `${val1} / ${val2} = ${val1 / val2}\n`;
+                            outputText += `${val1} % ${val2} = ${val1 % val2}\n`;
+                        } else {
+                            outputText += `${val1} / ${val2} = Không thể chia cho 0\n`;
+                            outputText += `${val1} % ${val2} = Không thể chia cho 0\n`;
+                        }
+                        break;
+
+                    case 'comparison':
+                        outputText += `=== KẾT QUẢ SO SÁNH ===\n`;
+                        outputText += `${val1} == ${val2} : ${val1 == val2}\n`;
+                        outputText += `${val1} === ${val2} : ${val1 === val2}\n`;
+                        outputText += `${val1} != ${val2} : ${val1 != val2}\n`;
+                        outputText += `${val1} !== ${val2} : ${val1 !== val2}\n`;
+                        outputText += `${val1} > ${val2} : ${val1 > val2}\n`;
+                        outputText += `${val1} < ${val2} : ${val1 < val2}\n`;
+                        outputText += `${val1} >= ${val2} : ${val1 >= val2}\n`;
+                        outputText += `${val1} <= ${val2} : ${val1 <= val2}\n`;
+                        break;
+
+                    case 'logical':
+                        outputText += `=== KẾT QUẢ LOGIC ===\n`;
+                        outputText += `${val1} && ${val2} : ${val1 && val2}\n`;
+                        outputText += `${val1} || ${val2} : ${val1 || val2}\n`;
+                        outputText += `!${val1} : ${!val1}\n`;
+                        outputText += `!${val2} : ${!val2}\n`;
+                        break;
+
+                    case 'ternary':
+                        const condition = parseFloat(val1) > parseFloat(val2);
+                        outputText += `=== TOÁN TỬ ĐIỀU KIỆN ===\n`;
+                        outputText += `Điều kiện: ${val1} > ${val2}\n`;
+                        outputText += `Kết quả: ${condition ? val1 : val2} là lớn hơn\n`;
+                        outputText += `Biểu thức: (${val1} > ${val2}) ? "${val1}" : "${val2}"\n`;
+                        outputText += `Giá trị trả về: "${condition ? val1 : val2}"\n`;
+                        break;
+                }
+            } catch (error) {
+                outputText += `Lỗi: ${error.message}\n`;
+            }
+
+            output.textContent = outputText;
+        }
+
+        // Chạy ví dụ thực hành
+        function runExample() {
+            const exampleType = document.getElementById('exampleType').value;
+            const input = document.getElementById('exampleInput').value;
+
+            const result = document.getElementById('exampleResult');
+            const output = document.getElementById('exampleResultContent');
+
+            result.classList.add('active');
+
+            let outputText = `=== VÍ DỤ THỰC HÀNH ===\n\n`;
+
+            try {
+                switch (exampleType) {
+                    case 'calculation':
+                        const radius = parseFloat(input) || 5;
+                        const PI = 3.14159;
+                        const area = PI * radius * radius;
+                        const circumference = 2 * PI * radius;
+
+                        outputText += `TÍNH TOÁN HÌNH HỌC\n`;
+                        outputText += `Bán kính: ${radius}\n`;
+                        outputText += `Số PI: ${PI}\n\n`;
+                        outputText += `Diện tích hình tròn:\n`;
+                        outputText += `  S = π × r² = ${PI} × ${radius}² = ${area.toFixed(2)}\n\n`;
+                        outputText += `Chu vi hình tròn:\n`;
+                        outputText += `  C = 2 × π × r = 2 × ${PI} × ${radius} = ${circumference.toFixed(2)}\n`;
+                        break;
+
+                    case 'string':
+                        const names = input.split(' ');
+                        const firstName = names[0] || 'nguyen';
+                        const lastName = names.slice(1).join(' ') || 'van a';
+
+                        const normalizedFirstName = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
+                        const normalizedLastName = lastName.split(' ').map(word =>
+                            word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+                        ).join(' ');
+
+                        outputText += `XỬ LÝ CHUỖI TÊN\n`;
+                        outputText += `Tên nhập: ${input}\n\n`;
+                        outputText += `Tên đầu: "${firstName}"\n`;
+                        outputText += `Họ: "${lastName}"\n\n`;
+                        outputText += `Tên chuẩn hóa: ${normalizedFirstName} ${normalizedLastName}\n`;
+                        outputText += `Email: ${firstName.toLowerCase()}.${lastName.toLowerCase().replace(/\s+/g, '')}@company.com\n`;
+                        outputText += `Username: ${firstName.charAt(0).toLowerCase()}${lastName.toLowerCase().replace(/\s+/g, '')}\n`;
+                        break;
+
+                    case 'condition':
+                        const age = parseInt(input) || 18;
+                        let category = '';
+
+                        if (age < 0) {
+                            category = "Tuổi không hợp lệ";
+                        } else if (age < 13) {
+                            category = "Trẻ em";
+                        } else if (age < 18) {
+                            category = "Thanh thiếu niên";
+                        } else if (age < 65) {
+                            category = "Người lớn";
+                        } else {
+                            category = "Người cao tuổi";
+                        }
+
+                        outputText += `KIỂM TRA ĐIỀU KIỆN\n`;
+                        outputText += `Tuổi nhập: ${age}\n\n`;
+                        outputText += `Phân loại: ${category}\n\n`;
+                        outputText += `Logic kiểm tra:\n`;
+                        outputText += `  if (age < 0) → "Tuổi không hợp lệ"\n`;
+                        outputText += `  else if (age < 13) → "Trẻ em"\n`;
+                        outputText += `  else if (age < 18) → "Thanh thiếu niên"\n`;
+                        outputText += `  else if (age < 65) → "Người lớn"\n`;
+                        outputText += `  else → "Người cao tuổi"\n`;
+                        break;
+                }
+            } catch (error) {
+                outputText += `Lỗi: ${error.message}\n`;
+            }
+
+            output.textContent = outputText;
+        }
+    </script>
+</body>
+
+</html>

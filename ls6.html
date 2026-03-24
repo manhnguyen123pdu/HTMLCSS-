@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OBJECT TRONG JAVASCRIPT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --info: #17a2b8;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+
+        body {
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 80vh;
+        }
+
+        .sidebar {
+            height: 85vh;
+            overflow: scroll;
+            background: var(--light);
+            padding: 20px;
+            border-right: 3px solid var(--secondary);
+        }
+
+        .sidebar ul {
+            padding: 0;
+        }
+
+        .nav-list {
+            list-style: none;
+            position: sticky;
+            top: 20px;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--secondary);
+            color: white;
+            transform: translateX(5px);
+            border-color: var(--secondary);
+        }
+
+        .nav-link1 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .main-content {
+            padding: 30px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: var(--accent);
+            margin: 25px 0 15px;
+            padding-left: 15px;
+            border-left: 4px solid var(--accent);
+        }
+
+        h4 {
+            color: var(--info);
+            margin: 20px 0 10px;
+        }
+
+        h5 {
+            color: var(--dark);
+            margin: 15px 0 8px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul,
+        ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            line-height: 1.4;
+            border: 2px solid #444;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn {
+            background: #555;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .keyword {
+            color: #569cd6;
+        }
+
+        .string {
+            color: #ce9178;
+        }
+
+        .comment {
+            color: #6a9955;
+        }
+
+        .number {
+            color: #b5cea8;
+        }
+
+        .class-name {
+            color: #4ec9b0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: var(--secondary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid var(--info);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .interactive-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #e9ecef;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 5px;
+        }
+
+        .btn-run {
+            background: var(--success);
+        }
+
+        .btn-warning {
+            background: var(--warning);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background: white;
+            border-left: 4px solid var(--warning);
+            display: none;
+        }
+
+        .result.active {
+            display: block;
+        }
+
+        .result-content {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border: 1px solid #e9ecef;
+            white-space: pre-wrap;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+        }
+ @media (max-width: 1400px) {
+      .sidebar {
+            height: 78vh;
+      }
+ }
+        @media (max-width: 768px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-right: none;
+                border-bottom: 3px solid var(--secondary);
+            }
+        }
+
+        .visual-array {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .array-item {
+            width: 60px;
+            height: 60px;
+            background: var(--secondary);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 5px;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .array-index {
+            position: absolute;
+            top: -25px;
+            font-size: 12px;
+            color: var(--dark);
+        }
+
+        .array-value {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .algorithm-steps {
+            background: #f0f7ff;
+            border-left: 4px solid #4dabf7;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .algorithm-steps ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .algorithm-steps li {
+            margin-bottom: 5px;
+        }
+
+        .method-demo {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+
+
+        .demo .wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .demo .array {
+            display: flex;
+        }
+
+        .demo .item {
+            width: 100px;
+            padding: 15px;
+            margin: 5px;
+            background: white;
+            color: black;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: 0.4s;
+        }
+
+        .demo .active {
+            background: #ffcc00;
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .demo .arrow {
+            position: absolute;
+            top: -35px;
+            font-size: 28px;
+            transition: 0.4s;
+        }
+
+        .demo .index {
+            margin-top: 30px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fab fa-js"></i> BÀI 6: OBJECT TRONG JAVASCRIPT</h1>
+        </header>
+
+        <div class="content-wrapper">
+            <nav class="sidebar">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#intro" class="nav-link active"><i class="fas fa-cube"></i>  Object
+                            là gì?</a></li>
+                    <li class="nav-item"><a href="#create" class="nav-link"><i class="fas fa-plus-circle"></i>  Cách
+                            tạo Object</a></li>
+                    <li class="nav-item"><a href="#properties-methods" class="nav-link"><i class="fas fa-list-ul"></i>
+                            III. Thuộc tính & Phương thức</a></li>
+                    <li class="nav-item"><a href="#iterate" class="nav-link"><i class="fas fa-redo-alt"></i> Duyệt
+                            Object</a></li>
+                    <li class="nav-item"><a href="#destructuring" class="nav-link"><i class="fas fa-code-branch"></i> 
+                            Destructuring</a></li>
+                    <li class="nav-item"><a href="#copy" class="nav-link"><i class="fas fa-copy"></i> Copy
+                            Object</a></li>
+                    <li class="nav-item"><a href="#optional-chaining" class="nav-link"><i
+                                class="fas fa-question-circle"></i> VII. Optional Chaining & ??</a></li>
+                    <li class="nav-item"><a href="#dynamic" class="nav-link"><i class="fas fa-dice-d6"></i>  Tạo
+                            Object động</a></li>
+                    <li class="nav-item"><a href="#exercises" class="nav-link"><i class="fas fa-dumbbell"></i>Thực
+                            hành</a></li>
+                    <li class="nav-item"><a href="#solutions" class="nav-link"><i class="fas fa-check-double"></i> Bài
+                            tập</a></li>
+                </ul>
+            </nav>
+
+            <main class="main-content">
+                <!-- I. OBJECT LÀ GÌ -->
+                <section id="intro" class="section active">
+                    <h2><i class="fas fa-cube"></i> I. Object là gì?</h2>
+
+                    <h3>Định nghĩa:</h3>
+                    <p>Object là một kiểu dữ liệu trong JavaScript cho phép lưu trữ nhiều giá trị dưới dạng cặp
+                        key-value (thuộc tính: giá trị). Mỗi key (còn gọi là "property name") thường là chuỗi, còn value
+                        có thể là bất kỳ kiểu dữ liệu nào, kể cả function.</p>
+
+                    <h4>Mục đích:</h4>
+                    <ul>
+                        <li>Gom nhóm các thông tin liên quan về một đối tượng thực tế (người, sản phẩm, xe, v.v).</li>
+                        <li>Dễ quản lý và truy cập dữ liệu có cấu trúc phức tạp.</li>
+                        <li>Là nền tảng cho lập trình hướng đối tượng trong JavaScript.</li>
+                    </ul>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cú pháp cơ bản</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> objectName = {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;key1: value1,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;key2: value2,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;...<br>
+                        };
+                    </div>
+
+                    <h4>Giải thích cú pháp:</h4>
+                    <ul>
+                        <li><strong>objectName:</strong> Tên của đối tượng (do bạn đặt).</li>
+                        <li><strong>key1, key2:</strong> Tên thuộc tính (phải là chuỗi, nếu không thì được ép thành
+                            chuỗi).</li>
+                        <li><strong>value1, value2:</strong> Giá trị tương ứng với từng key. Có thể là chuỗi, số,
+                            boolean, array, object khác hoặc function.</li>
+                    </ul>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ object đơn giản</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> person = {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;name: <span class="string">"Nam"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;age: <span class="number">25</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;isStudent: <span class="keyword">true</span><br>
+                        };
+                    </div>
+                </section>
+
+                <!-- II. CÁCH TẠO OBJECT -->
+                <section id="create" class="section">
+                    <h2><i class="fas fa-plus-circle"></i> II. Cách tạo Object</h2>
+
+                    <h3>1. Dùng cú pháp literal (phổ biến nhất)</h3>
+                    <p><strong>Định nghĩa:</strong> Tạo object bằng dấu {} và liệt kê các cặp key: value bên trong.</p>
+                    <p><strong>Mục đích:</strong> Nhanh chóng, ngắn gọn khi khai báo một object tĩnh.</p>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Object literal</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> objectName = {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;key1: value1,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;key2: value2<br>
+                        };
+                    </div>
+
+                    <h4>Giải thích cú pháp:</h4>
+                    <ul>
+                        <li>Cặp key-value được khai báo trong dấu {}.</li>
+                        <li>Các cặp cách nhau bằng dấu phẩy ,.</li>
+                    </ul>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ object literal</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> book = {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;title: <span class="string">"JavaScript Cơ bản"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;pages: <span class="number">120</span><br>
+                        };
+                    </div>
+
+                    <h3>2. Dùng từ khóa new Object()</h3>
+                    <p><strong>Định nghĩa:</strong> Tạo một object mới bằng cách gọi constructor Object().</p>
+                    <p><strong>Mục đích:</strong> Tạo object khi bạn muốn thêm thuộc tính sau từng bước.</p>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>new Object()</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> obj = <span class="keyword">new</span> <span
+                            class="class-name">Object</span>();<br>
+                        obj.key = value;
+                    </div>
+
+                    <h4>Giải thích cú pháp:</h4>
+                    <ul>
+                        <li>new Object() tạo ra một object rỗng.</li>
+                        <li>Các thuộc tính được thêm vào như obj.key = value.</li>
+                    </ul>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ new Object()</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> student = <span class="keyword">new</span> <span
+                            class="class-name">Object</span>();<br>
+                        student.name = <span class="string">"Linh"</span>;<br>
+                        student.age = <span class="number">21</span>;
+                    </div>
+
+                    <h3>3. Dùng Constructor Function (Hàm khởi tạo)</h3>
+                    <p><strong>Định nghĩa:</strong> Sử dụng một hàm đặc biệt để tạo ra các object có cùng cấu trúc.</p>
+                    <p><strong>Mục đích:</strong> Tạo nhiều object giống nhau về cấu trúc.</p>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Constructor Function</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> <span class="class-name">ConstructorName</span>(param1,
+                        param2) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.key1 = param1;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.key2 = param2;<br>
+                        }<br>
+                        <span class="keyword">const</span> obj = <span class="keyword">new</span> <span
+                            class="class-name">ConstructorName</span>(arg1, arg2);
+                    </div>
+
+                    <h4>Giải thích cú pháp:</h4>
+                    <ul>
+                        <li>this.key = param: gán giá trị vào object mới.</li>
+                        <li>new giúp tạo ra instance mới.</li>
+                        <li><strong>Instance</strong> là một bản sao cụ thể được tạo ra từ một "khuôn mẫu" (constructor
+                            function hoặc class).</li>
+                    </ul>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ Constructor Function</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> <span class="class-name">Car</span>(brand, color) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.brand = brand;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.color = color;<br>
+                        }<br>
+                        <span class="keyword">const</span> myCar = <span class="keyword">new</span> <span
+                            class="class-name">Car</span>(<span class="string">"Toyota"</span>, <span
+                            class="string">"Red"</span>);
+                    </div>
+
+                    <h3>4. Dùng Class (ES6+)</h3>
+                    <p><strong>Định nghĩa:</strong> Class là cách viết hiện đại để tạo đối tượng với phương thức và
+                        thuộc tính.</p>
+                    <p><strong>Mục đích:</strong> Tổ chức code rõ ràng, dễ mở rộng.</p>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Class ES6</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">class</span> <span class="class-name">ClassName</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">constructor</span>(param1, param2) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.key1 =
+                        param1;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.key2 =
+                        param2;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }<br>
+                        <span class="keyword">const</span> obj = <span class="keyword">new</span> <span
+                            class="class-name">ClassName</span>(arg1, arg2);
+                    </div>
+
+                    <h4>Giải thích cú pháp:</h4>
+                    <ul>
+                        <li>constructor: hàm chạy khi dùng new.</li>
+                        <li>this: đại diện cho object được tạo.</li>
+                    </ul>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ Class</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">class</span> <span class="class-name">Student</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">constructor</span>(name, age) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.name =
+                        name;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.age = age;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }<br>
+                        <span class="keyword">const</span> s1 = <span class="keyword">new</span> <span
+                            class="class-name">Student</span>(<span class="string">"Quang"</span>, <span
+                            class="number">20</span>);
+                    </div>
+                </section>
+
+                <!-- III. THUỘC TÍNH VÀ PHƯƠNG THỨC -->
+                <section id="properties-methods" class="section">
+                    <h2><i class="fas fa-list-ul"></i> III. Thuộc tính và phương thức trong Object</h2>
+
+                    <h3>1. Thuộc tính (Property)</h3>
+                    <p><strong>Định nghĩa:</strong> Thuộc tính là cặp key: value được lưu trong object. Mỗi thuộc tính
+                        là một phần thông tin mô tả cho đối tượng.</p>
+                    <p><strong>Mục đích:</strong> Lưu trữ dữ liệu liên quan đến đối tượng cụ thể. Dễ dàng truy cập, sửa
+                        đổi hoặc hiển thị thông tin.</p>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Truy cập thuộc tính</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        objectName.key <span class="comment">// Truy cập bằng dấu chấm (dot notation)</span><br>
+                        objectName[<span class="string">"key"</span>] <span class="comment">// Truy cập bằng dấu ngoặc
+                            vuông (bracket notation)</span>
+                    </div>
+
+                    <h4>Giải thích cú pháp:</h4>
+                    <ul>
+                        <li>objectName.key: dùng khi key là một tên hợp lệ (không có khoảng trắng, dấu đặc biệt).</li>
+                        <li>objectName["key"]: dùng khi key là biến, chuỗi hoặc có ký tự đặc biệt.</li>
+                    </ul>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Truy cập thuộc tính</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> user = {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;name: <span class="string">"Hưng"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;age: <span class="number">28</span><br>
+                        };<br>
+                        <br>
+                        console.log(user.name); <span class="comment">// "Hưng"</span><br>
+                        console.log(user[<span class="string">"age"</span>]); <span class="comment">// 28</span><br>
+                        <br>
+                        <span class="keyword">const</span> key = <span class="string">"name"</span>;<br>
+                        console.log(user[key]); <span class="comment">// "Hưng"</span>
+                    </div>
+
+                    <h3>2. Thêm hoặc sửa thuộc tính</h3>
+                    <p><strong>Định nghĩa:</strong> Có thể thêm thuộc tính mới hoặc cập nhật giá trị thuộc tính đã có.
+                    </p>
+                    <p><strong>Mục đích:</strong> Linh hoạt mở rộng dữ liệu trong object bất kỳ lúc nào.</p>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Thêm/sửa thuộc tính</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        objectName.newKey = value;<br>
+                        objectName[<span class="string">"newKey"</span>] = value;
+                    </div>
+
+                    <h4>Giải thích cú pháp:</h4>
+                    <ul>
+                        <li>Nếu newKey chưa tồn tại, nó sẽ được thêm mới.</li>
+                        <li>Nếu newKey đã tồn tại, giá trị sẽ bị ghi đè.</li>
+                    </ul>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Thêm/sửa thuộc tính</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> product = {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;name: <span class="string">"Laptop"</span><br>
+                        };<br>
+                        <br>
+                        product.price = <span class="number">1500</span>; <span class="comment">// thêm mới</span><br>
+                        product.name = <span class="string">"Gaming Laptop"</span>; <span class="comment">//
+                            sửa</span><br>
+                        <br>
+                        console.log(product); <span class="comment">// { name: "Gaming Laptop", price: 1500 }</span>
+                    </div>
+
+                    <h3>3. Xóa thuộc tính</h3>
+                    <p><strong>Định nghĩa:</strong> Dùng từ khóa delete để loại bỏ một thuộc tính khỏi object.</p>
+                    <p><strong>Mục đích:</strong> Dọn dẹp hoặc ẩn dữ liệu không còn cần thiết.</p>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Xóa thuộc tính</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">delete</span> objectName.key;<br>
+                        <span class="keyword">delete</span> objectName[<span class="string">"key"</span>];
+                    </div>
+
+                    <h4>Giải thích cú pháp:</h4>
+                    <ul>
+                        <li>Sau khi xóa, thuộc tính đó không còn tồn tại trong object nữa.</li>
+                    </ul>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Xóa thuộc tính</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> user = {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;name: <span class="string">"Huy"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;age: <span class="number">30</span><br>
+                        };<br>
+                        <br>
+                        <span class="keyword">delete</span> user.age;<br>
+                        console.log(user); <span class="comment">// { name: "Huy" }</span>
+                    </div>
+
+                    <h3>4. Phương thức trong object (Method)</h3>
+                    <p><strong>Định nghĩa:</strong> Phương thức là một thuộc tính có giá trị là hàm. Dùng để thực hiện
+                        hành vi (hành động) của object.</p>
+                    <p><strong>Mục đích:</strong> Gắn hành vi vào object, giúp quản lý hành vi và dữ liệu cùng nhau. Là
+                        nền tảng cho Lập trình hướng đối tượng (OOP).</p>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Phương thức</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> object = {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;methodName: <span class="keyword">function</span>() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// code</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        };<br>
+                        <br>
+                        <span class="comment">//Hoặc cú pháp rút gọn (ES6):</span><br>
+                        <br>
+                        <span class="keyword">const</span> object = {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;methodName() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// code</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        };
+                    </div>
+
+                    <h4>Giải thích cú pháp:</h4>
+                    <ul>
+                        <li>methodName: tên của phương thức.</li>
+                        <li>function() {...}: hàm định nghĩa hành vi.</li>
+                        <li>Có thể sử dụng this để tham chiếu đến chính object đó.</li>
+                    </ul>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ phương thức</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> dog = {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;name: <span class="string">"Lu"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;speak: <span class="keyword">function</span>() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(`${<span
+                            class="keyword">this</span>.name} nói: Gâu Gâu!`);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        };<br>
+                        <br>
+                        dog.speak(); <span class="comment">// "Lu nói: Gâu Gâu!"</span><br>
+                        <br>
+                        <span class="comment">// Hoặc viết ngắn hơn:</span><br>
+                        <span class="keyword">const</span> cat = {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;name: <span class="string">"Miu"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;speak() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(`${<span
+                            class="keyword">this</span>.name} kêu: Meo Meo!`);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        };<br>
+                        cat.speak(); <span class="comment">// "Miu kêu: Meo Meo!"</span>
+                    </div>
+                </section>
+
+                <!-- IV. DUYỆT OBJECT -->
+                <section id="iterate" class="section">
+                    <h2><i class="fas fa-redo-alt"></i> IV. Duyệt Object (Lặp qua thuộc tính)</h2>
+
+                    <h3>Định nghĩa:</h3>
+                    <p>Duyệt object là quá trình truy cập lần lượt từng cặp key: value trong một đối tượng.</p>
+
+                    <h4>Mục đích:</h4>
+                    <ul>
+                        <li>Hiển thị toàn bộ thông tin trong object.</li>
+                        <li>Thực hiện thao tác với từng thuộc tính như kiểm tra, tính toán, lọc...</li>
+                    </ul>
+
+                    <h4>Cú pháp:</h4>
+                    <h5>Cách 1: for...in (truyền thống)</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>for...in</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">for</span> (<span class="keyword">let</span> key <span
+                            class="keyword">in</span> object) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(key, object[key]);<br>
+                        }
+                    </div>
+
+                    <h5>Cách 2: Dùng Object.keys, Object.values, Object.entries</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Object methods</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        Object.keys(obj); <span class="comment">// → mảng các key</span><br>
+                        Object.values(obj); <span class="comment">// → mảng các value</span><br>
+                        Object.entries(obj); <span class="comment">// → mảng các cặp [key, value]</span>
+                    </div>
+
+                    <h4>Giải thích cú pháp:</h4>
+                    <ul>
+                        <li>for...in: duyệt qua từng thuộc tính (bao gồm kế thừa).</li>
+                        <li>Object.keys() trả về mảng chứa tất cả key của object.</li>
+                        <li>Object.entries() dùng với for...of để vừa lấy key vừa lấy value.</li>
+                    </ul>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ duyệt object</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> student = {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;name: <span class="string">"Hải"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;age: <span class="number">23</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;score: <span class="number">8.5</span><br>
+                        };<br>
+                        <br>
+                        <span class="comment">// Dùng for...in</span><br>
+                        <span class="keyword">for</span> (<span class="keyword">let</span> key <span
+                            class="keyword">in</span> student) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(`${key}: ${student[key]}`);<br>
+                        }<br>
+                        <br>
+                        <span class="comment">// Dùng Object.entries</span><br>
+                        <span class="keyword">for</span> (<span class="keyword">let</span> [key, value] <span
+                            class="keyword">of</span> Object.entries(student)) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(`${key} => ${value}`);<br>
+                        }
+                    </div>
+                </section>
+
+                <!-- V. DESTRUCTURING -->
+                <section id="destructuring" class="section">
+                    <h2><i class="fas fa-code-branch"></i> V. Destructuring Object (Phân rã đối tượng)</h2>
+
+                    <h3>Định nghĩa:</h3>
+                    <p>Destructuring là cú pháp giúp trích xuất dữ liệu từ object ra biến một cách nhanh chóng.</p>
+
+                    <h4>Mục đích:</h4>
+                    <ul>
+                        <li>Truy xuất nhiều thuộc tính một cách ngắn gọn.</li>
+                        <li>Code ngắn gọn, dễ đọc hơn khi làm việc với object có nhiều thuộc tính.</li>
+                    </ul>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Destructuring</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> { key1, key2 } = object;
+                    </div>
+
+                    <h4>Giải thích cú pháp:</h4>
+                    <ul>
+                        <li>key1, key2: tên thuộc tính cần trích xuất.</li>
+                        <li>Phải trùng tên với key trong object.</li>
+                        <li>Có thể đổi tên: { key1: newVarName }.</li>
+                    </ul>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ destructuring</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> product = {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;name: <span class="string">"Mouse"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;price: <span class="number">200</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;brand: <span class="string">"Logitech"</span><br>
+                        };<br>
+                        <br>
+                        <span class="keyword">const</span> { name, price } = product;<br>
+                        console.log(name); <span class="comment">// "Mouse"</span><br>
+                        console.log(price); <span class="comment">// 200</span><br>
+                        <br>
+                        <span class="comment">// Đổi tên biến</span><br>
+                        <span class="keyword">const</span> { brand: productBrand } = product;<br>
+                        console.log(productBrand); <span class="comment">// "Logitech"</span>
+                    </div>
+                </section>
+
+                <!-- VI. COPY OBJECT -->
+                <section id="copy" class="section">
+                    <h2><i class="fas fa-copy"></i> VI. Copy Object (Sao chép đối tượng)</h2>
+
+                    <h3>Định nghĩa:</h3>
+                    <p>Copy object là tạo ra một bản sao từ object gốc.</p>
+
+                    <h4>Mục đích:</h4>
+                    <ul>
+                        <li>Tránh ảnh hưởng đến object gốc khi thay đổi bản sao.</li>
+                        <li>Làm việc với dữ liệu độc lập.</li>
+                    </ul>
+
+                    <h4>Cú pháp:</h4>
+                    <h5>1. Copy bằng tham chiếu (KHÔNG độc lập)</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Copy tham chiếu</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> newObj = oldObj;
+                    </div>
+
+                    <h5>2. Shallow copy (sao chép nông)</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Shallow copy</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> copy1 = Object.assign({}, obj);<br>
+                        <span class="keyword">const</span> copy2 = { ...obj };
+                    </div>
+
+                    <h5>3. Deep copy (sao chép sâu)</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Deep copy</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> deepCopy = JSON.parse(JSON.stringify(obj));
+                    </div>
+
+                    <h4>Giải thích cú pháp:</h4>
+                    <ul>
+                        <li><strong>Copy tham chiếu:</strong> cả hai biến cùng trỏ đến một object trong bộ nhớ.</li>
+                        <li><strong>Shallow copy:</strong> chỉ sao chép các thuộc tính cấp 1, object lồng bên trong vẫn
+                            bị tham chiếu.</li>
+                        <li><strong>Deep copy:</strong> tạo bản sao hoàn toàn tách biệt kể cả object lồng nhau.</li>
+                    </ul>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ copy object</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> person = {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;name: <span class="string">"An"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;address: {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;city: <span class="string">"Hanoi"</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        };<br>
+                        <br>
+                        <span class="comment">// Shallow copy</span><br>
+                        <span class="keyword">const</span> copy = { ...person };<br>
+                        copy.name = <span class="string">"Bình"</span>;<br>
+                        copy.address.city = <span class="string">"Saigon"</span>;<br>
+                        <br>
+                        console.log(person.name); <span class="comment">// "An"</span><br>
+                        console.log(person.address.city); <span class="comment">// "Saigon" ❗️bị ảnh hưởng</span><br>
+                        <br>
+                        <span class="comment">// Deep copy</span><br>
+                        <span class="keyword">const</span> deepCopy = JSON.parse(JSON.stringify(person));<br>
+                        deepCopy.address.city = <span class="string">"Hue"</span>;<br>
+                        console.log(person.address.city); <span class="comment">// "Saigon"</span><br>
+                        console.log(deepCopy.address.city); <span class="comment">// "Hue"</span>
+                    </div>
+                </section>
+
+                <!-- VII. OPTIONAL CHAINING & NULLISH COALESCING -->
+                <section id="optional-chaining" class="section">
+                    <h2><i class="fas fa-question-circle"></i> VII. Optional Chaining (?.) & Nullish Coalescing (??)
+                    </h2>
+
+                    <h3>Định nghĩa:</h3>
+                    <ul>
+                        <li><strong>Optional chaining ?.:</strong> truy cập sâu trong object mà không gây lỗi nếu giá
+                            trị trung gian là undefined hoặc null.</li>
+                        <li><strong>Nullish coalescing ??:</strong> trả về giá trị bên phải nếu bên trái là null hoặc
+                            undefined.</li>
+                    </ul>
+
+                    <h4>Mục đích:</h4>
+                    <ul>
+                        <li>Tránh lỗi khi truy cập thuộc tính không tồn tại.</li>
+                        <li>Đảm bảo gán giá trị mặc định an toàn.</li>
+                    </ul>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Optional Chaining & Nullish Coalescing</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        object?.key?.subKey<br>
+                        <span class="keyword">let</span> value = input ?? <span class="string">"default value"</span>;
+                    </div>
+
+                    <h4>Giải thích cú pháp:</h4>
+                    <ul>
+                        <li>obj?.prop: nếu obj là null hoặc undefined, sẽ trả về undefined mà không lỗi.</li>
+                        <li>a ?? b: nếu a là null hoặc undefined, trả về b. Các giá trị như 0, false, "" vẫn giữ nguyên.
+                        </li>
+                    </ul>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ Optional Chaining và Nullish Coalescing</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> user = {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;profile: {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name: <span class="string">"Mai"</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        };<br>
+                        <br>
+                        console.log(user.profile?.name); <span class="comment">// "Mai"</span><br>
+                        console.log(user.contact?.email); <span class="comment">// undefined, không lỗi</span><br>
+                        <br>
+                        <span class="keyword">const</span> username = <span class="keyword">null</span>;<br>
+                        <span class="keyword">const</span> display = username ?? <span
+                            class="string">"Guest"</span>;<br>
+                        console.log(display); <span class="comment">// "Guest"</span>
+                    </div>
+                </section>
+
+                <!-- VIII. TẠO OBJECT ĐỘNG -->
+                <section id="dynamic" class="section">
+                    <h2><i class="fas fa-dice-d6"></i> VIII. Tạo Object động (Tính năng nâng cao)</h2>
+
+                    <h3>1. Computed Property Names</h3>
+                    <p><strong>Định nghĩa:</strong> Tạo key từ giá trị biến động (biến, kết quả tính toán).</p>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Computed Property Names</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> key = <span class="string">"email"</span>;<br>
+                        <span class="keyword">const</span> obj = {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;[key]: <span class="string">"abc@gmail.com"</span><br>
+                        };
+                    </div>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ Computed Property Names</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> prop = <span class="string">"age"</span>;<br>
+                        <span class="keyword">const</span> user = {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;name: <span class="string">"Hoàng"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;[prop]: <span class="number">27</span><br>
+                        };<br>
+                        console.log(user.age); <span class="comment">// 27</span>
+                    </div>
+
+                    <h3>2. Shorthand Property & Method (Viết gọn)</h3>
+                    <p><strong>Định nghĩa:</strong> Viết tắt khi tên biến trùng với tên key, hoặc định nghĩa phương
+                        thức.</p>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Shorthand Property & Method</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> name = <span class="string">"Lan"</span>;<br>
+                        <span class="keyword">const</span> person = { name }; <span class="comment">// tương đương: {
+                            name: name }</span><br>
+                        <br>
+                        <span class="keyword">const</span> obj = {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;greet() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span
+                            class="string">"Hi"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        };
+                    </div>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ Shorthand</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> price = <span class="number">1000</span>;<br>
+                        <span class="keyword">const</span> product = {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;name: <span class="string">"TV"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;price, <span class="comment">// tương đương price: price</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;showInfo() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(`${<span
+                            class="keyword">this</span>.name} - ${<span class="keyword">this</span>.price}`);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        };<br>
+                        product.showInfo(); <span class="comment">// "TV - 1000"</span>
+                    </div>
+                </section>
+
+                <!-- BÀI TẬP -->
+                <section id="exercises" class="section">
+                    <h2><i class="fas fa-dumbbell"></i> BÀI TẬP</h2>
+
+                    <h3>Bài 1. Tạo object đơn giản</h3>
+                    <p><strong>Yêu cầu:</strong> Tạo một object student có các thuộc tính: name, age, gender, address.
+                        In ra thông tin từng thuộc tính.</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Bài 1</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> student = {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;name: <span class="string">"Nguyen Van A"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;age: <span class="number">20</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;gender: <span class="string">"Male"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;address: <span class="string">"Hanoi"</span><br>
+                        };
+                    </div>
+
+                    <h3>Bài 2. Duyệt qua object</h3>
+                    <p><strong>Yêu cầu:</strong> Duyệt qua tất cả các thuộc tính của object student và in ra theo dạng:
+                        name: Nguyen Van A</p>
+
+                    <h3>Bài 3. Thêm / sửa / xóa thuộc tính</h3>
+                    <p><strong>Yêu cầu:</strong></p>
+                    <ul>
+                        <li>Thêm thuộc tính email vào object student</li>
+                        <li>Sửa age thành 21</li>
+                        <li>Xóa thuộc tính address</li>
+                    </ul>
+
+                    <h3>Bài 4. Kiểm tra thuộc tính có tồn tại</h3>
+                    <p><strong>Yêu cầu:</strong> Kiểm tra xem object student có thuộc tính email không? In kết quả
+                        true/false.</p>
+
+                    <h3>Bài 5. Đếm số thuộc tính</h3>
+                    <p><strong>Yêu cầu:</strong> Viết phương thức countProperties(obj) để đếm số thuộc tính trong một
+                        object bất kỳ</p>
+
+                    <h2>Hướng dẫn</h2>
+                    <h3>Bài 1. Tạo object đơn giản</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Giải bài 1</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> student = {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;name: <span class="string">"Nguyen Van A"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;age: <span class="number">20</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;gender: <span class="string">"Male"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;address: <span class="string">"Hanoi"</span><br>
+                        };<br>
+                        <br>
+                        console.log(student.name); <span class="comment">// Nguyen Van A</span><br>
+                        console.log(student.age); <span class="comment">// 20</span><br>
+                        console.log(student.gender); <span class="comment">// Male</span><br>
+                        console.log(student.address); <span class="comment">// Hanoi</span>
+                    </div>
+
+                    <h3>Bài 2. Duyệt qua object</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Giải bài 2</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">for</span> (<span class="keyword">let</span> key <span
+                            class="keyword">in</span> student) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(`${key}: ${student[key]}`);<br>
+                        }
+                    </div>
+
+                    <h3>Bài 3. Thêm / sửa / xóa thuộc tính</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Giải bài 3</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        student.email = <span class="string">"nguyenvana@gmail.com"</span>; <span class="comment">//
+                            thêm</span><br>
+                        student.age = <span class="number">21</span>; <span class="comment">// sửa</span><br>
+                        <span class="keyword">delete</span> student.address; <span class="comment">// xóa</span><br>
+                        <br>
+                        console.log(student);
+                    </div>
+
+                    <h3>Bài 4. Kiểm tra thuộc tính có tồn tại</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Giải bài 4</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        console.log(<span class="string">"email"</span> <span class="keyword">in</span> student); <span
+                            class="comment">// true</span><br>
+                        console.log(<span class="string">"phone"</span> <span class="keyword">in</span> student); <span
+                            class="comment">// false</span>
+                    </div>
+
+                    <h3>Bài 5. Đếm số thuộc tính</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Giải bài 5</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> count = <span class="number">0</span>;<br>
+                        <span class="keyword">for</span> (<span class="keyword">let</span> key <span
+                            class="keyword">in</span> student) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;count++;<br>
+                        }<br>
+                        console.log(<span class="string">"Số thuộc tính:"</span>, count);
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm bài tập</h4>
+                        <button class="btn btn-run" onclick="testExercises()">
+                            <i class="fas fa-play"></i> Chạy bài tập mẫu
+                        </button>
+                        <div class="result" id="exercisesResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="exercisesResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- BÀI GIẢI -->
+                <section id="solutions" class="section">
+
+
+                    <!-- Bài 1 -->
+                    <div class="exercise">
+                        <h2>Bài 1: Quản lý sinh viên</h2>
+                         <div class="code-block">
+                                                <pre>
+let students = [
+  {
+    id: "SV001",
+    name: "Nguyễn Văn A",
+    age: 20,
+    gender: "Nam",
+    major: "Công nghệ thông tin"
+  },
+  {
+    id: "SV002",
+    name: "Trần Thị B",
+    age: 22,
+    gender: "Nữ",
+    major: "Kinh tế"
+  },
+  {
+    id: "SV003",
+    name: "Lê Văn C",
+    age: 19,
+    gender: "Nam",
+    major: "Công nghệ thông tin"
+  }
+];
+            </pre>
+                         </div>
+    
+                        <ul style="list-style: none;">
+                            <li><p>1. Thêm 3 sinh viên vào mảng students</p></li>
+                            <li><p>2. In ra toàn bộ thông tin sinh viên</p></li>
+                            <li><p>3. In ra thông tin các sinh viên có ngành học là "Công nghệ thông tin"</p> </li>
+                            <li><p>4. Cập nhật tuổi của sinh viên có id = "SV002" thành 21</p></li>
+                            <li><p>5. Xóa sinh viên có id = "SV003" khỏi mảng</p></li>
+                        </ul>
+                    </div>
+
+                    <!-- Bài 2 -->
+                    <div class="exercise">
+                        <h2>Bài 2: Quản lý sản phẩm</h2>
+                        <div class="code-block">
+                            <pre>
+let products = [
+  { id: "P001", name: "Tủ lạnh", price: 5000000, quantity: 10, category: "Đồ gia dụng" },
+  { id: "P002", name: "Áo thun", price: 200000, quantity: 25, category: "Thời trang" },
+  { id: "P003", name: "Gạo ST25", price: 30000, quantity: 100, category: "Thực phẩm" }
+];
+            </pre>
+                        </div>
+
+
+                        <ul style="list-style: none;">
+                            <li><p>1. Thêm 2 sản phẩm mới vào mảng</p></li>
+                            <li><p>2. In toàn bộ sản phẩm trong kho</p></li>
+                            <li><p>3. In các sản phẩm có giá trên 1 triệu</p></li>
+                            <li><p>4. Tính tổng giá trị tồn kho (price × quantity)</p></li>
+                            <li><p>5. Tăng số lượng sản phẩm có id = "P002" lên thêm 10</p></li>
+                            <li><p>6. Xóa sản phẩm có id = "P003"</p></li>
+                            <li><p>7. Đếm số lượng sản phẩm theo từng danh mục (category)</p></li>
+                            <li><p>8. Tìm sản phẩm có số lượng tồn kho lớn nhất</p></li>
+                            <li><p>9. Lọc sản phẩm có tên chứa từ khóa "áo" (không phân biệt hoa thường)</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Bài 3 -->
+                    <div class="exercise">
+                        <h2>Bài 3: Quản lý giao dịch ngân hàng</h2>
+  <div class="code-block">              <pre>
+let transactions = [
+  { id: "T001", type: "nạp", amount: 5000000, date: "2025-07-01", account: "123456789" },
+  { id: "T002", type: "rút", amount: 2000000, date: "2025-07-02", account: "123456789" },
+  { id: "T003", type: "nạp", amount: 3000000, date: "2025-07-03", account: "987654321" },
+  { id: "T004", type: "rút", amount: 1000000, date: "2025-07-03", account: "123456789" }
+];
+            </pre></div>
+          
+
+                        <ul style="list-style: none;">
+                            <li>
+                                <p>1. Thêm 2 giao dịch mới vào mảng transactions</p>
+                            </li>
+                            <li>
+                                <p>2. In toàn bộ lịch sử giao dịch (1 dòng/giao dịch)</p>
+                            </li>
+                            <li>
+                                <p>3. Tính tổng tiền đã nạp và đã rút của tất cả tài khoản</p>
+                            </li>
+                            <li>
+                                <p>4. Tính số dư hiện tại của từng tài khoản (nạp – rút)</p>
+                            </li>
+                            <li>
+                                <p>5. In danh sách giao dịch của tài khoản "123456789"</p>
+                            </li>
+                            <li>
+                                <p>6. Tìm giao dịch có số tiền lớn nhất</p>
+                            </li>
+                            <li>
+                                <p>7. Đếm số giao dịch theo loại "nạp" và "rút"</p>
+                            </li>
+                        </ul>
+                    </div>
+        </div>
+        </section>
+        </main>
+    </div>
+
+    <footer>
+        <p>Bài 6 Object &copy; GV: Nguyễn Đình Mạnh</p>
+    </footer>
+    </div>
+
+    <script>
+        // Xử lý điều hướng
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    // Xóa class active từ tất cả các link và section
+                    navLinks.forEach(item => item.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+
+                    // Thêm class active cho link được click
+                    this.classList.add('active');
+
+                    // Hiển thị section tương ứng
+                    const targetId = this.getAttribute('href').substring(1);
+                    document.getElementById(targetId).classList.add('active');
+                });
+            });
+        });
+
+        // Hàm copy code
+        function copyCode(button) {
+            const codeBlock = button.parentElement.parentElement;
+            const text = codeBlock.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Đã copy!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        // Thử nghiệm bài tập
+        function testExercises() {
+            const result = document.getElementById('exercisesResult');
+            const output = document.getElementById('exercisesResultContent');
+
+            result.classList.add('active');
+
+            let outputText = `=== THỬ NGHIỆM BÀI TẬP OBJECT ===\n\n`;
+
+            // Bài 1: Tạo object
+            let student = {
+                name: "Nguyen Van A",
+                age: 20,
+                gender: "Male",
+                address: "Hanoi"
+            };
+
+            outputText += `BÀI 1 - Object student:\n`;
+            outputText += `name: ${student.name}\n`;
+            outputText += `age: ${student.age}\n`;
+            outputText += `gender: ${student.gender}\n`;
+            outputText += `address: ${student.address}\n\n`;
+
+            // Bài 2: Duyệt object
+            outputText += `BÀI 2 - Duyệt object:\n`;
+            for (let key in student) {
+                outputText += `${key}: ${student[key]}\n`;
+            }
+            outputText += `\n`;
+
+            // Bài 3: Thêm/sửa/xóa
+            student.email = "nguyenvana@gmail.com";
+            student.age = 21;
+            delete student.address;
+
+            outputText += `BÀI 3 - Sau khi thêm/sửa/xóa:\n`;
+            for (let key in student) {
+                outputText += `${key}: ${student[key]}\n`;
+            }
+            outputText += `\n`;
+
+            // Bài 4: Kiểm tra thuộc tính
+            outputText += `BÀI 4 - Kiểm tra thuộc tính:\n`;
+            outputText += `Có email không? ${"email" in student}\n`;
+            outputText += `Có phone không? ${"phone" in student}\n\n`;
+
+            // Bài 5: Đếm thuộc tính
+            let count = 0;
+            for (let key in student) {
+                count++;
+            }
+            outputText += `BÀI 5 - Số thuộc tính: ${count}\n`;
+
+            output.textContent = outputText;
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,2644 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CÂU LỆNH ĐIỀU KIỆN</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --info: #17a2b8;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+
+        body {
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 80vh;
+        }
+
+        .sidebar {
+            height: 80vh;
+            overflow: scroll;
+            background: var(--light);
+            padding: 20px;
+            border-right: 3px solid var(--secondary);
+        }
+
+        .sidebar ul {
+            padding: 0;
+        }
+
+        .nav-list {
+            list-style: none;
+            position: sticky;
+            top: 20px;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--secondary);
+            color: white;
+            transform: translateX(5px);
+            border-color: var(--secondary);
+        }
+
+        .main-content {
+            padding: 30px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: var(--accent);
+            margin: 25px 0 15px;
+            padding-left: 15px;
+            border-left: 4px solid var(--accent);
+        }
+
+        h4 {
+            color: var(--info);
+            margin: 20px 0 10px;
+        }
+
+        h5 {
+            color: var(--dark);
+            margin: 15px 0 8px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul,
+        ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            line-height: 1.4;
+            border: 2px solid #444;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn {
+            background: #555;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .keyword {
+            color: #569cd6;
+        }
+
+        .string {
+            color: #ce9178;
+        }
+
+        .comment {
+            color: #6a9955;
+        }
+
+        .number {
+            color: #b5cea8;
+        }
+
+        .class-name {
+            color: #4ec9b0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: var(--secondary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid var(--info);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .interactive-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #e9ecef;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 5px;
+        }
+
+        .btn-run {
+            background: var(--success);
+        }
+
+        .btn-test {
+            background: var(--warning);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background: white;
+            border-left: 4px solid var(--warning);
+            display: none;
+        }
+
+        .result.active {
+            display: block;
+        }
+
+        .result-content {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border: 1px solid #e9ecef;
+            white-space: pre-wrap;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-right: none;
+                border-bottom: 3px solid var(--secondary);
+            }
+        }
+
+        .flowchart {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .flowchart img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .definition-box {
+            background: #f0f7ff;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .example-box {
+            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .test-case {
+            background: #e8f4fc;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .syntax-box {
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        .tip-box {
+            background: #fff8e1;
+            border: 1px solid #ffd54f;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-code-branch"></i> BÀI 2: CÂU LỆNH ĐIỀU KIỆN</h1>
+        </header>
+
+        <div class="content-wrapper">
+            <nav class="sidebar">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#intro" class="nav-link active"><i class="fas fa-home"></i> Giới
+                            thiệu</a></li>
+                    <li class="nav-item"><a href="#concepts" class="nav-link"><i class="fas fa-lightbulb"></i> Khái
+                            niệm</a></li>
+                    <li class="nav-item"><a href="#if-statement" class="nav-link"><i class="fas fa-code"></i> Câu lệnh
+                            if</a></li>
+                    <li class="nav-item"><a href="#if-else" class="nav-link"><i class="fas fa-exchange-alt"></i>
+                            if...else</a></li>
+                    <li class="nav-item"><a href="#if-else-if" class="nav-link"><i class="fas fa-sitemap"></i> if...else
+                            if...else</a></li>
+                    <li class="nav-item"><a href="#ternary" class="nav-link"><i class="fas fa-question-circle"></i> Toán
+                            tử ba ngôi</a></li>
+                    <li class="nav-item"><a href="#switch" class="nav-link"><i class="fas fa-th-list"></i>
+                            switch...case</a></li>
+                    <li class="nav-item"><a href="#logical" class="nav-link"><i class="fas fa-project-diagram"></i> Toán
+                            tử logic</a></li>
+                    <li class="nav-item"><a href="#tips" class="nav-link"><i class="fas fa-magic"></i> Mẹo và viết
+                            nhanh</a></li>
+                    <li class="nav-item"><a href="#exercises" class="nav-link"><i class="fas fa-dumbbell"></i> Thực
+                            hành</a></li>
+                    <li class="nav-item"><a href="#exercisesHome" class="nav-link"><i class="fas fa-dumbbell"></i> Bài
+                            tập</a></li>
+                </ul>
+            </nav>
+
+            <main class="main-content">
+                <!-- PHẦN GIỚI THIỆU -->
+                <section id="intro" class="section active">
+                    <h2><i class="fas fa-home"></i> GIỚI THIỆU VỀ CÂU LỆNH ĐIỀU KIỆN</h2>
+
+                    <div class="definition-box">
+                        <h4><i class="fas fa-book"></i> Định nghĩa:</h4>
+                        <p><strong>Câu lệnh điều kiện</strong> là cấu trúc trong JavaScript cho phép chương trình kiểm
+                            tra một điều kiện logic, và thực thi các đoạn mã khác nhau tùy theo điều kiện đó là đúng
+                            (true) hay sai (false). Nói cách khác, nó cho phép chương trình "ra quyết định".</p>
+                    </div>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Mục tiêu học tập:</h4>
+                        <ul>
+                            <li>Hiểu khái niệm và tác dụng của câu lệnh điều kiện</li>
+                            <li>Sử dụng thành thạo các loại câu lệnh if, if...else, if...else if...else</li>
+                            <li>Áp dụng toán tử ba ngôi (ternary) trong thực tế</li>
+                            <li>Sử dụng câu lệnh switch...case hiệu quả</li>
+                            <li>Kết hợp toán tử logic &&, ||, ! trong điều kiện</li>
+                            <li>Giải quyết các bài toán thực tế bằng câu lệnh điều kiện</li>
+                        </ul>
+                    </div>
+
+                </section>
+
+                <!-- PHẦN KHÁI NIỆM -->
+                <section id="concepts" class="section">
+                    <h2><i class="fas fa-lightbulb"></i> CÁC KHÁI NIỆM CƠ BẢN</h2>
+
+                    <h3>Mục đích của câu lệnh điều kiện</h3>
+                    <p>Câu lệnh điều kiện giúp chương trình xử lý linh hoạt tùy theo tình huống cụ thể, cho phép kiểm
+                        tra dữ liệu, trạng thái và thực hiện hành động phù hợp.</p>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-check-circle"></i> Là nền tảng để viết logic cho các tính năng:</h4>
+                        <ul>
+                            <li><strong>Kiểm tra đăng nhập:</strong> Xác thực thông tin người dùng</li>
+                            <li><strong>Tính điểm và xếp loại:</strong> Đánh giá kết quả học tập</li>
+                            <li><strong>Kiểm tra quyền truy cập:</strong> Phân quyền người dùng</li>
+                            <li><strong>Hiển thị thông báo:</strong> Thông báo lỗi, cảnh báo</li>
+                            <li><strong>Xử lý giao dịch:</strong> Kiểm tra số dư, điều kiện thanh toán</li>
+                        </ul>
+                    </div>
+
+                    <h3>Tác dụng của câu lệnh điều kiện</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tác dụng</th>
+                                    <th>Giải thích</th>
+                                    <th>Ví dụ ứng dụng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Rẽ nhánh chương trình</strong></td>
+                                    <td>Dựa vào kết quả điều kiện, chương trình chạy theo nhánh khác nhau</td>
+                                    <td>Chọn đường đi trong game, hiển thị giao diện khác nhau</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Kiểm tra dữ liệu</strong></td>
+                                    <td>Xác định giá trị có hợp lệ, có tồn tại không</td>
+                                    <td>Validate form, kiểm tra định dạng email</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tăng tính thông minh</strong></td>
+                                    <td>Cho phép phần mềm phản ứng đúng theo tình huống</td>
+                                    <td>Trợ lý ảo, hệ thống đề xuất</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tạo tương tác người dùng</strong></td>
+                                    <td>Dùng để hiển thị thông báo, lỗi, hoặc xử lý hành động của người dùng</td>
+                                    <td>Popup thông báo, form xác nhận</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Kiểm soát luồng chạy</strong></td>
+                                    <td>Giúp chương trình chạy đúng thứ tự, đúng logic mong muốn</td>
+                                    <td>Điều khiển máy móc, hệ thống tự động</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Minh họa tác dụng của câu lệnh điều kiện</h4>
+                        <div class="input-group">
+                            <label for="conceptExample">Chọn ví dụ minh họa:</label>
+                            <select id="conceptExample">
+                                <option value="login">Kiểm tra đăng nhập</option>
+                                <option value="grade">Xếp loại học tập</option>
+                                <option value="discount">Tính giảm giá</option>
+                                <option value="access">Phân quyền truy cập</option>
+                            </select>
+                        </div>
+                        <button class="btn" onclick="showConceptExample()">
+                            <i class="fas fa-eye"></i> Xem ví dụ
+                        </button>
+                        <div class="result" id="conceptResult">
+                            <strong>Minh họa:</strong>
+                            <div class="result-content" id="conceptResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN CÂU LỆNH IF -->
+                <section id="if-statement" class="section">
+                    <h2><i class="fas fa-code"></i> CÂU LỆNH IF (DẠNG 1)</h2>
+
+                    <div class="definition-box">
+                        <h4><i class="fas fa-book"></i> Định nghĩa:</h4>
+                        <p>Câu lệnh <strong>if</strong> dùng để kiểm tra một điều kiện. Nếu điều kiện đúng (true) thì
+                            đoạn mã trong khối if sẽ được thực thi.</p>
+                    </div>
+
+                    <div class="flowchart">
+                        <img src="./img/if.png" alt="Lưu đồ thuật toán câu lệnh IF">
+                    </div>
+
+                    <div class="syntax-box">
+                        <h4><i class="fas fa-terminal"></i> Cú pháp:</h4>
+                        <pre>if (<điều_kiện>) {
+    'khối_lệnh';
+}</pre>
+                    </div>
+
+                    <h4>Ví dụ: Kiểm tra số dương</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>if_example.js</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> number = <span class="number">5</span>;<br>
+                        <span class="keyword">if</span> (number > <span class="number">0</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Số dương"</span>);<br>
+                        }
+                    </div>
+
+                    <div class="example-box">
+                        <h4><i class="fas fa-laptop-code"></i> Cách hoạt động:</h4>
+                        <ol>
+                            <li>Biến <code>number</code> được khai báo với giá trị 5</li>
+                            <li>Điều kiện <code>number > 0</code> được kiểm tra (5 > 0 → true)</li>
+                            <li>Vì điều kiện đúng, khối lệnh trong if được thực thi</li>
+                            <li>In ra màn hình: "Số dương"</li>
+                        </ol>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm câu lệnh if</h4>
+                        <div class="input-group">
+                            <label for="ifNumber">Nhập một số:</label>
+                            <input type="number" id="ifNumber" value="5">
+                        </div>
+                        <button class="btn" onclick="testIfStatement()">
+                            <i class="fas fa-play"></i> Kiểm tra số dương
+                        </button>
+                        <div class="result" id="ifResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="ifResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN IF...ELSE -->
+                <section id="if-else" class="section">
+                    <h2><i class="fas fa-exchange-alt"></i> CÂU LỆNH IF...ELSE</h2>
+
+                    <div class="definition-box">
+                        <h4><i class="fas fa-book"></i> Định nghĩa:</h4>
+                        <p>Câu lệnh <strong>if...else</strong> là câu lệnh điều kiện có 2 nhánh:</p>
+                        <ul>
+                            <li>Nếu điều kiện đúng → chạy khối lệnh trong if</li>
+                            <li>Nếu điều kiện sai → chạy khối lệnh trong else</li>
+                        </ul>
+                    </div>
+
+                    <div class="flowchart">
+                        <img src=".//img/ifelse.png" alt="Lưu đồ thuật toán câu lệnh IF...ELSE">
+                    </div>
+
+                    <div class="syntax-box">
+                        <h4><i class="fas fa-terminal"></i> Cú pháp:</h4>
+                        <pre>if (<điều_kiện>) {
+    khối_lệnh1;
+} else {
+    khối_lệnh2;
+}</pre>
+                    </div>
+
+                    <h4>Ví dụ: Kiểm tra đậu/rớt</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>if_else_example.js</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> score = <span class="number">6.5</span>;<br>
+                        <span class="keyword">if</span> (score >= <span class="number">5</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Đậu"</span>);<br>
+                        } <span class="keyword">else</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Rớt"</span>);<br>
+                        }
+                    </div>
+
+                    <div class="example-box">
+                        <h4><i class="fas fa-laptop-code"></i> Cách hoạt động:</h4>
+                        <ol>
+                            <li>Biến <code>score</code> được khai báo với giá trị 6.5</li>
+                            <li>Điều kiện <code>score >= 5</code> được kiểm tra (6.5 >= 5 → true)</li>
+                            <li>Vì điều kiện đúng, khối lệnh trong if được thực thi</li>
+                            <li>In ra màn hình: "Đậu"</li>
+                            <li>Khối lệnh trong else bị bỏ qua</li>
+                        </ol>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm câu lệnh if...else</h4>
+                        <div class="input-group">
+                            <label for="ifElseScore">Nhập điểm thi (0-10):</label>
+                            <input type="number" id="ifElseScore" value="6.5" min="0" max="10" step="0.1">
+                        </div>
+                        <button class="btn" onclick="testIfElseStatement()">
+                            <i class="fas fa-graduation-cap"></i> Kiểm tra đậu/rớt
+                        </button>
+                        <div class="result" id="ifElseResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="ifElseResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN IF...ELSE IF...ELSE -->
+                <section id="if-else-if" class="section">
+                    <h2><i class="fas fa-sitemap"></i> CÂU LỆNH IF...ELSE IF...ELSE</h2>
+
+                    <div class="definition-box">
+                        <h4><i class="fas fa-book"></i> Định nghĩa:</h4>
+                        <p>Câu lệnh <strong>if...else if...else</strong> cho phép kiểm tra nhiều điều kiện khác nhau,
+                            theo thứ tự từ trên xuống. Khi gặp điều kiện đúng đầu tiên, chương trình sẽ thực hiện và
+                            không kiểm tra tiếp.</p>
+                    </div>
+
+                    <div class="flowchart">
+                        <img src="./img/if...else if...else.png" alt="Lưu đồ thuật toán câu lệnh IF...ELSE IF...ELSE">
+                    </div>
+
+                    <div class="syntax-box">
+                        <h4><i class="fas fa-terminal"></i> Cú pháp:</h4>
+                        <pre>if (<điều_kiện1>) {
+    khối_lệnh1;
+} else if (<điều_kiện2>) {
+    khối_lệnh2;
+} else if (<điều_kiện3>) {
+    khối_lệnh3;
+} else {
+    khối_lệnh_n;
+}</pre>
+                    </div>
+
+                    <h4>Ví dụ: Xếp loại học lực</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>if_else_if_example.js</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> score = <span class="number">8.5</span>;<br>
+                        <span class="keyword">if</span> (score >= <span class="number">9</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Xuất sắc"</span>);<br>
+                        } <span class="keyword">else if</span> (score >= <span class="number">7</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Khá"</span>);<br>
+                        } <span class="keyword">else if</span> (score >= <span class="number">5</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Trung bình"</span>);<br>
+                        } <span class="keyword">else</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Yếu"</span>);<br>
+                        }
+                    </div>
+
+                    <div class="example-box">
+                        <h4><i class="fas fa-laptop-code"></i> Cách hoạt động:</h4>
+                        <ol>
+                            <li>Biến <code>score</code> được khai báo với giá trị 8.5</li>
+                            <li>Kiểm tra điều kiện 1: <code>score >= 9</code> (8.5 >= 9 → false)</li>
+                            <li>Chuyển sang điều kiện 2: <code>score >= 7</code> (8.5 >= 7 → true)</li>
+                            <li>Vì điều kiện 2 đúng, thực thi khối lệnh tương ứng</li>
+                            <li>In ra màn hình: "Khá"</li>
+                            <li>Các điều kiện sau và khối else bị bỏ qua</li>
+                        </ol>
+                    </div>
+
+                    <div class="note">
+                        <h4><i class="fas fa-exclamation-circle"></i> Lưu ý quan trọng:</h4>
+                        <p>Thứ tự các điều kiện rất quan trọng! Luôn sắp xếp từ điều kiện khắt khe nhất đến điều kiện dễ
+                            nhất. Nếu đặt <code>score >= 5</code> lên đầu, tất cả số >= 5 sẽ bị xếp loại "Trung bình" dù
+                            có thể là "Khá" hoặc "Xuất sắc".</p>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm câu lệnh if...else if...else</h4>
+                        <div class="input-group">
+                            <label for="ifElseIfScore">Nhập điểm (0-10):</label>
+                            <input type="number" id="ifElseIfScore" value="8.5" min="0" max="10" step="0.1">
+                        </div>
+                        <button class="btn" onclick="testIfElseIfStatement()">
+                            <i class="fas fa-chart-line"></i> Xếp loại học lực
+                        </button>
+                        <div class="result" id="ifElseIfResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="ifElseIfResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN TOÁN TỬ BA NGÔI -->
+                <section id="ternary" class="section">
+                    <h2><i class="fas fa-question-circle"></i> TOÁN TỬ BA NGÔI (TERNARY OPERATOR)</h2>
+
+                    <div class="definition-box">
+                        <h4><i class="fas fa-book"></i> Định nghĩa:</h4>
+                        <p>Toán tử ba ngôi (<strong>?:</strong>) là cú pháp rút gọn của if...else, dùng khi cần lựa chọn
+                            giữa hai giá trị. Nó giúp viết mã ngắn gọn và súc tích hơn, nhất là khi chỉ cần trả về một
+                            giá trị.</p>
+                    </div>
+
+                    <div class="syntax-box">
+                        <h4><i class="fas fa-terminal"></i> Cú pháp:</h4>
+                        <pre><điều_kiện> ? <giá_trị_nếu_đúng> : <giá_trị_nếu_sai></pre>
+                    </div>
+
+                    <h4>Ví dụ: Kiểm tra đậu/rớt (dạng rút gọn)</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>ternary_example.js</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> score = <span class="number">6.5</span>;<br>
+                        <span class="keyword">let</span> result = (score >= <span class="number">5</span>) ? <span
+                            class="string">"Đậu"</span> : <span class="string">"Rớt"</span>;<br>
+                        console.log(result); <span class="comment">// "Đậu"</span>
+                    </div>
+
+                    <div class="example-box">
+                        <h4><i class="fas fa-laptop-code"></i> So sánh với if...else:</h4>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>So sánh cú pháp</span>
+                            </div>
+                            <span class="comment">// Dùng if...else</span><br>
+                            <span class="keyword">let</span> result1;<br>
+                            <span class="keyword">if</span> (score >= <span class="number">5</span>) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;result1 = <span class="string">"Đậu"</span>;<br>
+                            } <span class="keyword">else</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;result1 = <span class="string">"Rớt"</span>;<br>
+                            }<br>
+                            <br>
+                            <span class="comment">// Dùng toán tử ba ngôi (ngắn gọn hơn)</span><br>
+                            <span class="keyword">let</span> result2 = (score >= <span class="number">5</span>) ? <span
+                                class="string">"Đậu"</span> : <span class="string">"Rớt"</span>;
+                        </div>
+                    </div>
+
+                    <div class="tip-box">
+                        <h4><i class="fas fa-lightbulb"></i> Khi nào nên dùng toán tử ba ngôi:</h4>
+                        <ul>
+                            <li>Khi chỉ có hai lựa chọn đơn giản (đúng/sai)</li>
+                            <li>Khi cần gán giá trị cho biến dựa trên điều kiện</li>
+                            <li>Khi muốn code ngắn gọn, dễ đọc</li>
+                            <li>Không nên dùng khi logic phức tạp hoặc nhiều điều kiện</li>
+                        </ul>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm toán tử ba ngôi</h4>
+                        <div class="input-group">
+                            <label for="ternaryScore">Nhập điểm thi:</label>
+                            <input type="number" id="ternaryScore" value="6.5" min="0" max="10" step="0.1">
+                        </div>
+                        <button class="btn" onclick="testTernaryOperator()">
+                            <i class="fas fa-question-circle"></i> Sử dụng toán tử ba ngôi
+                        </button>
+                        <div class="result" id="ternaryResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="ternaryResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN SWITCH...CASE -->
+                <section id="switch" class="section">
+                    <h2><i class="fas fa-th-list"></i> CÂU LỆNH SWITCH...CASE</h2>
+
+                    <div class="definition-box">
+                        <h4><i class="fas fa-book"></i> Định nghĩa:</h4>
+                        <p>Câu lệnh <strong>switch...case</strong> dùng để so sánh một giá trị với nhiều trường hợp khác
+                            nhau (case). Nó thường được sử dụng thay cho nhiều câu lệnh if...else if khi so sánh một
+                            biến với nhiều giá trị cố định.</p>
+                    </div>
+
+                    <div class="flowchart">
+                        <img src="./img//8cde7779-2b16-4c86-8c2a-f6ad30107293.png"
+                            alt="Lưu đồ thuật toán câu lệnh SWITCH...CASE">
+                    </div>
+
+                    <div class="syntax-box">
+                        <h4><i class="fas fa-terminal"></i> Cú pháp:</h4>
+                        <pre>switch (biểu_thức) {
+    case giá_trị_1:
+        khối_lệnh_1;
+        break;
+    case giá_trị_2:
+        khối_lệnh_2;
+        break;
+    ...
+    default:
+        khối_lệnh_mặc_định;
+}</pre>
+                    </div>
+
+                    <h4>Ví dụ: Hiển thị thứ trong tuần</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>switch_example.js</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> day = <span class="number">2</span>;<br>
+                        <br>
+                        <span class="keyword">switch</span> (day) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">case</span> <span class="number">1</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Thứ
+                            Hai"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">case</span> <span class="number">2</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Thứ
+                            Ba"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">case</span> <span class="number">3</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Thứ
+                            Tư"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">case</span> <span class="number">4</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Thứ
+                            Năm"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">case</span> <span class="number">5</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Thứ
+                            Sáu"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">case</span> <span class="number">6</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Thứ
+                            Bảy"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">case</span> <span class="number">7</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Chủ
+                            Nhật"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">default</span>:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Không hợp
+                            lệ"</span>);<br>
+                        }
+                    </div>
+
+                    <div class="note">
+                        <h4><i class="fas fa-exclamation-circle"></i> Quan trọng: Từ khóa break</h4>
+                        <p>Từ khóa <strong>break</strong> là bắt buộc trong hầu hết các trường hợp. Nếu thiếu break,
+                            chương trình sẽ tiếp tục thực thi các case tiếp theo cho đến khi gặp break hoặc kết thúc
+                            switch (hiện tượng "fall-through").</p>
+                    </div>
+
+                    <div class="example-box">
+                        <h4><i class="fas fa-laptop-code"></i> Khi nào nên dùng switch...case:</h4>
+                        <ul>
+                            <li>Khi so sánh một biến với nhiều giá trị cố định</li>
+                            <li>Khi có nhiều trường hợp (>= 3) để xử lý</li>
+                            <li>Khi các điều kiện là so sánh bằng (===) chứ không phải so sánh phạm vi</li>
+                            <li>Code dễ đọc và bảo trì hơn nhiều if...else if</li>
+                        </ul>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm câu lệnh switch...case</h4>
+                        <div class="input-group">
+                            <label for="switchDay">Nhập số thứ (1-7):</label>
+                            <input type="number" id="switchDay" value="2" min="1" max="7">
+                        </div>
+                        <button class="btn" onclick="testSwitchStatement()">
+                            <i class="fas fa-calendar-alt"></i> Hiển thị thứ trong tuần
+                        </button>
+                        <div class="result" id="switchResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="switchResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN TOÁN TỬ LOGIC -->
+                <section id="logical" class="section">
+                    <h2><i class="fas fa-project-diagram"></i> TOÁN TỬ LOGIC (&&, ||, !)</h2>
+
+                    <div class="definition-box">
+                        <h4><i class="fas fa-book"></i> Định nghĩa:</h4>
+                        <p>Toán tử logic cho phép kết hợp nhiều điều kiện trong một biểu thức, giúp xử lý logic phức tạp
+                            hơn.</p>
+                    </div>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Toán tử</th>
+                                    <th>Tên gọi</th>
+                                    <th>Ý nghĩa</th>
+                                    <th>Kết quả đúng khi</th>
+                                    <th>Ví dụ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>&&</strong></td>
+                                    <td>AND (Và)</td>
+                                    <td>Đúng khi cả hai điều kiện đúng</td>
+                                    <td>Cả hai đều true</td>
+                                    <td><code>(age >= 18 && hasID)</code></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>||</strong></td>
+                                    <td>OR (Hoặc)</td>
+                                    <td>Đúng khi ít nhất một điều kiện đúng</td>
+                                    <td>Ít nhất một true</td>
+                                    <td><code>(score >= 8 || bonus >= 2)</code></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>!</strong></td>
+                                    <td>NOT (Phủ định)</td>
+                                    <td>Phủ định điều kiện (đúng thành sai và ngược lại)</td>
+                                    <td>Điều kiện false</td>
+                                    <td><code>!(age < 18)</code> tương đương <code>age >= 18</code></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>Ví dụ: Kiểm tra điều kiện vào cửa</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>logical_operators.js</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> age = <span class="number">17</span>;<br>
+                        <span class="keyword">let</span> hasID = <span class="keyword">true</span>;<br>
+                        <br>
+                        <span class="keyword">if</span> (age >= <span class="number">18</span> && hasID) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Được vào cửa"</span>);<br>
+                        } <span class="keyword">else</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Không được vào cửa"</span>);<br>
+                        }<br>
+                        <br>
+                        <span class="comment">// Kết hợp nhiều toán tử</span><br>
+                        <span class="keyword">let</span> isWeekend = <span class="keyword">true</span>;<br>
+                        <span class="keyword">let</span> hasTicket = <span class="keyword">true</span>;<br>
+                        <span class="keyword">let</span> hasVaccine = <span class="keyword">false</span>;<br>
+                        <br>
+                        <span class="keyword">if</span> (hasTicket && (isWeekend || hasVaccine)) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Được tham gia sự kiện"</span>);<br>
+                        }
+                    </div>
+
+                    <div class="example-box">
+                        <h4><i class="fas fa-laptop-code"></i> Bảng chân lý (Truth Table):</h4>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>A</th>
+                                        <th>B</th>
+                                        <th>A && B</th>
+                                        <th>A || B</th>
+                                        <th>!A</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>true</td>
+                                        <td>true</td>
+                                        <td>true</td>
+                                        <td>true</td>
+                                        <td>false</td>
+                                    </tr>
+                                    <tr>
+                                        <td>true</td>
+                                        <td>false</td>
+                                        <td>false</td>
+                                        <td>true</td>
+                                        <td>false</td>
+                                    </tr>
+                                    <tr>
+                                        <td>false</td>
+                                        <td>true</td>
+                                        <td>false</td>
+                                        <td>true</td>
+                                        <td>true</td>
+                                    </tr>
+                                    <tr>
+                                        <td>false</td>
+                                        <td>false</td>
+                                        <td>false</td>
+                                        <td>false</td>
+                                        <td>true</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="tip-box">
+                        <h4><i class="fas fa-lightbulb"></i> Mẹo sử dụng toán tử logic:</h4>
+                        <ul>
+                            <li>Sử dụng dấu ngoặc đơn để làm rõ thứ tự ưu tiên</li>
+                            <li><code>&&</code> có độ ưu tiên cao hơn <code>||</code></li>
+                            <li>Sử dụng <code>!</code> để đảo ngược điều kiện, giúp code dễ đọc hơn</li>
+                            <li>Kết hợp toán tử logic với toán tử so sánh để tạo điều kiện phức tạp</li>
+                        </ul>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm toán tử logic</h4>
+                        <div class="input-group">
+                            <label for="logicAge">Tuổi:</label>
+                            <input type="number" id="logicAge" value="17" min="0" max="100">
+                        </div>
+                        <div class="input-group">
+                            <label for="logicHasID">Có giấy tờ tùy thân?</label>
+                            <select id="logicHasID">
+                                <option value="true">Có</option>
+                                <option value="false">Không</option>
+                            </select>
+                        </div>
+                        <button class="btn" onclick="testLogicalOperators()">
+                            <i class="fas fa-door-open"></i> Kiểm tra điều kiện vào cửa
+                        </button>
+                        <div class="result" id="logicResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="logicResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN MẸO VÀ VIẾT NHANH -->
+                <section id="tips" class="section">
+                    <h2><i class="fas fa-magic"></i> MẸO VÀ CÚ PHÁP VIẾT NHANH</h2>
+
+                    <div class="definition-box">
+                        <h4><i class="fas fa-book"></i> Truthy và Falsy trong JavaScript:</h4>
+                        <p>Trong JavaScript, các giá trị có thể được coi là "truthy" (giống true) hoặc "falsy" (giống
+                            false) khi chuyển đổi sang boolean.</p>
+                    </div>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Kỹ thuật</th>
+                                    <th>Cú pháp</th>
+                                    <th>Ý nghĩa</th>
+                                    <th>Ví dụ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Truthy check</strong></td>
+                                    <td><code>if (a)</code></td>
+                                    <td>Kiểm tra nếu a tồn tại (truthy)</td>
+                                    <td><code>if (username)</code> ← username không rỗng</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Falsy check</strong></td>
+                                    <td><code>if (!a)</code></td>
+                                    <td>Kiểm tra nếu a không tồn tại (falsy)</td>
+                                    <td><code>if (!error)</code> ← không có lỗi</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Nullish check</strong></td>
+                                    <td><code>a ?? b</code></td>
+                                    <td>Trả về a nếu a không null/undefined, ngược lại trả về b</td>
+                                    <td><code>let name = input ?? "Khách"</code></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Optional chaining</strong></td>
+                                    <td><code>a?.b?.c</code></td>
+                                    <td>Truy cập thuộc tính an toàn, tránh lỗi undefined</td>
+                                    <td><code>user?.address?.city</code></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>Các giá trị Falsy trong JavaScript:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Các giá trị falsy</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">false</span> <span class="comment">// boolean false</span><br>
+                        <span class="number">0</span> <span class="comment">// số 0</span><br>
+                        <span class="string">""</span> <span class="comment">// chuỗi rỗng</span><br>
+                        <span class="keyword">null</span> <span class="comment">// giá trị null</span><br>
+                        <span class="keyword">undefined</span> <span class="comment">// giá trị undefined</span><br>
+                        <span class="class-name">NaN</span> <span class="comment">// Not a Number</span>
+                    </div>
+
+                    <h4>Ví dụ thực tế:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>truthy_falsy_examples.js</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// Kiểm tra chuỗi không rỗng</span><br>
+                        <span class="keyword">let</span> username = <span class="string">"John"</span>;<br>
+                        <span class="keyword">if</span> (username) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Xin chào "</span> + username);<br>
+                        } <span class="keyword">else</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Vui lòng nhập tên"</span>);<br>
+                        }<br>
+                        <br>
+                        <span class="comment">// Kiểm tra mảng có phần tử</span><br>
+                        <span class="keyword">let</span> items = [<span class="string">"apple"</span>, <span
+                            class="string">"banana"</span>];<br>
+                        <span class="keyword">if</span> (items.length) { <span class="comment">// length > 0 là
+                            truthy</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Có "</span> + items.length + <span
+                            class="string">" món hàng"</span>);<br>
+                        }<br>
+                        <br>
+                        <span class="comment">// Gán giá trị mặc định</span><br>
+                        <span class="keyword">let</span> userRole = <span class="keyword">null</span>;<br>
+                        <span class="keyword">let</span> role = userRole || <span class="string">"guest"</span>; <span
+                            class="comment">// "guest" vì null là falsy</span><br>
+                        console.log(role); <span class="comment">// "guest"</span>
+                    </div>
+
+                    <div class="tip-box">
+                        <h4><i class="fas fa-lightbulb"></i> Mẹo viết code hiệu quả:</h4>
+                        <ul>
+                            <li>Sử dụng <code>if (variable)</code> thay vì
+                                <code>if (variable !== undefined && variable !== null && variable !== "")</code>
+                            </li>
+                            <li>Dùng toán tử <code>||</code> để gán giá trị mặc định</li>
+                            <li>Sử dụng <code>&&</code> để thực thi code có điều kiện:
+                                <code>isLogged && showDashboard()</code>
+                            </li>
+                            <li>Ưu tiên đọc hiểu: đặt điều kiện dương (<code>if (isValid)</code>) thay vì phủ định
+                                (<code>if (!isInvalid)</code>)</li>
+                        </ul>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm truthy/falsy</h4>
+                        <div class="input-group">
+                            <label for="truthyValue">Nhập giá trị để kiểm tra:</label>
+                            <input type="text" id="truthyValue" placeholder="Nhập bất kỳ giá trị nào">
+                        </div>
+                        <button class="btn" onclick="testTruthyFalsy()">
+                            <i class="fas fa-search"></i> Kiểm tra truthy/falsy
+                        </button>
+                        <div class="result" id="truthyResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="truthyResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN BÀI TẬP THỰC HÀNH -->
+                <section id="exercises" class="section">
+                    <h2><i class="fas fa-dumbbell"></i> BÀI TẬP THỰC HÀNH</h2>
+
+                    <h3>Bài 1: Xếp loại học sinh theo điểm và hạnh kiểm</h3>
+
+                    <div class="definition-box">
+                        <h4><i class="fas fa-book"></i> Đề bài:</h4>
+                        <p>Viết chương trình nhập vào:</p>
+                        <ul>
+                            <li><code>diemTB</code> (điểm trung bình)</li>
+                            <li><code>hanhKiem</code> (giá trị chuỗi: "Tốt", "Khá", "Trung bình", "Yếu")</li>
+                        </ul>
+                        <p>In ra xếp loại theo quy tắc:</p>
+                        <ul>
+                            <li>Nếu điểm >= 8 và hạnh kiểm Tốt → "Giỏi"</li>
+                            <li>Nếu điểm >= 6.5 và hạnh kiểm Khá hoặc Tốt → "Khá"</li>
+                            <li>Nếu điểm >= 5 và hạnh kiểm không phải Yếu → "Trung bình"</li>
+                            <li>Ngược lại → "Yếu"</li>
+                        </ul>
+                    </div>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Test Case</th>
+                                    <th>Input</th>
+                                    <th>Expected Output</th>
+                                    <th>Giải thích</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>diemTB: 9, hanhKiem: "Tốt"</td>
+                                    <td>Giỏi</td>
+                                    <td>Vì >= 8 và hạnh kiểm Tốt</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>diemTB: 8, hanhKiem: "Khá"</td>
+                                    <td>Khá</td>
+                                    <td>Vì >= 6.5 và hạnh kiểm Khá</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>diemTB: 6.8, hanhKiem: "Tốt"</td>
+                                    <td>Khá</td>
+                                    <td>Vì >= 6.5 và hạnh kiểm Tốt</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>diemTB: 5.5, hanhKiem: "Trung bình"</td>
+                                    <td>Trung bình</td>
+                                    <td>Vì >= 5 và không phải Yếu</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>diemTB: 6, hanhKiem: "Yếu"</td>
+                                    <td>Yếu</td>
+                                    <td>Vì hạnh kiểm Yếu dù điểm >= 5</td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td>diemTB: 4.9, hanhKiem: "Khá"</td>
+                                    <td>Yếu</td>
+                                    <td>Vì điểm < 5</td>
+                                </tr>
+                                <tr>
+                                    <td>7</td>
+                                    <td>diemTB: 7.5, hanhKiem: "Trung bình"</td>
+                                    <td>Trung bình</td>
+                                    <td>Vì >= 5 và hạnh kiểm không Yếu</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>Đáp án & Lời giải:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>exercise1.js</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// Bài 1: Xếp loại học sinh</span><br>
+                        <span class="keyword">let</span> diemTB = <span
+                            class="class-name">parseFloat</span>(prompt(<span class="string">"Nhập điểm trung
+                            bình:"</span>));<br>
+                        <span class="keyword">let</span> hanhKiem = prompt(<span class="string">"Nhập hạnh kiểm (Tốt,
+                            Khá, Trung bình, Yếu):"</span>);<br>
+                        <br>
+                        <span class="keyword">if</span> (diemTB >= <span class="number">8</span> && hanhKiem === <span
+                            class="string">"Tốt"</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Giỏi"</span>);<br>
+                        } <span class="keyword">else if</span> (diemTB >= <span class="number">6.5</span> && (hanhKiem
+                        === <span class="string">"Khá"</span> || hanhKiem === <span class="string">"Tốt"</span>)) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Khá"</span>);<br>
+                        } <span class="keyword">else if</span> (diemTB >= <span class="number">5</span> && hanhKiem !==
+                        <span class="string">"Yếu"</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Trung bình"</span>);<br>
+                        } <span class="keyword">else</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Yếu"</span>);<br>
+                        }
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm Bài 1</h4>
+                        <div class="input-group">
+                            <label for="ex1Diem">Điểm trung bình:</label>
+                            <input type="number" id="ex1Diem" value="8.5" min="0" max="10" step="0.1">
+                        </div>
+                        <div class="input-group">
+                            <label for="ex1HanhKiem">Hạnh kiểm:</label>
+                            <select id="ex1HanhKiem">
+                                <option value="Tốt">Tốt</option>
+                                <option value="Khá">Khá</option>
+                                <option value="Trung bình">Trung bình</option>
+                                <option value="Yếu">Yếu</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-run" onclick="runExercise1()">
+                            <i class="fas fa-play"></i> Chạy Bài 1
+                        </button>
+                        <div class="result" id="ex1Result">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="ex1ResultContent"></div>
+                        </div>
+                    </div>
+
+                    <h3>Bài 2: Tính giá vé theo độ tuổi và là học sinh/sinh viên</h3>
+
+                    <div class="definition-box">
+                        <h4><i class="fas fa-book"></i> Đề bài:</h4>
+                        <p>Giá vé gốc: 100,000 VND</p>
+                        <p>Viết chương trình nhập vào:</p>
+                        <ul>
+                            <li>Tuổi của người mua vé</li>
+                            <li>Đối tượng (yes: là học sinh, sinh viên / no: không phải học sinh sinh viên)</li>
+                        </ul>
+                        <p>Tính giá vé phải trả theo quy định giảm giá:</p>
+                        <ul>
+                            <li>Trẻ em (< 6 tuổi): miễn phí</li>
+                            <li>Học sinh/sinh viên: giảm 50%</li>
+                            <li>Người già (>= 60 tuổi): giảm 30%</li>
+                            <li>Ngược lại: giá gốc</li>
+                        </ul>
+                    </div>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Test Case</th>
+                                    <th>Input</th>
+                                    <th>Expected Output</th>
+                                    <th>Giải thích</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Tuổi: 4, Đối tượng: Trẻ em</td>
+                                    <td>0 VND</td>
+                                    <td>Miễn phí vì < 6 tuổi</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Tuổi: 18, Đối tượng: Học sinh</td>
+                                    <td>50,000 VND</td>
+                                    <td>Giảm 50%</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Tuổi: 20, Đối tượng: Sinh viên</td>
+                                    <td>50,000 VND</td>
+                                    <td>Giảm 50%</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>Tuổi: 60, Đối tượng: Người già</td>
+                                    <td>70,000 VND</td>
+                                    <td>Giảm 30%</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>Tuổi: 40, Đối tượng: Người thường</td>
+                                    <td>100,000 VND</td>
+                                    <td>Không giảm giá</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>Đáp án & Lời giải:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>exercise2.js</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// Bài 2: Tính giá vé</span><br>
+                        <span class="keyword">let</span> age = <span class="class-name">parseInt</span>(prompt(<span
+                            class="string">"Nhập tuổi:"</span>));<br>
+                        <span class="keyword">let</span> isStudent = prompt(<span class="string">"Bạn có phải học
+                            sinh/sinh viên không? (yes/no)"</span>);<br>
+                        <span class="keyword">let</span> price = <span class="number">100000</span>;<br>
+                        <br>
+                        <span class="keyword">if</span> (age < <span class="number">6</span>) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Miễn phí"</span>);<br>
+                            } <span class="keyword">else if</span> (isStudent.toLowerCase() === <span
+                                class="string">"yes"</span>) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Giá vé: "</span> + price * <span
+                                class="number">0.5</span> + <span class="string">" VND"</span>);<br>
+                            } <span class="keyword">else if</span> (age >= <span class="number">60</span>) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Giá vé: "</span> + price * <span
+                                class="number">0.7</span> + <span class="string">" VND"</span>);<br>
+                            } <span class="keyword">else</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Giá vé: "</span> + price + <span
+                                class="string">" VND"</span>);<br>
+                            }
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm Bài 2</h4>
+                        <div class="input-group">
+                            <label for="ex2Age">Tuổi:</label>
+                            <input type="number" id="ex2Age" value="18" min="0" max="120">
+                        </div>
+                        <div class="input-group">
+                            <label for="ex2IsStudent">Có phải học sinh/sinh viên?</label>
+                            <select id="ex2IsStudent">
+                                <option value="yes">Có (yes)</option>
+                                <option value="no">Không (no)</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-run" onclick="runExercise2()">
+                            <i class="fas fa-play"></i> Chạy Bài 2
+                        </button>
+                        <div class="result" id="ex2Result">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="ex2ResultContent"></div>
+                        </div>
+                    </div>
+
+                    <h3>Bài 3: Kiểm tra năm nhuận</h3>
+
+                    <div class="definition-box">
+                        <h4><i class="fas fa-book"></i> Đề bài:</h4>
+                        <p>Nhập một số year, kiểm tra xem có phải năm nhuận hay không.</p>
+                        <p>Điều kiện năm nhuận:</p>
+                        <ul>
+                            <li>Chia hết cho 4 và không chia hết cho 100</li>
+                            <li>Hoặc chia hết cho 400</li>
+                        </ul>
+                    </div>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Test Case</th>
+                                    <th>Input (year)</th>
+                                    <th>Expected Output</th>
+                                    <th>Giải thích</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>2024</td>
+                                    <td>Năm nhuận</td>
+                                    <td>Chia hết cho 4, không chia hết cho 100</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>2023</td>
+                                    <td>Không phải năm nhuận</td>
+                                    <td>Không chia hết cho 4</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>1900</td>
+                                    <td>Không phải năm nhuận</td>
+                                    <td>Chia hết cho 100 nhưng không chia hết cho 400</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>2000</td>
+                                    <td>Năm nhuận</td>
+                                    <td>Chia hết cho 400</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>2100</td>
+                                    <td>Không phải năm nhuận</td>
+                                    <td>Chia hết cho 100 nhưng không chia hết cho 400</td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td>2400</td>
+                                    <td>Năm nhuận</td>
+                                    <td>Chia hết cho 400</td>
+                                </tr>
+                                <tr>
+                                    <td>7</td>
+                                    <td>1996</td>
+                                    <td>Năm nhuận</td>
+                                    <td>Chia hết cho 4, không chia hết cho 100</td>
+                                </tr>
+                                <tr>
+                                    <td>8</td>
+                                    <td>1800</td>
+                                    <td>Không phải năm nhuận</td>
+                                    <td>Chia hết cho 100 nhưng không chia hết cho 400</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>Đáp án & Lời giải:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>exercise3.js</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// Bài 3: Kiểm tra năm nhuận</span><br>
+                        <span class="keyword">let</span> year = <span class="class-name">parseInt</span>(prompt(<span
+                            class="string">"Nhập năm:"</span>));<br>
+                        <br>
+                        <span class="keyword">if</span> ((year % <span class="number">4</span> === <span
+                            class="number">0</span> && year % <span class="number">100</span> !== <span
+                            class="number">0</span>) || year % <span class="number">400</span> === <span
+                            class="number">0</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(year + <span class="string">" là năm nhuận"</span>);<br>
+                        } <span class="keyword">else</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(year + <span class="string">" không phải năm
+                            nhuận"</span>);<br>
+                        }
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm Bài 3</h4>
+                        <div class="input-group">
+                            <label for="ex3Year">Nhập năm:</label>
+                            <input type="number" id="ex3Year" value="2024" min="0" max="3000">
+                        </div>
+                        <button class="btn btn-run" onclick="runExercise3()">
+                            <i class="fas fa-play"></i> Chạy Bài 3
+                        </button>
+                        <div class="result" id="ex3Result">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="ex3ResultContent"></div>
+                        </div>
+                    </div>
+
+                    <div class="success-box">
+                        <h4><i class="fas fa-check-circle"></i> Lời khuyên khi làm bài tập:</h4>
+                        <ul>
+                            <li>Luôn đọc kỹ đề bài và phân tích các điều kiện</li>
+                            <li>Tạo bảng test case để kiểm tra các trường hợp biên</li>
+                            <li>Sử dụng console.log() để debug và kiểm tra giá trị trung gian</li>
+                            <li>Chú ý đến thứ tự các điều kiện trong if...else if</li>
+                            <li>Kiểm tra kỹ các toán tử logic (&&, ||) và so sánh (===, >=, <=)< /li>
+                        </ul>
+                    </div>
+                </section>
+                <section id="exercisesHome" class="section">
+                    <!-- BÀI 1: Số lẻ chia hết cho 3 nhưng không chia hết cho 5 -->
+                    <div id="bai1">
+                        <h2>Bài 1: Số lẻ chia hết cho 3 nhưng không chia hết cho 5</h2>
+                        <p>Nhập vào một số nguyên dương n, kiểm tra xem:</p>
+                        <ul>
+                            <li>Có phải số lẻ</li>
+                            <li>Và chia hết cho 3</li>
+                            <li>Nhưng không chia hết cho 5</li>
+                        </ul>
+                        <p>Nếu đúng, in "Thỏa mãn"; ngược lại "Không thỏa mãn"</p>
+
+                        <h3>Test case</h3>
+                        <table border="1" cellpadding="10" cellspacing="0">
+                            <tr>
+                                <th>Input (n)</th>
+                                <th>Expected Output</th>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Thỏa mãn</td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td>Thỏa mãn</td>
+                            </tr>
+                            <tr>
+                                <td>15</td>
+                                <td>Không thỏa mãn</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>Không thỏa mãn</td>
+                            </tr>
+                            <tr>
+                                <td>21</td>
+                                <td>Thỏa mãn</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <hr>
+
+                    <!-- BÀI 2: Tính phụ cấp nhân viên -->
+                    <div id="bai2">
+                        <h2>Bài 2: Tính phụ cấp nhân viên</h2>
+                        <p>Dùng hàm prompt nhập:</p>
+                        <ul>
+                            <li><strong>heSoLuong</strong>: số thực (VD: 3.5)</li>
+                            <li><strong>namCongTac</strong>: số nguyên (VD: 12)</li>
+                            <li><strong>chucVu</strong>: chuỗi "GD" (giám đốc), "TP" (trưởng phòng), "NV" (nhân viên)
+                            </li>
+                        </ul>
+
+                        <h3>Yêu cầu tính phụ cấp:</h3>
+                        <p><strong>Phụ cấp chức vụ:</strong></p>
+                        <ul>
+                            <li>GD → 1000</li>
+                            <li>TP → 700</li>
+                            <li>NV → 500</li>
+                        </ul>
+
+                        <p><strong>Điều chỉnh hệ số lương:</strong></p>
+                        <ul>
+                            <li>Nếu namCongTac > 10 → cộng thêm 10% hệ số lương</li>
+                            <li>Nếu namCongTac < 5 và chức vụ là "NV" → giảm 5% hệ số lương</li>
+                        </ul>
+
+                        <p><strong>Tổng phụ cấp = (phụ cấp chức vụ + hệ số lương sau điều chỉnh) × 100</strong></p>
+
+                        <h3>Test case</h3>
+                        <table border="1" cellpadding="10" cellspacing="0">
+                            <tr>
+                                <th>Input</th>
+                                <th>Expected Output</th>
+                            </tr>
+                            <tr>
+                                <td>heSoLuongGoc = 2.8<br>namCongTac = 3<br>chucVu = "NV"</td>
+                                <td>50,266</td>
+                            </tr>
+                            <tr>
+                                <td>heSoLuongGoc = 4.0<br>namCongTac = 8<br>chucVu = "GD"</td>
+                                <td>100,400</td>
+                            </tr>
+                            <tr>
+                                <td>heSoLuongGoc = 3.2<br>namCongTac = 9<br>chucVu = "intern"</td>
+                                <td>❌ Chức vụ không hợp lệ!</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <hr>
+
+                    <!-- BÀI 3: Tính điểm ưu tiên đại học -->
+                    <div id="bai3">
+                        <h2>Bài 3: Tính điểm ưu tiên đại học</h2>
+                        <p>Viết chương trình nhập vào:</p>
+                        <ul>
+                            <li><strong>Khu vực</strong>: A, B, C, hoặc X (X là không ưu tiên)</li>
+                            <li><strong>Đối tượng</strong>: 1, 2, 3, hoặc 0 (0 là không ưu tiên)</li>
+                            <li><strong>Điểm 3 môn</strong>: toán, lý, hóa</li>
+                        </ul>
+
+                        <h3>Yêu cầu:</h3>
+                        <p><strong>Tính tổng điểm gồm:</strong></p>
+                        <ol>
+                            <li>Tổng 3 môn</li>
+                            <li>Cộng điểm ưu tiên khu vực:
+                                <ul>
+                                    <li>A = 2 điểm</li>
+                                    <li>B = 1 điểm</li>
+                                    <li>C = 0.5 điểm</li>
+                                    <li>X = 0 điểm</li>
+                                </ul>
+                            </li>
+                            <li>Cộng điểm ưu tiên đối tượng:
+                                <ul>
+                                    <li>1 = 2.5 điểm</li>
+                                    <li>2 = 1.5 điểm</li>
+                                    <li>3 = 1 điểm</li>
+                                    <li>0 = 0 điểm</li>
+                                </ul>
+                            </li>
+                        </ol>
+
+                        <p><strong>Kiểm tra điều kiện:</strong></p>
+                        <ul>
+                            <li>Nếu có môn nào < 1 ⇒ "Rớt vì có điểm liệt" </li>
+                            <li>Nếu tổng điểm ≥ 20 ⇒ "Đậu"</li>
+                            <li>Ngược lại ⇒ "Rớt"</li>
+                        </ul>
+
+                        <h3>Test case</h3>
+                        <table border="1" cellpadding="10" cellspacing="0">
+                            <tr>
+                                <th>Input (kv, dt, toan, ly, hoa)</th>
+                                <th>Expected Output</th>
+                            </tr>
+                            <tr>
+                                <td>A, 1, 6, 6, 6</td>
+                                <td>Đậu</td>
+                            </tr>
+                            <tr>
+                                <td>B, 0, 5, 5, 4</td>
+                                <td>Rớt</td>
+                            </tr>
+                            <tr>
+                                <td>X, 2, 8, 9, 10</td>
+                                <td>Đậu</td>
+                            </tr>
+                            <tr>
+                                <td>C, 3, 0.5, 6, 7</td>
+                                <td>Rớt vì có điểm liệt</td>
+                            </tr>
+                            <tr>
+                                <td>A, 2, 4, 5, 6</td>
+                                <td>Đậu</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <hr>
+
+                    <!-- BÀI 4: Tính tiền điện theo bậc thang -->
+                    <div id="bai4">
+                        <h2>Bài 4: Tính tiền điện theo bậc thang</h2>
+                        <p>Viết chương trình nhập vào số điện sử dụng trong tháng (kWh) và loại khách hàng (sinh hoạt,
+                            kinh doanh, sản xuất) và tính tiền điện theo bảng sau:</p>
+
+                        <h3>Bảng giá điện:</h3>
+                        <table border="1" cellpadding="10" cellspacing="0">
+                            <tr>
+                                <th>Loại khách hàng</th>
+                                <th>Đơn giá (VNĐ/kWh)</th>
+                            </tr>
+                            <tr>
+                                <td>Sinh hoạt</td>
+                                <td>
+                                    0–50 kWh: 1800<br>
+                                    51–100: 2000<br>
+                                    101–200: 2500<br>
+                                    >200: 3000
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Kinh doanh</td>
+                                <td>3500</td>
+                            </tr>
+                            <tr>
+                                <td>Sản xuất</td>
+                                <td>2000</td>
+                            </tr>
+                        </table>
+
+                        <h3>Yêu cầu:</h3>
+                        <ul>
+                            <li>Nếu loại là "sinh hoạt" thì tính theo bậc thang (0–50, 51–100, …)</li>
+                            <li>Nếu "kinh doanh" hoặc "sản xuất" thì lấy đơn giá * số kWh</li>
+                            <li>Nếu nhập sai loại, thông báo "Loại khách hàng không hợp lệ"</li>
+                        </ul>
+
+                        <h3>Test case</h3>
+                        <table border="1" cellpadding="10" cellspacing="0">
+                            <tr>
+                                <th>Input (loại, số kWh)</th>
+                                <th>Expected Output</th>
+                            </tr>
+                            <tr>
+                                <td>sinh hoạt, 45</td>
+                                <td>45 × 1800 = 81,000 VNĐ</td>
+                            </tr>
+                            <tr>
+                                <td>kinh doanh, 100</td>
+                                <td>100 × 3500 = 350,000 VNĐ</td>
+                            </tr>
+                            <tr>
+                                <td>sản xuất, 120</td>
+                                <td>120 × 2000 = 240,000 VNĐ</td>
+                            </tr>
+                            <tr>
+                                <td>abc, 90</td>
+                                <td>Lỗi: Loại KH không hợp lệ</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <hr>
+
+                    <!-- BÀI 5: Tính tiền gửi tiết kiệm theo kỳ hạn -->
+                    <div id="bai5">
+                        <h2>Bài 5: Tính tiền gửi tiết kiệm theo kỳ hạn</h2>
+                        <p>Ngân hàng cung cấp các gói gửi tiết kiệm với kỳ hạn và lãi suất như sau:</p>
+
+                        <table border="1" cellpadding="10" cellspacing="0">
+                            <tr>
+                                <th>Kỳ hạn</th>
+                                <th>Số tháng gửi</th>
+                                <th>Lãi suất (%/năm)</th>
+                            </tr>
+                            <tr>
+                                <td>Ngắn hạn</td>
+                                <td>3 đến 5 tháng</td>
+                                <td>5%</td>
+                            </tr>
+                            <tr>
+                                <td>Trung hạn</td>
+                                <td>6 đến 11 tháng</td>
+                                <td>7%</td>
+                            </tr>
+                            <tr>
+                                <td>Dài hạn</td>
+                                <td>Từ 12 tháng trở lên</td>
+                                <td>8.5%</td>
+                            </tr>
+                        </table>
+
+                        <p><strong>Nếu số tháng gửi dưới 3, hệ thống sẽ thông báo là không đủ điều kiện gửi tiết
+                                kiệm.</strong></p>
+
+                        <h3>Yêu cầu:</h3>
+                        <ul>
+                            <li>Sử dụng hàm prompt để nhập:
+                                <ul>
+                                    <li>Số tiền gửi (VND)</li>
+                                    <li>Số tháng gửi</li>
+                                </ul>
+                            </li>
+                            <li>Xác định kỳ hạn dựa trên số tháng gửi.</li>
+                            <li>Tính:
+                                <ul>
+                                    <li>Tiền lãi = Số tiền gửi × (Lãi suất / 12) × Số tháng</li>
+                                    <li>Tổng tiền nhận được = Số tiền gửi + Tiền lãi</li>
+                                </ul>
+                            </li>
+                            <li>In ra màn hình (console):
+                                <ul>
+                                    <li>Kỳ hạn</li>
+                                    <li>Lãi suất theo kỳ hạn</li>
+                                    <li>Tiền lãi</li>
+                                    <li>Tổng tiền nhận được</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <h3>Test case</h3>
+                        <table border="1" cellpadding="10" cellspacing="0">
+                            <tr>
+                                <th>Input</th>
+                                <th>Expected Output</th>
+                            </tr>
+                            <tr>
+                                <td>Tiền gửi: 10.000.000 VND<br>Số tháng: 2</td>
+                                <td>Không đủ điều kiện gửi tiết kiệm</td>
+                            </tr>
+                            <tr>
+                                <td>Tiền gửi: 10.000.000 VND<br>Số tháng: 3</td>
+                                <td>
+                                    Kỳ hạn: Ngắn hạn<br>
+                                    Lãi suất: 5%/năm<br>
+                                    Tiền lãi: 125,000 VND<br>
+                                    Tổng: 10,125,000 VND
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tiền gửi: 15.000.000 VND<br>Số tháng: 5</td>
+                                <td>
+                                    Kỳ hạn: Ngắn hạn<br>
+                                    Lãi suất: 5%/năm<br>
+                                    Tiền lãi: 312,500 VND<br>
+                                    Tổng: 15,312,500 VND
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tiền gửi: 20.000.000 VND<br>Số tháng: 6</td>
+                                <td>
+                                    Kỳ hạn: Trung hạn<br>
+                                    Lãi suất: 7%/năm<br>
+                                    Tiền lãi: 700,000 VND<br>
+                                    Tổng: 20,700,000 VND
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tiền gửi: 5.000.000 VND<br>Số tháng: 12</td>
+                                <td>
+                                    Kỳ hạn: Dài hạn<br>
+                                    Lãi suất: 8.5%/năm<br>
+                                    Tiền lãi: 425,000 VND<br>
+                                    Tổng: 5,425,000 VND
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- BÀI 4 -->
+                <section id="bai4" class="section">
+                    <h2><i class="fas fa-bolt"></i> Bài 4: Tính tiền điện theo bậc thang</h2>
+
+                    <div class="description">
+                        <h4><i class="fas fa-info-circle"></i> Mô tả bài toán</h4>
+                        <p>Tính tiền điện theo loại khách hàng:</p>
+                        <div class="formula">
+                            <strong>Sinh hoạt:</strong><br>
+                            0–50 kWh: 1,800 VNĐ/kWh<br>
+                            51–100 kWh: 2,000 VNĐ/kWh<br>
+                            101–200 kWh: 2,500 VNĐ/kWh<br>
+                            >200 kWh: 3,000 VNĐ/kWh<br><br>
+                            <strong>Kinh doanh:</strong> 3,500 VNĐ/kWh<br>
+                            <strong>Sản xuất:</strong> 2,000 VNĐ/kWh
+                        </div>
+                    </div>
+
+                    <div class="exercise-container">
+                        <div class="test-case">
+                            <h4><i class="fas fa-vial"></i> Test Case</h4>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Input (Loại, Số kWh)</th>
+                                        <th>Expected Output</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Sinh hoạt, 45</td>
+                                        <td>81,000 VNĐ</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Kinh doanh, 100</td>
+                                        <td>350,000 VNĐ</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sản xuất, 120</td>
+                                        <td>240,000 VNĐ</td>
+                                    </tr>
+                                    <tr>
+                                        <td>abc, 90</td>
+                                        <td>Loại KH không hợp lệ</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="loaiKhachHang"><i class="fas fa-user-tag"></i> Loại khách hàng:</label>
+                            <select id="loaiKhachHang">
+                                <option value="sinhhoat">Sinh hoạt</option>
+                                <option value="kinhdoanh">Kinh doanh</option>
+                                <option value="sanxuat">Sản xuất</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="soDien"><i class="fas fa-bolt"></i> Số điện sử dụng (kWh):</label>
+                            <input type="number" id="soDien" min="0" step="0.1" placeholder="VD: 120.5">
+                        </div>
+
+                        <div class="btn-group">
+                            <button class="btn" onclick="bai4Calculate()">
+                                <i class="fas fa-calculator"></i> Tính tiền điện
+                            </button>
+                            <button class="btn btn-reset" onclick="bai4Reset()">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+
+                        <div class="result-container" id="bai4Result">
+                            <div class="result-title">
+                                <i class="fas fa-poll"></i> Hóa đơn tiền điện
+                            </div>
+                            <div class="result-content" id="bai4ResultContent">
+                                <!-- Kết quả sẽ hiển thị ở đây -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- BÀI 5 -->
+                <section id="bai5" class="section">
+                    <h2><i class="fas fa-piggy-bank"></i> Bài 5: Tính tiền gửi tiết kiệm theo kỳ hạn</h2>
+
+                    <div class="description">
+                        <h4><i class="fas fa-info-circle"></i> Mô tả bài toán</h4>
+                        <p>Tính tiền lãi gửi tiết kiệm theo kỳ hạn:</p>
+                        <div class="formula">
+                            <strong>Ngắn hạn (3-5 tháng):</strong> 5%/năm<br>
+                            <strong>Trung hạn (6-11 tháng):</strong> 7%/năm<br>
+                            <strong>Dài hạn (≥12 tháng):</strong> 8.5%/năm<br><br>
+                            <strong>Công thức:</strong><br>
+                            Tiền lãi = Số tiền gửi × (Lãi suất / 12) × Số tháng<br>
+                            Tổng tiền = Số tiền gửi + Tiền lãi<br><br>
+                            <em>Nếu số tháng < 3: "Không đủ điều kiện gửi tiết kiệm" </em>
+                        </div>
+                    </div>
+
+                    <div class="exercise-container">
+                        <div class="test-case">
+                            <h4><i class="fas fa-vial"></i> Test Case</h4>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Input (Tiền gửi, Số tháng)</th>
+                                        <th>Expected Output</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>10,000,000 VND, 2 tháng</td>
+                                        <td>Không đủ điều kiện</td>
+                                    </tr>
+                                    <tr>
+                                        <td>10,000,000 VND, 3 tháng</td>
+                                        <td>Lãi: 125,000 VND</td>
+                                    </tr>
+                                    <tr>
+                                        <td>15,000,000 VND, 5 tháng</td>
+                                        <td>Lãi: 312,500 VND</td>
+                                    </tr>
+                                    <tr>
+                                        <td>20,000,000 VND, 6 tháng</td>
+                                        <td>Lãi: 700,000 VND</td>
+                                    </tr>
+                                    <tr>
+                                        <td>5,000,000 VND, 12 tháng</td>
+                                        <td>Lãi: 425,000 VND</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="soTienGui"><i class="fas fa-money-bill-wave"></i> Số tiền gửi (VNĐ):</label>
+                            <input type="number" id="soTienGui" min="0" step="1000" placeholder="VD: 10000000">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="soThangGui"><i class="fas fa-calendar"></i> Số tháng gửi:</label>
+                            <input type="number" id="soThangGui" min="0" step="1" placeholder="VD: 12">
+                        </div>
+
+                        <div class="btn-group">
+                            <button class="btn" onclick="bai5Calculate()">
+                                <i class="fas fa-calculator"></i> Tính tiền lãi
+                            </button>
+                            <button class="btn btn-reset" onclick="bai5Reset()">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+
+                        <div class="result-container" id="bai5Result">
+                            <div class="result-title">
+                                <i class="fas fa-poll"></i> Kết quả gửi tiết kiệm
+                            </div>
+                            <div class="result-content" id="bai5ResultContent">
+                                <!-- Kết quả sẽ hiển thị ở đây -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+            </section>
+            </main>
+        </div>
+
+        <footer>
+            <p>Bài 2: Câu lệnh điều kiện &copy; GV: Nguyễn Đình Mạnh</p>
+        </footer>
+    </div>
+
+    <script>
+        // Xử lý điều hướng
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    // Xóa class active từ tất cả các link và section
+                    navLinks.forEach(item => item.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+
+                    // Thêm class active cho link được click
+                    this.classList.add('active');
+
+                    // Hiển thị section tương ứng
+                    const targetId = this.getAttribute('href').substring(1);
+                    document.getElementById(targetId).classList.add('active');
+
+                    // Scroll to top khi chuyển section
+                    window.scrollTo(0, 0);
+                });
+            });
+        });
+
+        // Hàm copy code
+        function copyCode(button) {
+            const codeBlock = button.parentElement.parentElement;
+            const text = codeBlock.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Đã copy!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        // ========== CÁC HÀM XỬ LÝ TƯƠNG TÁC ==========
+
+        // Hiển thị ví dụ minh họa khái niệm
+        function showConceptExample() {
+            const example = document.getElementById('conceptExample').value;
+            const result = document.getElementById('conceptResult');
+            const output = document.getElementById('conceptResultContent');
+
+            result.classList.add('active');
+
+            const examples = {
+                login: `=== KIỂM TRA ĐĂNG NHẬP ===
+
+let username = "admin";
+let password = "123456";
+let inputUsername = prompt("Nhập username:");
+let inputPassword = prompt("Nhập password:");
+
+if (inputUsername === username && inputPassword === password) {
+    console.log("Đăng nhập thành công!");
+    // Hiển thị trang quản trị
+} else {
+    console.log("Sai username hoặc password!");
+    // Hiển thị thông báo lỗi
+}
+
+📌 Tác dụng của câu lệnh điều kiện:
+• Rẽ nhánh: Chương trình đi theo 2 hướng khác nhau
+• Kiểm tra dữ liệu: Xác thực thông tin đăng nhập
+• Tạo tương tác: Hiển thị thông báo phù hợp`,
+
+                grade: `=== XẾP LOẠI HỌC TẬP ===
+
+let score = 8.5;
+
+if (score >= 9) {
+    console.log("Xuất sắc");
+} else if (score >= 7) {
+    console.log("Khá");
+} else if (score >= 5) {
+    console.log("Trung bình");
+} else {
+    console.log("Yếu");
+}
+
+📌 Tác dụng của câu lệnh điều kiện:
+• Kiểm tra dữ liệu: Phân loại điểm số
+• Tăng tính thông minh: Đưa ra đánh giá phù hợp
+• Kiểm soát luồng: Thực hiện đúng 1 trong các trường hợp`,
+
+                discount: `=== TÍNH GIẢM GIÁ ===
+
+let totalAmount = 500000;
+let memberLevel = "gold";
+
+if (memberLevel === "gold" && totalAmount > 1000000) {
+    discount = 20;
+} else if (memberLevel === "silver" || totalAmount > 500000) {
+    discount = 10;
+} else {
+    discount = 0;
+}
+
+console.log("Giảm giá: " + discount + "%");
+
+📌 Tác dụng của câu lệnh điều kiện:
+• Kiểm tra dữ liệu: Xác định điều kiện giảm giá
+• Tăng tính thông minh: Áp dụng chính sách phù hợp
+• Kết hợp điều kiện: Sử dụng toán tử logic`,
+
+                access: `=== PHÂN QUYỀN TRUY CẬP ===
+
+let userRole = "admin";
+let requestedPage = "dashboard";
+
+if (userRole === "admin") {
+    console.log("Cho phép truy cập tất cả trang");
+} else if (userRole === "editor" && 
+           (requestedPage === "editor" || requestedPage === "profile")) {
+    console.log("Cho phép truy cập trang biên tập");
+} else if (userRole === "user" && requestedPage === "profile") {
+    console.log("Chỉ cho phép truy cập trang cá nhân");
+} else {
+    console.log("Từ chối truy cập");
+}
+
+📌 Tác dụng của câu lệnh điều kiện:
+• Kiểm soát luồng: Điều hướng người dùng
+• Kiểm tra quyền: Xác định quyền truy cập
+• Kết hợp logic: Sử dụng nhiều điều kiện phức tạp`
+            };
+
+            output.textContent = examples[example];
+        }
+
+        // Thử nghiệm câu lệnh if
+        function testIfStatement() {
+            const number = parseFloat(document.getElementById('ifNumber').value);
+            const result = document.getElementById('ifResult');
+            const output = document.getElementById('ifResultContent');
+
+            result.classList.add('active');
+
+            let outputText = `=== KIỂM TRA CÂU LỆNH IF ===\n\n`;
+            outputText += `Giá trị nhập vào: ${number}\n\n`;
+
+            if (number > 0) {
+                outputText += `Điều kiện: ${number} > 0 → TRUE\n`;
+                outputText += `Kết quả: "Số dương" được in ra\n\n`;
+                outputText += `📌 Khối lệnh trong IF được thực thi`;
+            } else {
+                outputText += `Điều kiện: ${number} > 0 → FALSE\n`;
+                outputText += `Kết quả: Không có gì được in ra\n\n`;
+                outputText += `📌 Khối lệnh trong IF KHÔNG được thực thi`;
+            }
+
+            output.textContent = outputText;
+        }
+
+        // Thử nghiệm câu lệnh if...else
+        function testIfElseStatement() {
+            const score = parseFloat(document.getElementById('ifElseScore').value);
+            const result = document.getElementById('ifElseResult');
+            const output = document.getElementById('ifElseResultContent');
+
+            result.classList.add('active');
+
+            let outputText = `=== KIỂM TRA CÂU LỆNH IF...ELSE ===\n\n`;
+            outputText += `Điểm nhập vào: ${score}\n\n`;
+
+            if (score >= 5) {
+                outputText += `Điều kiện: ${score} >= 5 → TRUE\n`;
+                outputText += `Kết quả: "Đậu" được in ra\n\n`;
+                outputText += `📌 Khối lệnh trong IF được thực thi`;
+                outputText += `\n📌 Khối lệnh trong ELSE bị bỏ qua`;
+            } else {
+                outputText += `Điều kiện: ${score} >= 5 → FALSE\n`;
+                outputText += `Kết quả: "Rớt" được in ra\n\n`;
+                outputText += `📌 Khối lệnh trong IF bị bỏ qua`;
+                outputText += `\n📌 Khối lệnh trong ELSE được thực thi`;
+            }
+
+            output.textContent = outputText;
+        }
+
+        // Thử nghiệm câu lệnh if...else if...else
+        function testIfElseIfStatement() {
+            const score = parseFloat(document.getElementById('ifElseIfScore').value);
+            const result = document.getElementById('ifElseIfResult');
+            const output = document.getElementById('ifElseIfResultContent');
+
+            result.classList.add('active');
+
+            let outputText = `=== KIỂM TRA CÂU LỆNH IF...ELSE IF...ELSE ===\n\n`;
+            outputText += `Điểm nhập vào: ${score}\n\n`;
+
+            outputText += `1. Kiểm tra: ${score} >= 9 → ${score >= 9 ? 'TRUE' : 'FALSE'}\n`;
+
+            if (score >= 9) {
+                outputText += `   → Kết quả: "Xuất sắc"\n`;
+                outputText += `   → Các điều kiện sau không được kiểm tra`;
+            } else {
+                outputText += `2. Kiểm tra: ${score} >= 7 → ${score >= 7 ? 'TRUE' : 'FALSE'}\n`;
+
+                if (score >= 7) {
+                    outputText += `   → Kết quả: "Khá"\n`;
+                    outputText += `   → Các điều kiện sau không được kiểm tra`;
+                } else {
+                    outputText += `3. Kiểm tra: ${score} >= 5 → ${score >= 5 ? 'TRUE' : 'FALSE'}\n`;
+
+                    if (score >= 5) {
+                        outputText += `   → Kết quả: "Trung bình"\n`;
+                    } else {
+                        outputText += `   → Kết quả: "Yếu"\n`;
+                    }
+                }
+            }
+
+            outputText += `\n\n📌 Chỉ có MỘT khối lệnh được thực thi`;
+            outputText += `\n📌 Các điều kiện được kiểm tra theo thứ tự từ trên xuống`;
+
+            output.textContent = outputText;
+        }
+
+        // Thử nghiệm toán tử ba ngôi
+        function testTernaryOperator() {
+            const score = parseFloat(document.getElementById('ternaryScore').value);
+            const result = document.getElementById('ternaryResult');
+            const output = document.getElementById('ternaryResultContent');
+
+            result.classList.add('active');
+
+            let outputText = `=== KIỂM TRA TOÁN TỬ BA NGÔI ===\n\n`;
+            outputText += `Điểm nhập vào: ${score}\n\n`;
+
+            // Sử dụng toán tử ba ngôi
+            const resultValue = (score >= 5) ? "Đậu" : "Rớt";
+
+            outputText += `Biểu thức: (${score} >= 5) ? "Đậu" : "Rớt"\n`;
+            outputText += `Điều kiện: ${score} >= 5 → ${score >= 5 ? 'TRUE' : 'FALSE'}\n`;
+            outputText += `Kết quả: "${resultValue}"\n\n`;
+
+            outputText += `📌 So sánh với if...else:\n`;
+            outputText += `if (score >= 5) {\n`;
+            outputText += `    result = "Đậu";\n`;
+            outputText += `} else {\n`;
+            outputText += `    result = "Rớt";\n`;
+            outputText += `}\n\n`;
+            outputText += `📌 Toán tử ba ngôi giúp code ngắn gọn hơn 60%`;
+
+            output.textContent = outputText;
+        }
+
+        // Thử nghiệm câu lệnh switch...case
+        function testSwitchStatement() {
+            const day = parseInt(document.getElementById('switchDay').value);
+            const result = document.getElementById('switchResult');
+            const output = document.getElementById('switchResultContent');
+
+            result.classList.add('active');
+
+            let outputText = `=== KIỂM TRA CÂU LỆNH SWITCH...CASE ===\n\n`;
+            outputText += `Số thứ nhập vào: ${day}\n\n`;
+
+            let dayName;
+            switch (day) {
+                case 1: dayName = "Thứ Hai"; break;
+                case 2: dayName = "Thứ Ba"; break;
+                case 3: dayName = "Thứ Tư"; break;
+                case 4: dayName = "Thứ Năm"; break;
+                case 5: dayName = "Thứ Sáu"; break;
+                case 6: dayName = "Thứ Bảy"; break;
+                case 7: dayName = "Chủ Nhật"; break;
+                default: dayName = "Không hợp lệ";
+            }
+
+            outputText += `switch (${day}) {\n`;
+            for (let i = 1; i <= 7; i++) {
+                outputText += `    case ${i}:\n`;
+                outputText += `        console.log("${i === 1 ? 'Thứ Hai' : i === 2 ? 'Thứ Ba' : i === 3 ? 'Thứ Tư' : i === 4 ? 'Thứ Năm' : i === 5 ? 'Thứ Sáu' : i === 6 ? 'Thứ Bảy' : 'Chủ Nhật'}");\n`;
+                outputText += `        break;\n`;
+            }
+            outputText += `    default:\n`;
+            outputText += `        console.log("Không hợp lệ");\n`;
+            outputText += `}\n\n`;
+
+            outputText += `📌 Kết quả: "${dayName}"\n\n`;
+
+            if (day >= 1 && day <= 7) {
+                outputText += `📌 Giá trị ${day} khớp với case ${day}\n`;
+                outputText += `📌 Từ khóa break ngăn không kiểm tra các case còn lại`;
+            } else {
+                outputText += `📌 Giá trị ${day} không khớp với case nào\n`;
+                outputText += `📌 Khối default được thực thi`;
+            }
+
+            output.textContent = outputText;
+        }
+
+        // Thử nghiệm toán tử logic
+        function testLogicalOperators() {
+            const age = parseInt(document.getElementById('logicAge').value);
+            const hasID = document.getElementById('logicHasID').value === 'true';
+            const result = document.getElementById('logicResult');
+            const output = document.getElementById('logicResultContent');
+
+            result.classList.add('active');
+
+            let outputText = `=== KIỂM TRA TOÁN TỬ LOGIC ===\n\n`;
+            outputText += `Tuổi: ${age}\n`;
+            outputText += `Có giấy tờ: ${hasID ? 'Có' : 'Không'}\n\n`;
+
+            outputText += `Điều kiện: age >= 18 && hasID\n`;
+            outputText += `           ${age} >= 18 && ${hasID}\n\n`;
+
+            const condition1 = age >= 18;
+            const condition2 = hasID;
+            const finalResult = condition1 && condition2;
+
+            outputText += `📊 Bảng đánh giá:\n`;
+            outputText += `• ${age} >= 18 → ${condition1 ? 'TRUE' : 'FALSE'}\n`;
+            outputText += `• hasID → ${condition2 ? 'TRUE' : 'FALSE'}\n`;
+            outputText += `• Kết hợp với && (AND): ${condition1} && ${condition2} → ${finalResult}\n\n`;
+
+            if (finalResult) {
+                outputText += `🎯 Kết quả: "Được vào cửa"\n`;
+                outputText += `📌 Vì cả hai điều kiện đều đúng`;
+            } else {
+                outputText += `🎯 Kết quả: "Không được vào cửa"\n`;
+
+                if (!condition1 && !condition2) {
+                    outputText += `📌 Vì cả hai điều kiện đều sai`;
+                } else if (!condition1) {
+                    outputText += `📌 Vì tuổi ${age} < 18`;
+                } else {
+                    outputText += `📌 Vì không có giấy tờ`;
+                }
+            }
+
+            output.textContent = outputText;
+        }
+
+        // Thử nghiệm truthy/falsy
+        function testTruthyFalsy() {
+            const input = document.getElementById('truthyValue').value;
+            const result = document.getElementById('truthyResult');
+            const output = document.getElementById('truthyResultContent');
+
+            result.classList.add('active');
+
+            let outputText = `=== KIỂM TRA TRUTHY/FALSY ===\n\n`;
+            outputText += `Giá trị nhập vào: "${input}"\n`;
+            outputText += `Kiểu dữ liệu: ${typeof input}\n\n`;
+
+            // Kiểm tra truthy/falsy
+            let isTruthy;
+            let explanation;
+
+            if (input === "") {
+                isTruthy = false;
+                explanation = "Chuỗi rỗng là falsy";
+            } else if (input === "0") {
+                isTruthy = true; // Chuỗi "0" là truthy
+                explanation = "Chuỗi '0' là truthy (chỉ số 0 mới là falsy)";
+            } else if (input === "false") {
+                isTruthy = true; // Chuỗi "false" là truthy
+                explanation = "Chuỗi 'false' là truthy (chỉ boolean false mới là falsy)";
+            } else if (input === "null") {
+                isTruthy = false;
+                explanation = "null là falsy";
+            } else if (input === "undefined") {
+                isTruthy = false;
+                explanation = "undefined là falsy";
+            } else if (!isNaN(input) && input !== "" && !isNaN(parseFloat(input))) {
+                // Là số
+                if (parseFloat(input) === 0) {
+                    isTruthy = false;
+                    explanation = "Số 0 là falsy";
+                } else {
+                    isTruthy = true;
+                    explanation = "Số khác 0 là truthy";
+                }
+            } else {
+                isTruthy = true;
+                explanation = "Chuỗi không rỗng là truthy";
+            }
+
+            outputText += `📊 Kết quả kiểm tra:\n`;
+            outputText += `• Truthy/Falsy: ${isTruthy ? 'TRUTHY' : 'FALSY'}\n`;
+            outputText += `• Giải thích: ${explanation}\n\n`;
+
+            outputText += `📌 Ví dụ trong if:\n`;
+            outputText += `if ("${input}") {\n`;
+            outputText += `    console.log("Điều kiện đúng");\n`;
+            outputText += `} else {\n`;
+            outputText += `    console.log("Điều kiện sai");\n`;
+            outputText += `}\n\n`;
+            outputText += `Kết quả: "${isTruthy ? 'Điều kiện đúng' : 'Điều kiện sai'}"`;
+
+            output.textContent = outputText;
+        }
+
+        // ========== CÁC HÀM CHẠY BÀI TẬP ==========
+
+        // Chạy Bài 1
+        function runExercise1() {
+            const diemTB = parseFloat(document.getElementById('ex1Diem').value);
+            const hanhKiem = document.getElementById('ex1HanhKiem').value;
+            const result = document.getElementById('ex1Result');
+            const output = document.getElementById('ex1ResultContent');
+
+            result.classList.add('active');
+
+            let outputText = `=== BÀI 1: XẾP LOẠI HỌC SINH ===\n\n`;
+            outputText += `📥 Đầu vào:\n`;
+            outputText += `• Điểm trung bình: ${diemTB}\n`;
+            outputText += `• Hạnh kiểm: ${hanhKiem}\n\n`;
+
+            outputText += `🔍 Phân tích điều kiện:\n`;
+
+            let classification;
+            let explanation;
+
+            if (diemTB >= 8 && hanhKiem === "Tốt") {
+                classification = "Giỏi";
+                explanation = `Vì ${diemTB} >= 8 và hạnh kiểm "${hanhKiem}" === "Tốt"`;
+            } else if (diemTB >= 6.5 && (hanhKiem === "Khá" || hanhKiem === "Tốt")) {
+                classification = "Khá";
+                explanation = `Vì ${diemTB} >= 6.5 và hạnh kiểm "${hanhKiem}" thuộc ["Khá", "Tốt"]`;
+            } else if (diemTB >= 5 && hanhKiem !== "Yếu") {
+                classification = "Trung bình";
+                explanation = `Vì ${diemTB} >= 5 và hạnh kiểm "${hanhKiem}" !== "Yếu"`;
+            } else {
+                classification = "Yếu";
+                explanation = `Vì không thỏa mãn các điều kiện trên`;
+            }
+
+            outputText += `${explanation}\n\n`;
+            outputText += `🎯 Kết quả: ${classification}`;
+
+            output.textContent = outputText;
+        }
+
+        // Chạy Bài 2
+        function runExercise2() {
+            const age = parseInt(document.getElementById('ex2Age').value);
+            const isStudent = document.getElementById('ex2IsStudent').value;
+            const result = document.getElementById('ex2Result');
+            const output = document.getElementById('ex2ResultContent');
+
+            result.classList.add('active');
+
+            let outputText = `=== BÀI 2: TÍNH GIÁ VÉ ===\n\n`;
+            outputText += `📥 Đầu vào:\n`;
+            outputText += `• Tuổi: ${age}\n`;
+            outputText += `• Học sinh/sinh viên: ${isStudent}\n`;
+            outputText += `• Giá vé gốc: 100,000 VND\n\n`;
+
+            outputText += `🔍 Phân tích điều kiện:\n`;
+
+            let finalPrice;
+            let discount;
+            let explanation;
+
+            if (age < 6) {
+                finalPrice = 0;
+                discount = "100% (miễn phí)";
+                explanation = `Vì ${age} < 6 tuổi`;
+            } else if (isStudent === "yes") {
+                finalPrice = 100000 * 0.5;
+                discount = "50%";
+                explanation = `Vì là học sinh/sinh viên`;
+            } else if (age >= 60) {
+                finalPrice = 100000 * 0.7;
+                discount = "30%";
+                explanation = `Vì ${age} >= 60 tuổi`;
+            } else {
+                finalPrice = 100000;
+                discount = "0%";
+                explanation = `Vì không thuộc đối tượng giảm giá`;
+            }
+
+            outputText += `${explanation}\n`;
+            outputText += `• Giảm giá: ${discount}\n`;
+            outputText += `• Giá vé sau giảm: ${finalPrice.toLocaleString('vi-VN')} VND\n\n`;
+
+            if (finalPrice === 0) {
+                outputText += `🎯 Kết quả: Miễn phí`;
+            } else {
+                outputText += `🎯 Kết quả: ${finalPrice.toLocaleString('vi-VN')} VND`;
+            }
+
+            output.textContent = outputText;
+        }
+
+        // Chạy Bài 3
+        function runExercise3() {
+            const year = parseInt(document.getElementById('ex3Year').value);
+            const result = document.getElementById('ex3Result');
+            const output = document.getElementById('ex3ResultContent');
+
+            result.classList.add('active');
+
+            let outputText = `=== BÀI 3: KIỂM TRA NĂM NHUẬN ===\n\n`;
+            outputText += `📥 Đầu vào: Năm ${year}\n\n`;
+
+            outputText += `🔍 Phân tích điều kiện:\n`;
+            outputText += `• Chia hết cho 4: ${year} % 4 = ${year % 4} → ${year % 4 === 0 ? 'ĐÚNG' : 'SAI'}\n`;
+            outputText += `• Không chia hết cho 100: ${year} % 100 = ${year % 100} → ${year % 100 !== 0 ? 'ĐÚNG' : 'SAI'}\n`;
+            outputText += `• Chia hết cho 400: ${year} % 400 = ${year % 400} → ${year % 400 === 0 ? 'ĐÚNG' : 'SAI'}\n\n`;
+
+            const condition1 = (year % 4 === 0 && year % 100 !== 0);
+            const condition2 = (year % 400 === 0);
+            const isLeapYear = condition1 || condition2;
+
+            outputText += `📊 Tổng hợp:\n`;
+            outputText += `• Điều kiện 1 (chia hết cho 4 và không chia hết cho 100): ${condition1 ? 'TRUE' : 'FALSE'}\n`;
+            outputText += `• Điều kiện 2 (chia hết cho 400): ${condition2 ? 'TRUE' : 'FALSE'}\n`;
+            outputText += `• Kết hợp với || (OR): ${condition1} || ${condition2} → ${isLeapYear}\n\n`;
+
+            if (isLeapYear) {
+                outputText += `🎯 Kết quả: ${year} là năm nhuận`;
+            } else {
+                outputText += `🎯 Kết quả: ${year} không phải năm nhuận`;
+            }
+
+            output.textContent = outputText;
+        }
+
+        // Lưu trạng thái khi refresh
+        window.addEventListener('load', function () {
+            const activeSection = localStorage.getItem('activeSection') || 'intro';
+            const activeLink = document.querySelector(`a[href="#${activeSection}"]`);
+
+            if (activeLink) {
+                activeLink.click();
+            }
+        });
+
+        // Lưu trạng thái khi chuyển section
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function () {
+                const sectionId = this.getAttribute('href').substring(1);
+                localStorage.setItem('activeSection', sectionId);
+            });
+        });
+    </script>
+</body>
+
+</html>

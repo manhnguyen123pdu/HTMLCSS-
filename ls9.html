@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> DOM </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+       <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --info: #17a2b8;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+
+        body {
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 80vh;
+        }
+
+        .sidebar {
+            height: 85vh;
+            overflow: scroll;
+            background: var(--light);
+            padding: 20px;
+            border-right: 3px solid var(--secondary);
+        }
+
+        .sidebar ul {
+            padding: 0;
+        }
+
+        .nav-list {
+            list-style: none;
+            position: sticky;
+            top: 20px;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--secondary);
+            color: white;
+            transform: translateX(5px);
+            border-color: var(--secondary);
+        }
+
+        .nav-link1 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .main-content {
+            padding: 30px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: var(--accent);
+            margin: 25px 0 15px;
+            padding-left: 15px;
+            border-left: 4px solid var(--accent);
+        }
+
+        h4 {
+            color: var(--info);
+            margin: 20px 0 10px;
+        }
+
+        h5 {
+            color: var(--dark);
+            margin: 15px 0 8px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul,
+        ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            line-height: 1.4;
+            border: 2px solid #444;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn {
+            background: #555;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .keyword {
+            color: #569cd6;
+        }
+
+        .string {
+            color: #ce9178;
+        }
+
+        .comment {
+            color: #6a9955;
+        }
+
+        .number {
+            color: #b5cea8;
+        }
+
+        .class-name {
+            color: #4ec9b0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: var(--secondary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid var(--info);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .interactive-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #e9ecef;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 5px;
+        }
+
+        .btn-run {
+            background: var(--success);
+        }
+
+        .btn-warning {
+            background: var(--warning);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background: white;
+            border-left: 4px solid var(--warning);
+            display: none;
+        }
+
+        .result.active {
+            display: block;
+        }
+
+        .result-content {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border: 1px solid #e9ecef;
+            white-space: pre-wrap;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+        }
+ @media (max-width: 1400px) {
+      .sidebar {
+            height: 78vh;
+      }
+ }
+        @media (max-width: 768px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-right: none;
+                border-bottom: 3px solid var(--secondary);
+            }
+        }
+
+        .visual-array {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .array-item {
+            width: 60px;
+            height: 60px;
+            background: var(--secondary);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 5px;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .array-index {
+            position: absolute;
+            top: -25px;
+            font-size: 12px;
+            color: var(--dark);
+        }
+
+        .array-value {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .algorithm-steps {
+            background: #f0f7ff;
+            border-left: 4px solid #4dabf7;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .algorithm-steps ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .algorithm-steps li {
+            margin-bottom: 5px;
+        }
+
+        .method-demo {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+
+
+        .demo .wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .demo .array {
+            display: flex;
+        }
+
+        .demo .item {
+            width: 100px;
+            padding: 15px;
+            margin: 5px;
+            background: white;
+            color: black;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: 0.4s;
+        }
+
+        .demo .active {
+            background: #ffcc00;
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .demo .arrow {
+            position: absolute;
+            top: -35px;
+            font-size: 28px;
+            transition: 0.4s;
+        }
+
+        .demo .index {
+            margin-top: 30px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-sitemap"></i> BÀI 9: DOM TRONG JAVASCRIPT</h1>
+        </header>
+
+        <div class="content-wrapper">
+            <nav class="sidebar">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#intro" class="nav-link active"><i class="fas fa-info-circle"></i> I. DOM là gì?</a></li>
+                    <li class="nav-item"><a href="#access" class="nav-link"><i class="fas fa-search"></i> II. Truy cập phần tử</a></li>
+                    <li class="nav-item"><a href="#modify" class="nav-link"><i class="fas fa-edit"></i> III. Thay đổi nội dung & thuộc tính</a></li>
+                    <li class="nav-item"><a href="#create-insert" class="nav-link"><i class="fas fa-plus-circle"></i> IV. Tạo, chèn, xóa phần tử</a></li>
+                    <li class="nav-item"><a href="#events" class="nav-link"><i class="fas fa-bolt"></i> V. Sự kiện trong JS</a></li>
+                </ul>
+            </nav>
+
+            <main class="main-content">
+                <!-- I. DOM LÀ GÌ -->
+                <section id="intro" class="section active">
+                    <h2><i class="fas fa-info-circle"></i> I. DOM LÀ GÌ?</h2>
+
+                    <h3>Định nghĩa DOM</h3>
+                    <p>DOM (Document Object Model) là một mô hình đối tượng đại diện cho cấu trúc của tài liệu HTML dưới dạng cây (tree structure). Mỗi phần tử HTML (thẻ, văn bản, thuộc tính, v.v.) được biểu diễn như một đối tượng (object) trong JavaScript mà ta có thể truy cập và thay đổi.</p>
+                    
+                    <div class="note">
+                        <p><strong>Hiểu nôm na:</strong> Khi trang HTML được load, trình duyệt chuyển nó thành một cây DOM để bạn điều khiển bằng JavaScript.</p>
+                    </div>
+
+                    <h4>Ví dụ HTML</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>index.html</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;<span class="keyword">!DOCTYPE html</span>&gt;<br>
+                        &lt;<span class="keyword">html</span>&gt;<br>
+                        &nbsp;&nbsp;&lt;<span class="keyword">head</span>&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="keyword">title</span>&gt;Demo DOM&lt;/<span class="keyword">title</span>&gt;<br>
+                        &nbsp;&nbsp;&lt;/<span class="keyword">head</span>&gt;<br>
+                        &nbsp;&nbsp;&lt;<span class="keyword">body</span>&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="keyword">h1</span> <span class="keyword">id</span>=<span class="string">"title"</span>&gt;Chào bạn!&lt;/<span class="keyword">h1</span>&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;<span class="keyword">p</span> <span class="keyword">class</span>=<span class="string">"content"</span>&gt;Đây là ví dụ về DOM.&lt;/<span class="keyword">p</span>&gt;<br>
+                        &nbsp;&nbsp;&lt;/<span class="keyword">body</span>&gt;<br>
+                        &lt;/<span class="keyword">html</span>&gt;
+                    </div>
+
+                    <h4>→ Cây DOM tương ứng.</h4>
+                    <div class="dom-tree">
+                        <pre>
+Document
+└── html
+    ├── head
+    │   └── title
+    └── body
+        ├── h1#title
+        └── p.content
+                        </pre>
+                    </div>
+
+                    <h4>DOM được dùng để làm gì?</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tác vụ</th>
+                                    <th>Ý nghĩa</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Truy cập phần tử HTML</strong></td>
+                                    <td>Lấy dữ liệu, xử lý...</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Thay đổi nội dung</strong></td>
+                                    <td>Gán nội dung mới, cập nhật text</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Thay đổi thuộc tính</strong></td>
+                                    <td>Thêm/sửa/xóa class, id, src, href...</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Thêm, xóa phần tử</strong></td>
+                                    <td>Tạo mới hoặc gỡ bỏ node HTML</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Bắt sự kiện người dùng</strong></td>
+                                    <td>Click, nhập dữ liệu, submit...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Demo DOM cơ bản</h4>
+                        <div class="demo-box">
+                            <h4 id="demoTitle">Chào bạn!</h4>
+                            <p class="demoContent">Đây là ví dụ về DOM.</p>
+                            <button class="btn-demo" onclick="changeDemoContent()">Thay đổi nội dung</button>
+                            <div class="demo-output" id="demoOutput">
+                                Nhấn nút để thay đổi nội dung
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- II. TRUY CẬP PHẦN TỬ TRONG DOM -->
+                <section id="access" class="section">
+                    <h2><i class="fas fa-search"></i> II. TRUY CẬP PHẦN TỬ TRONG DOM</h2>
+
+                    <h3>1. document.getElementById()</h3>
+                    <p><strong>➤ Cú pháp:</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>document.getElementById()</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        document.getElementById(<span class="string">"id"</span>);
+                    </div>
+                    <ul>
+                        <li><strong>document:</strong> đại diện toàn bộ tài liệu HTML.</li>
+                        <li><strong>getElementById("id"):</strong> trả về một phần tử duy nhất có id = "id".</li>
+                    </ul>
+                    
+                    <p><strong>➤ Ví dụ:</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>HTML + JS</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">&lt;h1 id="myTitle"&gt;Xin chào&lt;/h1&gt;</span><br>
+                        <br>
+                        <span class="keyword">let</span> title = document.getElementById(<span class="string">"myTitle"</span>);<br>
+                        console.log(title.textContent); <span class="comment">// Kết quả: "Xin chào"</span>
+                    </div>
+
+                    <h3>2. document.getElementsByClassName()</h3>
+                    <p><strong>➤ Cú pháp:</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>document.getElementsByClassName()</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        document.getElementsByClassName(<span class="string">"className"</span>);
+                    </div>
+                    <ul>
+                        <li>Trả về HTMLCollection gồm các phần tử có cùng class.</li>
+                        <li>Không dùng được các phương thức mảng như .forEach(), phải chuyển sang mảng nếu cần.</li>
+                    </ul>
+
+                    <p><strong>➤ Ví dụ:</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>HTML + JS</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">&lt;p class="note"&gt;Ghi chú 1&lt;/p&gt;</span><br>
+                        <span class="comment">&lt;p class="note"&gt;Ghi chú 2&lt;/p&gt;</span><br>
+                        <br>
+                        <span class="keyword">let</span> notes = document.getElementsByClassName(<span class="string">"note"</span>);<br>
+                        console.log(notes.length); <br>
+                        console.log(notes[0].textContent);
+                    </div>
+
+                    <h3>3. document.getElementsByTagName()</h3>
+                    <p><strong>➤ Cú pháp:</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>document.getElementsByTagName()</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        document.getElementsByTagName(<span class="string">"tagName"</span>);
+                    </div>
+                    <ul>
+                        <li>Trả về HTMLCollection chứa các phần tử có cùng tên thẻ.</li>
+                    </ul>
+
+                    <p><strong>➤ Ví dụ:</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>HTML + JS</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">&lt;p&gt;Đoạn 1&lt;/p&gt;</span><br>
+                        <span class="comment">&lt;p&gt;Đoạn 2&lt;/p&gt;</span><br>
+                        <br>
+                        <span class="keyword">let</span> paras = document.getElementsByTagName(<span class="string">"p"</span>);<br>
+                        <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; paras.length; i++) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(paras[i].textContent);<br>
+                        }
+                    </div>
+
+                    <h3>4. document.querySelector() và querySelectorAll()</h3>
+                    <p><strong>➤ Cú pháp:</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>querySelector() và querySelectorAll()</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        document.querySelector(<span class="string">"cssSelector"</span>);<br>
+                        document.querySelectorAll(<span class="string">"cssSelector"</span>);
+                    </div>
+                    <ul>
+                        <li><strong>querySelector</strong> → trả về phần tử đầu tiên khớp với CSS selector.</li>
+                        <li><strong>querySelectorAll</strong> → trả về NodeList (giống mảng) chứa tất cả phần tử khớp.</li>
+                    </ul>
+
+                    <p><strong>➤ Ví dụ:</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>HTML + JS</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">&lt;div class="box"&gt;Box 1&lt;/div&gt;</span><br>
+                        <span class="comment">&lt;div class="box"&gt;Box 2&lt;/div&gt;</span><br>
+                        <br>
+                        <span class="keyword">let</span> firstBox = document.querySelector(<span class="string">".box"</span>);<br>
+                        console.log(firstBox.textContent); <span class="comment">// Box 1</span><br>
+                        <br>
+                        <span class="keyword">let</span> allBoxes = document.querySelectorAll(<span class="string">".box"</span>);<br>
+                        allBoxes.forEach((box) =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(box.textContent);<br>
+                        });
+                    </div>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Ghi chú quan trọng:</h4>
+                        <ul>
+                            <li><strong>getElementById()</strong> → chỉ dùng được với ID duy nhất.</li>
+                            <li><strong>querySelector()</strong> dùng được cho tất cả kiểu chọn (ID, class, tag…).</li>
+                            <li><strong>querySelectorAll()</strong> hỗ trợ CSS selector như div > p, ul li, a[href], v.v.</li>
+                        </ul>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm truy cập DOM</h4>
+                        <div class="demo-box">
+                            <h4 id="demoTitle2">Tiêu đề ví dụ</h4>
+                            <p class="demoPara">Đoạn văn 1</p>
+                            <p class="demoPara">Đoạn văn 2</p>
+                            <button class="btn-demo" onclick="testGetElementById()">getElementById</button>
+                            <button class="btn-demo" onclick="testGetElementsByClassName()">getElementsByClassName</button>
+                            <button class="btn-demo" onclick="testQuerySelector()">querySelector</button>
+                            <div class="demo-output" id="accessOutput">
+                                Nhấn nút để xem kết quả truy cập
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- III. THAY ĐỔI NỘI DUNG VÀ THUỘC TÍNH DOM -->
+                <section id="modify" class="section">
+                    <h2><i class="fas fa-edit"></i> III. THAY ĐỔI NỘI DUNG VÀ THUỘC TÍNH DOM</h2>
+
+                    <h3>1. Thay đổi nội dung văn bản</h3>
+
+                    <h4>element.innerHTML</h4>
+                    <p><strong>Định nghĩa:</strong> Lấy hoặc gán nội dung HTML bên trong phần tử.</p>
+                    <p><strong>Lưu ý:</strong> Có thể chèn thẻ HTML, nên cẩn thận khi lấy từ người dùng (nguy cơ XSS).</p>
+                    
+                    <p><strong>➤ Ví dụ:</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>innerHTML</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">&lt;div id="content"&gt;Xin chào&lt;/div&gt;</span><br>
+                        <br>
+                        document.getElementById(<span class="string">"content"</span>).innerHTML = <span class="string">"&lt;b&gt;Chào bạn!&lt;/b&gt;"</span>;<br>
+                        <span class="comment">// Output HTML: </span><br>
+                        <span class="comment">&lt;div id="content"&gt;&lt;b&gt;Chào bạn!&lt;/b&gt;&lt;/div&gt;</span>
+                    </div>
+
+                    <h4>element.textContent</h4>
+                    <p><strong>Định nghĩa:</strong> Lấy hoặc gán nội dung chỉ văn bản, bỏ qua thẻ HTML.</p>
+                    
+                    <p><strong>➤ Ví dụ:</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>textContent</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">&lt;div id="content"&gt;Xin chào&lt;/div&gt;</span><br>
+                        <br>
+                        document.getElementById(<span class="string">"content"</span>).textContent = <span class="string">"&lt;b&gt;Chào bạn!&lt;/b&gt;"</span>;<br>
+                        <span class="comment">// Kết quả hiển thị:</span><br>
+                        <span class="comment">&lt;b&gt;Chào bạn!&lt;/b&gt;</span>
+                    </div>
+
+                    <h4>So sánh nhanh:</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Thuộc tính</th>
+                                    <th>Gán HTML được?</th>
+                                    <th>Hiển thị thẻ HTML?</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>innerHTML</strong></td>
+                                    <td>✅</td>
+                                    <td>✅</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>textContent</strong></td>
+                                    <td>❌</td>
+                                    <td>❌</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>2. Thay đổi thuộc tính (Attribute)</h3>
+
+                    <h4>element.setAttribute(name, value)</h4>
+                    <p>Đặt hoặc thay đổi giá trị của một thuộc tính HTML.</p>
+                    <p><strong>➤ Ví dụ:</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>setAttribute</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">&lt;img id="img1" src="old.jpg" /&gt;</span><br>
+                        <br>
+                        document.getElementById(<span class="string">"img1"</span>).setAttribute(<span class="string">"src"</span>, <span class="string">"new.jpg"</span>);
+                    </div>
+
+                    <h4>element.getAttribute(name)</h4>
+                    <p>Lấy giá trị của thuộc tính.</p>
+                    <p><strong>➤ Ví dụ:</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>getAttribute</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> src = document.getElementById(<span class="string">"img1"</span>).getAttribute(<span class="string">"src"</span>);<br>
+                        console.log(src); <span class="comment">// new.jpg</span>
+                    </div>
+
+                    <h4>element.removeAttribute(name)</h4>
+                    <p>Xóa thuộc tính khỏi phần tử.</p>
+                    <p><strong>➤ Ví dụ:</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>removeAttribute</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        document.getElementById(<span class="string">"img1"</span>).removeAttribute(<span class="string">"src"</span>);
+                    </div>
+
+                    <h3>3. Làm việc với class (CSS Class)</h3>
+                    
+                    <ul>
+                        <li><strong>element.classList.add("className")</strong> → Thêm một class vào phần tử.</li>
+                        <li><strong>element.classList.remove("className")</strong> → Xóa class khỏi phần tử.</li>
+                        <li><strong>element.classList.toggle("className")</strong> → Nếu chưa có class → thêm. Nếu đã có → xóa.</li>
+                        <li><strong>element.classList.contains("className")</strong> → Trả về true nếu phần tử có class đó.</li>
+                    </ul>
+
+                    <p><strong>➤ Ví dụ:</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>classList</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> box = document.getElementById(<span class="string">"box"</span>);<br>
+                        <br>
+                        box.classList.add(<span class="string">"blue"</span>);      <span class="comment">// Thêm class "blue"</span><br>
+                        box.classList.remove(<span class="string">"red"</span>);    <span class="comment">// Xóa class "red"</span><br>
+                        box.classList.toggle(<span class="string">"hidden"</span>); <span class="comment">// Nếu có thì xóa, không có thì thêm</span><br>
+                        console.log(box.classList.contains(<span class="string">"blue"</span>)); <span class="comment">// true</span>
+                    </div>
+
+                    <h3>4. Thay đổi thuộc tính đặc biệt (như value, src, href, style)</h3>
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Thuộc tính</th>
+                                    <th>Ý nghĩa</th>
+                                    <th>Ví dụ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>value</strong></td>
+                                    <td>Giá trị trong input</td>
+                                    <td>input.value = "abc"</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>href</strong></td>
+                                    <td>Đường dẫn liên kết</td>
+                                    <td>a.href = "https://..."</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>src</strong></td>
+                                    <td>Nguồn ảnh/video</td>
+                                    <td>img.src = "image.jpg"</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>style</strong></td>
+                                    <td>CSS nội tuyến</td>
+                                    <td>el.style.color = "red"</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p><strong>➤ Ví dụ thay đổi style:</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Thay đổi style</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> el = document.getElementById(<span class="string">"title"</span>);<br>
+                        el.style.fontSize = <span class="string">"24px"</span>; <br>
+                        el.style.color = <span class="string">"green"</span>;
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm thay đổi DOM</h4>
+                        <div class="demo-box">
+                            <div id="modifyDemo" style="padding: 10px; border: 1px solid #ddd; margin-bottom: 15px;">
+                                Nội dung gốc
+                            </div>
+                            <input type="text" id="demoInput" placeholder="Nhập nội dung..." value="Giá trị mặc định" style="width: 100%; padding: 8px; margin-bottom: 10px;">
+                            <button class="btn-demo" onclick="testInnerHTML()">Thử innerHTML</button>
+                            <button class="btn-demo" onclick="testTextContent()">Thử textContent</button>
+                            <button class="btn-demo" onclick="testAddClass()">Thêm class</button>
+                            <button class="btn-demo" onclick="testRemoveClass()">Xóa class</button>
+                            <button class="btn-demo" onclick="testChangeStyle()">Thay đổi style</button>
+                            <button class="btn-demo" onclick="testGetInputValue()">Lấy giá trị input</button>
+                            <div class="demo-output" id="modifyOutput">
+                                Kết quả sẽ hiển thị ở đây
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- IV. TẠO, CHÈN, VÀ XÓA PHẦN TỬ DOM -->
+                <section id="create-insert" class="section">
+                    <h2><i class="fas fa-plus-circle"></i> IV. TẠO, CHÈN, VÀ XÓA PHẦN TỬ DOM</h2>
+
+                    <h3>1. Tạo 1 phần tử mới bằng JS</h3>
+                    
+                    <h4>document.createElement("tagName")</h4>
+                    <p><strong>Định nghĩa:</strong> Tạo một phần tử HTML mới (chưa được hiển thị trên trang). Chỉ tạo trong bộ nhớ, phải chèn vào DOM thì mới thấy.</p>
+                    
+                    <p><strong>Cú pháp:</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>createElement</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> element = document.createElement(<span class="string">"tag-name"</span>);
+                    </div>
+
+                    <p><strong>Ví dụ: Tạo thẻ &lt;p&gt; mới</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Tạo phần tử</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> p = document.createElement(<span class="string">"p"</span>);<br>
+                        p.textContent = <span class="string">"Đây là đoạn văn mới"</span>;
+                    </div>
+
+                    <div class="note">
+                        <p>Sau đoạn này:</p>
+                        <ul>
+                            <li>Đã có 1 phần tử &lt;p&gt; nằm trong bộ nhớ JS.</li>
+                            <li>Chưa xuất hiện trên trang HTML.</li>
+                        </ul>
+                    </div>
+
+                    <h3>2. Chèn phần tử vào DOM</h3>
+
+                    <h4>parent.appendChild(child)</h4>
+                    <p><strong>Định nghĩa:</strong> Gắn phần tử con vào cuối cùng trong phần tử cha.</p>
+                    
+                    <p><strong>Cú pháp:</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>appendChild</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        cha.appendChild(con);
+                    </div>
+
+                    <p><strong>Ví dụ: Chèn đoạn văn vào &lt;div id="box"&gt;</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Chèn phần tử</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> box = document.getElementById(<span class="string">"box"</span>);<br>
+                        <span class="keyword">let</span> p = document.createElement(<span class="string">"p"</span>);<br>
+                        p.textContent = <span class="string">"Nội dung mới"</span>;<br>
+                        box.appendChild(p);
+                    </div>
+
+                    <p><strong>Kết quả:</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Kết quả HTML</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;div id=<span class="string">"box"</span>&gt;<br>
+                        &nbsp;&nbsp;&lt;p&gt;Nội dung mới&lt;/p&gt;<br>
+                        &lt;/div&gt;
+                    </div>
+
+                    <h3>3. Xóa phần tử khỏi DOM</h3>
+
+                    <h4>element.remove()</h4>
+                    <p><strong>Định nghĩa:</strong> Xóa chính phần tử đó ra khỏi DOM.</p>
+                    
+                    <p><strong>Ví dụ:</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>remove()</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;button onclick=<span class="string">"deleteMe(this)"</span>&gt;Xóa tôi&lt;/button&gt;<br>
+                        <br>
+                        <span class="keyword">function</span> <span class="class-name">deleteMe</span>(btn) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;btn.remove();<br>
+                        }
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm tạo/chèn/xóa phần tử</h4>
+                        <div class="demo-box">
+                            <div id="containerForDemo" style="min-height: 50px; border: 1px dashed #ccc; padding: 10px; margin-bottom: 15px;">
+                                <!-- Các phần tử sẽ được chèn vào đây -->
+                            </div>
+                            <button class="btn-demo" onclick="testCreateElement()">Tạo phần tử mới</button>
+                            <button class="btn-demo" onclick="testAppendChild()">Chèn vào container</button>
+                            <button class="btn-demo" onclick="testRemoveLast()">Xóa phần tử cuối</button>
+                            <div class="demo-output" id="createOutput">
+                                Nhấn nút để thao tác với DOM
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- V. SỰ KIỆN TRONG JS -->
+                <section id="events" class="section">
+                    <h2><i class="fas fa-bolt"></i> V. SỰ KIỆN TRONG JS</h2>
+
+                    <h3>1. SỰ KIỆN LÀ GÌ?</h3>
+                    <p><strong>Định nghĩa:</strong> Sự kiện (event) trong DOM là các hành động xảy ra trên trang như: người dùng click, gõ phím, di chuột, cuộn trang, thay đổi input, v.v. Bạn có thể “lắng nghe” những sự kiện này và viết mã phản hồi lại khi sự kiện xảy ra.</p>
+
+                    <h3>2. CÁCH GẮN SỰ KIỆN (3 CÁCH)</h3>
+
+                    <h4>CÁCH 1 – Gắn trực tiếp vào HTML (ít dùng)</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cách 1</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;button onclick=<span class="string">"alert('Bạn đã bấm!')"</span>&gt;Bấm tôi&lt;/button&gt;
+                    </div>
+
+                    <h4>CÁCH 2 – Gắn qua thuộc tính on... trong JS</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cách 2</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;button id=<span class="string">"btn1"</span>&gt;Bấm tôi&lt;/button&gt;<br>
+                        <br>
+                        document.getElementById(<span class="string">"btn1"</span>).onclick = <span class="keyword">function</span> () {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;alert(<span class="string">"Bạn đã bấm vào nút!"</span>);<br>
+                        };
+                    </div>
+                    <p>Dễ hiểu, nhưng không thể gắn nhiều sự kiện cùng lúc.</p>
+
+                    <h4>CÁCH 3 – Dùng addEventListener (Khuyên dùng ✅)</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cách 3</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;button id=<span class="string">"btn2"</span>&gt;Click Me&lt;/button&gt;<br>
+                        <br>
+                        <span class="keyword">let</span> btn = document.getElementById(<span class="string">"btn2"</span>);<br>
+                        <br>
+                        btn.addEventListener(<span class="string">"click"</span>, <span class="keyword">function</span> () {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;alert(<span class="string">"Đây là cách đúng chuẩn!"</span>);<br>
+                        });
+                    </div>
+                    <p>Cho phép gắn nhiều sự kiện cùng lúc và dễ kiểm soát.</p>
+
+                    <h3>3. DANH SÁCH CÁC SỰ KIỆN PHỔ BIẾN</h3>
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Sự kiện</th>
+                                    <th>Mô tả</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>click</strong></td>
+                                    <td>Khi người dùng click chuột</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>dblclick</strong></td>
+                                    <td>Nhấn đúp chuột</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>mouseover</strong></td>
+                                    <td>Khi rê chuột vào</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>mouseout</strong></td>
+                                    <td>Khi chuột rời khỏi</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>keydown</strong></td>
+                                    <td>Khi nhấn phím</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>keyup</strong></td>
+                                    <td>Khi thả phím</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>change</strong></td>
+                                    <td>Khi input/select thay đổi giá trị</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>submit</strong></td>
+                                    <td>Khi form được gửi</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>input</strong></td>
+                                    <td>Khi người dùng gõ vào input</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>4. ĐỐI TƯỢNG event</h3>
+                    <p>Khi một sự kiện xảy ra, JS tạo ra một đối tượng event chứa thông tin chi tiết về sự kiện.</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Đối tượng event</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;button id=<span class="string">"btn2"</span>&gt;Click Me&lt;/button&gt;<br>
+                        <br>
+                        <span class="keyword">let</span> btn = document.getElementById(<span class="string">"btn2"</span>);<br>
+                        <br>
+                        btn.addEventListener(<span class="string">"click"</span>, <span class="keyword">function</span> (e) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(e);           <span class="comment">// Đối tượng sự kiện</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(e.target);    <span class="comment">// Phần tử được click</span><br>
+                        });
+                    </div>
+
+                    <div class="info-box">
+                        <p><strong>e hoặc event</strong> Là đối tượng chứa thông tin như vị trí click, phím bấm, element liên quan...</p>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm sự kiện</h4>
+                        <div class="demo-box">
+                            <div class="event-demo-area">
+                                <div class="event-demo-box" id="clickBox" onclick="handleClick(event)">
+                                    Click vào tôi
+                                </div>
+                                <div class="event-demo-box" id="mouseBox" onmouseover="handleMouseOver()" onmouseout="handleMouseOut()">
+                                    Rê chuột vào tôi
+                                </div>
+                            </div>
+                            
+                            <div style="margin: 15px 0;">
+                                <input type="text" id="inputDemo" placeholder="Gõ gì đó..." style="width: 100%; padding: 8px;">
+                            </div>
+                            
+                            <button class="btn-demo" id="addEventBtn">Gắn sự kiện bằng addEventListener</button>
+                            
+                            <div class="demo-output" id="eventOutput">
+                                Kết quả sự kiện sẽ hiển thị ở đây
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <footer>
+            <p>Bài 9: DOM &copy; GV: Nguyễn Đình Mạnh</p>
+        </footer>
+    </div>
+
+    <script>
+        // Xử lý điều hướng
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    navLinks.forEach(item => item.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+
+                    this.classList.add('active');
+
+                    const targetId = this.getAttribute('href').substring(1);
+                    document.getElementById(targetId).classList.add('active');
+                });
+            });
+
+            // Khởi tạo các sự kiện demo
+            initEventDemo();
+        });
+
+        // Hàm copy code
+        function copyCode(button) {
+            const codeBlock = button.parentElement.parentElement;
+            const text = codeBlock.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Đã copy!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        // ===== DEMO PHẦN I =====
+        function changeDemoContent() {
+            const title = document.getElementById('demoTitle');
+            const content = document.querySelector('.demoContent');
+            const output = document.getElementById('demoOutput');
+            
+            title.textContent = 'Đã thay đổi!';
+            content.innerHTML = '<b>Nội dung đã được cập nhật bằng JavaScript</b>';
+            output.innerHTML = '✅ Đã thay đổi nội dung thành công!';
+        }
+
+        // ===== DEMO PHẦN II =====
+        function testGetElementById() {
+            const title = document.getElementById('demoTitle2');
+            const output = document.getElementById('accessOutput');
+            if (title) {
+                output.innerHTML = `✅ getElementById tìm thấy: "${title.textContent}"`;
+            } else {
+                output.innerHTML = '❌ Không tìm thấy phần tử';
+            }
+        }
+
+        function testGetElementsByClassName() {
+            const paras = document.getElementsByClassName('demoPara');
+            const output = document.getElementById('accessOutput');
+            let result = `✅ Tìm thấy ${paras.length} phần tử:<br>`;
+            for (let i = 0; i < paras.length; i++) {
+                result += `- ${paras[i].textContent}<br>`;
+            }
+            output.innerHTML = result;
+        }
+
+        function testQuerySelector() {
+            const firstPara = document.querySelector('.demoPara');
+            const output = document.getElementById('accessOutput');
+            if (firstPara) {
+                output.innerHTML = `✅ querySelector tìm thấy phần tử đầu tiên: "${firstPara.textContent}"`;
+            } else {
+                output.innerHTML = '❌ Không tìm thấy phần tử';
+            }
+        }
+
+        // ===== DEMO PHẦN III =====
+        function testInnerHTML() {
+            const demo = document.getElementById('modifyDemo');
+            const input = document.getElementById('demoInput');
+            const output = document.getElementById('modifyOutput');
+            
+            demo.innerHTML = `<b style="color: red">${input.value}</b>`;
+            output.innerHTML = `✅ Đã dùng innerHTML để chèn: "${input.value}" với thẻ HTML`;
+        }
+
+        function testTextContent() {
+            const demo = document.getElementById('modifyDemo');
+            const input = document.getElementById('demoInput');
+            const output = document.getElementById('modifyOutput');
+            
+            demo.textContent = input.value;
+            output.innerHTML = `✅ Đã dùng textContent để gán: "${input.value}" (không có thẻ HTML)`;
+        }
+
+        function testAddClass() {
+            const demo = document.getElementById('modifyDemo');
+            const output = document.getElementById('modifyOutput');
+            
+            demo.classList.add('highlight');
+            demo.style.backgroundColor = '#ffff99';
+            output.innerHTML = '✅ Đã thêm class highlight (màu vàng)';
+        }
+
+        function testRemoveClass() {
+            const demo = document.getElementById('modifyDemo');
+            const output = document.getElementById('modifyOutput');
+            
+            demo.classList.remove('highlight');
+            demo.style.backgroundColor = '';
+            output.innerHTML = '✅ Đã xóa class highlight';
+        }
+
+        function testChangeStyle() {
+            const demo = document.getElementById('modifyDemo');
+            const output = document.getElementById('modifyOutput');
+            
+            demo.style.fontSize = '24px';
+            demo.style.color = 'blue';
+            demo.style.fontWeight = 'bold';
+            output.innerHTML = '✅ Đã thay đổi style: font-size, color, font-weight';
+        }
+
+        function testGetInputValue() {
+            const input = document.getElementById('demoInput');
+            const output = document.getElementById('modifyOutput');
+            
+            output.innerHTML = `✅ Giá trị hiện tại của input: "${input.value}"`;
+        }
+
+        // ===== DEMO PHẦN IV =====
+        let elementCounter = 1;
+        
+        function testCreateElement() {
+            const output = document.getElementById('createOutput');
+            output.innerHTML = '✅ Đã tạo phần tử mới trong bộ nhớ. Nhấn "Chèn vào container" để hiển thị.';
+        }
+
+        function testAppendChild() {
+            const container = document.getElementById('containerForDemo');
+            const output = document.getElementById('createOutput');
+            
+            const newElement = document.createElement('p');
+            newElement.textContent = `Phần tử mới thứ ${elementCounter++}`;
+            newElement.style.padding = '5px';
+            newElement.style.margin = '5px';
+            newElement.style.backgroundColor = '#e6f7ff';
+            newElement.style.borderRadius = '4px';
+            
+            container.appendChild(newElement);
+            output.innerHTML = `✅ Đã chèn phần tử mới vào container`;
+        }
+
+        function testRemoveLast() {
+            const container = document.getElementById('containerForDemo');
+            const output = document.getElementById('createOutput');
+            
+            if (container.lastChild) {
+                container.lastChild.remove();
+                output.innerHTML = `✅ Đã xóa phần tử cuối cùng`;
+            } else {
+                output.innerHTML = `❌ Không có phần tử nào để xóa`;
+            }
+        }
+
+        // ===== DEMO PHẦN V =====
+        function handleClick(event) {
+            const output = document.getElementById('eventOutput');
+            output.innerHTML = `✅ Click event: Bạn vừa click vào box<br>`;
+            output.innerHTML += `🔍 event.target: ${event.target.id}<br>`;
+            output.innerHTML += `🔍 event.type: ${event.type}`;
+        }
+
+        function handleMouseOver() {
+            const output = document.getElementById('eventOutput');
+            output.innerHTML = `✅ mouseover event: Chuột vừa đi vào box`;
+        }
+
+        function handleMouseOut() {
+            const output = document.getElementById('eventOutput');
+            output.innerHTML = `✅ mouseout event: Chuột vừa rời khỏi box`;
+        }
+
+        function initEventDemo() {
+            // Input event
+            const input = document.getElementById('inputDemo');
+            if (input) {
+                input.addEventListener('input', function(e) {
+                    const output = document.getElementById('eventOutput');
+                    output.innerHTML = `✅ input event: Bạn vừa gõ: "${e.target.value}"`;
+                });
+            }
+
+            // AddEventListener button
+            const btn = document.getElementById('addEventBtn');
+            if (btn) {
+                btn.addEventListener('click', function(e) {
+                    const output = document.getElementById('eventOutput');
+                    output.innerHTML = `✅ addEventListener: Sự kiện click được kích hoạt<br>`;
+                    output.innerHTML += `🔍 event.target: ${e.target.textContent}`;
+                });
+
+                // Thêm sự kiện thứ hai để chứng minh có thể gắn nhiều sự kiện
+                btn.addEventListener('click', function() {
+                    console.log('Sự kiện thứ hai cũng chạy!');
+                });
+            }
+
+            // Demo event object
+            const clickBox = document.getElementById('clickBox');
+            if (clickBox) {
+                clickBox.addEventListener('dblclick', function(e) {
+                    const output = document.getElementById('eventOutput');
+                    output.innerHTML = `✅ dblclick event: Bạn vừa double-click vào box<br>`;
+                    output.innerHTML += `🔍 event.clientX: ${e.clientX}, event.clientY: ${e.clientY}`;
+                });
+            }
+        }
+    </script>
+</body>
+
+</html>

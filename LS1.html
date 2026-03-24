@@ -1,0 +1,1473 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TỔNG QUAN VỀ NGÔN NGỮ LẬP TRÌNH</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --info: #17a2b8;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+
+        body {
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 80vh;
+        }
+
+        .sidebar {
+            height: 80vh;
+            overflow: scroll;
+            background: var(--light);
+            padding: 20px;
+            border-right: 3px solid var(--secondary);
+        }
+
+        .nav-list {
+            list-style: none;
+            position: sticky;
+            top: 20px;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--secondary);
+            color: white;
+            transform: translateX(5px);
+            border-color: var(--secondary);
+        }
+
+        .main-content {
+            padding: 30px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: var(--accent);
+            margin: 25px 0 15px;
+            padding-left: 15px;
+            border-left: 4px solid var(--accent);
+        }
+
+        h4 {
+            color: var(--info);
+            margin: 20px 0 10px;
+        }
+
+        h5 {
+            color: var(--dark);
+            margin: 15px 0 8px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul,
+        ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            line-height: 1.4;
+            border: 2px solid #444;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn {
+            background: #555;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .keyword {
+            color: #569cd6;
+        }
+
+        .string {
+            color: #ce9178;
+        }
+
+        .comment {
+            color: #6a9955;
+        }
+
+        .number {
+            color: #b5cea8;
+        }
+
+        .class-name {
+            color: #4ec9b0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: var(--secondary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid var(--info);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .interactive-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #e9ecef;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 5px;
+        }
+
+        .btn-run {
+            background: var(--success);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background: white;
+            border-left: 4px solid var(--warning);
+            display: none;
+        }
+
+        .result.active {
+            display: block;
+        }
+
+        .result-content {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border: 1px solid #e9ecef;
+            white-space: pre-wrap;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-right: none;
+                border-bottom: 3px solid var(--secondary);
+            }
+        }
+
+        .flowchart {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .flowchart img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .definition-box {
+            background: #f0f7ff;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .example-box {
+            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-code"></i>TỔNG QUAN VỀ NGÔN NGỮ LẬP TRÌNH</h1>
+        </header>
+
+        <div class="content-wrapper">
+            <nav class="sidebar">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#intro" class="nav-link active"><i class="fas fa-home"></i> Giới thiệu</a></li>
+                    <li class="nav-item"><a href="#programming-language" class="nav-link"><i class="fas fa-language"></i> Ngôn ngữ lập trình</a></li>
+                    <li class="nav-item"><a href="#algorithm" class="nav-link"><i class="fas fa-cogs"></i> Thuật giải</a></li>
+                    <li class="nav-item"><a href="#program" class="nav-link"><i class="fas fa-file-code"></i> Chương trình</a></li>
+                    <li class="nav-item"><a href="#programming-steps" class="nav-link"><i class="fas fa-list-ol"></i> Các bước lập trình</a></li>
+                    <li class="nav-item"><a href="#programming-techniques" class="nav-link"><i class="fas fa-laptop-code"></i> Kỹ thuật lập trình</a></li>
+                    <li class="nav-item"><a href="#flowchart" class="nav-link"><i class="fas fa-project-diagram"></i> Lưu đồ thuật toán</a></li>
+                </ul>
+            </nav>
+
+            <main class="main-content">
+                <!-- PHẦN GIỚI THIỆU -->
+                <section id="intro" class="section active">
+                    <h2><i class="fas fa-home"></i> GIỚI THIỆU</h2>
+
+                    <h3>1. Tổng quan về ngôn ngữ lập trình</h3>
+                    <p>Ngôn ngữ lập trình là công cụ giúp con người giao tiếp với máy tính, biến các ý tưởng và giải pháp thành các chương trình máy tính có thể thực thi được. Việc hiểu rõ các khái niệm cơ bản về ngôn ngữ lập trình là bước đầu tiên quan trọng trên con đường trở thành một lập trình viên chuyên nghiệp.</p>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-lightbulb"></i> Mục tiêu học tập</h4>
+                        <ul>
+                            <li>Hiểu khái niệm về ngôn ngữ lập trình, thuật giải và chương trình</li>
+                            <li>Nắm vững các bước cơ bản trong quá trình lập trình</li>
+                            <li>Hiểu và áp dụng được quy trình I-P-O trong lập trình</li>
+                            <li>Đọc và vẽ được lưu đồ thuật toán đơn giản</li>
+                            <li>Phân biệt được các loại ngôn ngữ lập trình khác nhau</li>
+                        </ul>
+                    </div>
+
+                    <div class="success-box">
+                        <h4><i class="fas fa-check-circle"></i> Tại sao cần học ngôn ngữ lập trình?</h4>
+                        <p>Ngôn ngữ lập trình không chỉ là công cụ để viết phần mềm mà còn giúp phát triển tư duy logic, giải quyết vấn đề và sáng tạo. Trong thời đại số hóa, hiểu biết về lập trình trở thành kỹ năng quan trọng trong nhiều lĩnh vực.</p>
+                    </div>
+                </section>
+
+                <!-- PHẦN NGÔN NGỮ LẬP TRÌNH -->
+                <section id="programming-language" class="section">
+                    <h2><i class="fas fa-language"></i> NGÔN NGỮ LẬP TRÌNH</h2>
+
+                    <h3>1.1 Ngôn ngữ lập trình (Programming Language)</h3>
+                    <p>Ngôn ngữ lập trình là một hệ thống các ký hiệu và quy tắc cho phép con người mô tả các thuật toán để máy tính có thể hiểu và thực thi.</p>
+
+                    <div class="definition-box">
+                        <h4><i class="fas fa-book"></i> Định nghĩa:</h4>
+                        <p><strong>Ngôn ngữ lập trình</strong> là một ngôn ngữ hình thức gồm một tập hợp các câu lệnh, từ khóa, cú pháp và ngữ nghĩa được sử dụng để tạo ra các chương trình máy tính.</p>
+                    </div>
+
+                    <h4>Phân loại ngôn ngữ lập trình:</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Loại ngôn ngữ</th>
+                                    <th>Mức độ</th>
+                                    <th>Ví dụ</th>
+                                    <th>Đặc điểm</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Ngôn ngữ máy</strong></td>
+                                    <td>Thấp nhất</td>
+                                    <td>Mã nhị phân (0 và 1)</td>
+                                    <td>Máy tính hiểu trực tiếp, khó đọc và viết</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Hợp ngữ</strong></td>
+                                    <td>Thấp</td>
+                                    <td>Assembly</td>
+                                    <td>Sử dụng từ viết tắt, gần với ngôn ngữ máy</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Ngôn ngữ bậc cao</strong></td>
+                                    <td>Cao</td>
+                                    <td>Java, Python, C++</td>
+                                    <td>Gần với ngôn ngữ tự nhiên, dễ học và sử dụng</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>Vai trò của ngôn ngữ lập trình:</h4>
+                    <ul>
+                        <li><strong>Cầu nối</strong> giữa con người và máy tính</li>
+                        <li><strong>Biểu diễn thuật toán</strong> một cách chính xác</li>
+                        <li><strong>Tự động hóa</strong> các tác vụ và quy trình</li>
+                        <li><strong>Giải quyết vấn đề</strong> phức tạp bằng máy tính</li>
+                        <li><strong>Tạo ra ứng dụng</strong> và phần mềm hữu ích</li>
+                    </ul>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Khám phá các ngôn ngữ lập trình</h4>
+                        <div class="input-group">
+                            <label for="languageSelect">Chọn ngôn ngữ lập trình:</label>
+                            <select id="languageSelect">
+                                <option value="python">Python</option>
+                                <option value="java">Java</option>
+                                <option value="javascript">JavaScript</option>
+                                <option value="c">C</option>
+                                <option value="c++">C++</option>
+                                <option value="csharp">C#</option>
+                            </select>
+                        </div>
+                        <button class="btn" onclick="exploreLanguage()">
+                            <i class="fas fa-search"></i> Tìm hiểu
+                        </button>
+                        <div class="result" id="languageResult">
+                            <strong>Thông tin:</strong>
+                            <div class="result-content" id="languageResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN THUẬT GIẢI -->
+                <section id="algorithm" class="section">
+                    <h2><i class="fas fa-cogs"></i> THUẬT GIẢI (ALGORITHM)</h2>
+
+                    <h3>1.1.1 Thuật giải (Algorithm)</h3>
+                    
+                    <div class="definition-box">
+                        <h4><i class="fas fa-book"></i> Định nghĩa:</h4>
+                        <p><strong>Thuật giải</strong> hay thuật toán là một tập hợp hữu hạn của các bước xác định rõ ràng, được sắp xếp một cách có logic để giải quyết một vấn đề cụ thể hoặc thực hiện một tác vụ cụ thể.</p>
+                    </div>
+
+                    <h4>Các đặc điểm quan trọng của thuật giải:</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Đặc điểm</th>
+                                    <th>Mô tả</th>
+                                    <th>Ví dụ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Độ rõ ràng</strong></td>
+                                    <td>Mỗi bước cần phải được xác định rõ ràng, không gây hiểu lầm</td>
+                                    <td>"Cộng hai số" thay vì "Tính toán"</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Độc lập</strong></td>
+                                    <td>Không phụ thuộc vào ngôn ngữ lập trình cụ thể</td>
+                                    <td>Có thể code bằng Java, Python, C++</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Đầu vào (Input)</strong></td>
+                                    <td>Có 0 hoặc nhiều đầu vào được cung cấp trước</td>
+                                    <td>Hai số cần cộng: 5 và 3</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Đầu ra (Output)</strong></td>
+                                    <td>Có 1 hoặc nhiều đầu ra dựa trên đầu vào</td>
+                                    <td>Kết quả: 8</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Khả thi</strong></td>
+                                    <td>Có thể thực hiện được trong thực tế</td>
+                                    <td>Thuật toán phải hoàn thành trong thời gian hữu hạn</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Hữu hạn</strong></td>
+                                    <td>Phải kết thúc sau một số bước hữu hạn</td>
+                                    <td>Không được lặp vô hạn</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>Ví dụ về thuật giải: Tính tổng hai số</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Thuật giải tổng hai số</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// Thuật giải tính tổng hai số</span><br>
+                        <span class="keyword">Bước 1:</span> Bắt đầu<br>
+                        <span class="keyword">Bước 2:</span> Đọc giá trị số thứ nhất (a)<br>
+                        <span class="keyword">Bước 3:</span> Đọc giá trị số thứ hai (b)<br>
+                        <span class="keyword">Bước 4:</span> Tính tổng = a + b<br>
+                        <span class="keyword">Bước 5:</span> Hiển thị kết quả tổng<br>
+                        <span class="keyword">Bước 6:</span> Kết thúc
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm thuật giải</h4>
+                        <div class="input-group">
+                            <label for="num1">Nhập số thứ nhất:</label>
+                            <input type="number" id="num1" value="5">
+                        </div>
+                        <div class="input-group">
+                            <label for="num2">Nhập số thứ hai:</label>
+                            <input type="number" id="num2" value="3">
+                        </div>
+                        <button class="btn" onclick="testAlgorithm()">
+                            <i class="fas fa-play"></i> Chạy thuật toán
+                        </button>
+                        <div class="result" id="algorithmResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="algorithmResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN CHƯƠNG TRÌNH -->
+                <section id="program" class="section">
+                    <h2><i class="fas fa-file-code"></i> CHƯƠNG TRÌNH (PROGRAM)</h2>
+
+                    <h3>1.1.2 Chương trình (Program)</h3>
+                    
+                    <div class="definition-box">
+                        <h4><i class="fas fa-book"></i> Định nghĩa:</h4>
+                        <p><strong>Chương trình</strong> là một tập hợp các chỉ thị mà máy tính có thể hiểu và thực hiện. Các chỉ thị này được viết bằng một ngôn ngữ lập trình cụ thể và thường dựa trên một hoặc nhiều thuật giải để giải quyết một vấn đề hoặc thực hiện một tác vụ cụ thể.</p>
+                    </div>
+
+                    <h4>Các thành phần quan trọng của chương trình:</h4>
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Thành phần</th>
+                                    <th>Mô tả</th>
+                                    <th>Ví dụ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Mã nguồn (Source Code)</strong></td>
+                                    <td>Bản văn bản của chương trình, được viết bằng ngôn ngữ lập trình</td>
+                                    <td>Tập tin .java, .py, .cpp</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Biên dịch (Compilation)</strong></td>
+                                    <td>Chuyển đổi mã nguồn thành mã máy có thể thực thi</td>
+                                    <td>Java → javac → .class file</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Mã Thực thi (Executable)</strong></td>
+                                    <td>Phiên bản của chương trình mà máy tính có thể chạy</td>
+                                    <td>.exe (Windows), .app (Mac)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Thực thi (Execution)</strong></td>
+                                    <td>Quá trình máy tính thực hiện các chỉ thị trong chương trình</td>
+                                    <td>Chạy chương trình trên máy tính</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Gỡ lỗi (Debugging)</strong></td>
+                                    <td>Tìm và sửa lỗi trong chương trình</td>
+                                    <td>Sử dụng debugger để tìm lỗi</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Tối ưu hóa (Optimization)</strong></td>
+                                    <td>Cải thiện hiệu suất và tài nguyên sử dụng</td>
+                                    <td>Giảm thời gian chạy, giảm bộ nhớ</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>Ví dụ chương trình Hello World trong các ngôn ngữ khác nhau:</h4>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>HelloWorld.java</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">public class</span> <span class="class-name">HelloWorld</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public static void</span> <span class="class-name">main</span>(String[] args) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;System.out.println(<span class="string">"Hello, World!"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>hello.py</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">print</span>(<span class="string">"Hello, World!"</span>)
+                    </div>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Quá trình từ mã nguồn đến chương trình chạy:</h4>
+                        <ol>
+                            <li><strong>Viết mã nguồn</strong> - Lập trình viên viết code</li>
+                            <li><strong>Biên dịch</strong> - Chuyển đổi sang mã máy (đối với ngôn ngữ biên dịch)</li>
+                            <li><strong>Liên kết</strong> - Kết nối với các thư viện cần thiết</li>
+                            <li><strong>Tạo file thực thi</strong> - Tạo chương trình có thể chạy</li>
+                            <li><strong>Thực thi</strong> - Chạy chương trình trên máy tính</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- PHẦN CÁC BƯỚC LẬP TRÌNH -->
+                <section id="programming-steps" class="section">
+                    <h2><i class="fas fa-list-ol"></i> CÁC BƯỚC LẬP TRÌNH</h2>
+
+                    <h3>1.2 Các bước lập trình</h3>
+                    <p>Lập trình là quá trình giải quyết vấn đề bằng cách sử dụng các thuật toán và viết mã để máy tính có thể thực thi.</p>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Bước</th>
+                                    <th>Mô tả</th>
+                                    <th>Công việc cụ thể</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>1. Hiểu vấn đề</strong></td>
+                                    <td>Xác định rõ vấn đề cần giải quyết</td>
+                                    <td>Phân tích yêu cầu, xác định input/output</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>2. Phân tích vấn đề</strong></td>
+                                    <td>Tìm hiểu chi tiết về vấn đề</td>
+                                    <td>Xác định ràng buộc, điều kiện biên</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>3. Thiết kế thuật toán</strong></td>
+                                    <td>Xây dựng giải pháp logic</td>
+                                    <td>Vẽ lưu đồ, viết giả mã (pseudocode)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>4. Viết mã (Coding)</strong></td>
+                                    <td>Chuyển thuật toán thành code</td>
+                                    <td>Viết mã nguồn bằng ngôn ngữ lập trình</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>5. Kiểm tra & Gỡ lỗi</strong></td>
+                                    <td>Đảm bảo chương trình hoạt động đúng</td>
+                                    <td>Test với nhiều bộ dữ liệu, fix bugs</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>6. Tối ưu hóa</strong></td>
+                                    <td>Cải thiện hiệu suất chương trình</td>
+                                    <td>Tối ưu thuật toán, giảm tài nguyên</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>7. Tài liệu hóa</strong></td>
+                                    <td>Viết tài liệu hướng dẫn</td>
+                                    <td>Viết comment, tạo user manual</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>8. Triển khai</strong></td>
+                                    <td>Đưa chương trình vào sử dụng</td>
+                                    <td>Cài đặt, deploy lên server</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>9. Bảo trì</strong></td>
+                                    <td>Duy trì và cập nhật chương trình</td>
+                                    <td>Sửa lỗi, thêm tính năng mới</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="example-box">
+                        <h4><i class="fas fa-example"></i> Ví dụ minh họa: Phát triển ứng dụng máy tính cầm tay</h4>
+                        <ol>
+                            <li><strong>Hiểu vấn đề:</strong> Cần tạo ứng dụng tính toán cơ bản (cộng, trừ, nhân, chia)</li>
+                            <li><strong>Phân tích:</strong> Input: 2 số và phép toán; Output: Kết quả tính toán</li>
+                            <li><strong>Thiết kế thuật toán:</strong> 
+                                <ul>
+                                    <li>Nhập số thứ nhất</li>
+                                    <li>Nhập số thứ hai</li>
+                                    <li>Nhập phép toán</li>
+                                    <li>Thực hiện tính toán tương ứng</li>
+                                    <li>Hiển thị kết quả</li>
+                                </ul>
+                            </li>
+                            <li><strong>Viết mã:</strong> Code bằng Java/Python/JavaScript</li>
+                            <li><strong>Kiểm tra:</strong> Test với nhiều bộ số và phép toán khác nhau</li>
+                        </ol>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thực hành quy trình lập trình</h4>
+                        <p>Chọn một bài toán đơn giản và xem quy trình phát triển:</p>
+                        <div class="input-group">
+                            <label for="problemSelect">Chọn bài toán:</label>
+                            <select id="problemSelect">
+                                <option value="calculator">Máy tính cầm tay</option>
+                                <option value="temperature">Chuyển đổi nhiệt độ</option>
+                                <option value="bmi">Tính chỉ số BMI</option>
+                                <option value="interest">Tính lãi suất ngân hàng</option>
+                            </select>
+                        </div>
+                        <button class="btn" onclick="showDevelopmentProcess()">
+                            <i class="fas fa-eye"></i> Xem quy trình
+                        </button>
+                        <div class="result" id="processResult">
+                            <strong>Quy trình phát triển:</strong>
+                            <div class="result-content" id="processResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN KỸ THUẬT LẬP TRÌNH -->
+                <section id="programming-techniques" class="section">
+                    <h2><i class="fas fa-laptop-code"></i> KỸ THUẬT LẬP TRÌNH</h2>
+
+                    <h3>1.3 Kỹ thuật lập trình</h3>
+
+                    <h4>1.3.1 Quy trình I-P-O (Input-Process-Output)</h4>
+                    
+                    <div class="definition-box">
+                        <h4><i class="fas fa-book"></i> Định nghĩa:</h4>
+                        <p><strong>Quy trình I-P-O</strong> là một khái niệm cơ bản trong lập trình và khoa học máy tính, giúp định hình cách máy tính và các chương trình hoạt động. Đây là một quy trình tuần tự, trong đó dữ liệu được nhập vào, sau đó được xử lý theo một số thuật toán hoặc quy trình, và cuối cùng, kết quả được xuất ra.</p>
+                    </div>
+
+                    <div class="flowchart">
+                        <img src="./img/ipo.PNG" alt="Sơ đồ I-P-O">
+                    </div>
+
+                    <h5>Thành phần của I-P-O:</h5>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Thành phần</th>
+                                    <th>Mô tả</th>
+                                    <th>Ví dụ</th>
+                                    <th>Nguồn/Đích</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Input (Nhập)</strong></td>
+                                    <td>Dữ liệu được thu thập để xử lý</td>
+                                    <td>Số cần tính căn bậc hai</td>
+                                    <td>Bàn phím, file, cảm biến</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Process (Xử lý)</strong></td>
+                                    <td>Xử lý dữ liệu theo thuật toán</td>
+                                    <td>Tính căn bậc hai của số</td>
+                                    <td>CPU thực hiện tính toán</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Output (Xuất)</strong></td>
+                                    <td>Kết quả sau khi xử lý</td>
+                                    <td>Căn bậc hai của số</td>
+                                    <td>Màn hình, file, máy in</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>Ví dụ: Ứng dụng máy tính cầm tay</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ I-P-O: Máy tính cầm tay</span>
+                        </div>
+                        <span class="comment">// INPUT: Dữ liệu nhập vào</span><br>
+                        <span class="keyword">Số thứ nhất:</span> 15<br>
+                        <span class="keyword">Phép toán:</span> +<br>
+                        <span class="keyword">Số thứ hai:</span> 5<br><br>
+                        
+                        <span class="comment">// PROCESS: Xử lý dữ liệu</span><br>
+                        <span class="keyword">Thực hiện:</span> 15 + 5 = 20<br><br>
+                        
+                        <span class="comment">// OUTPUT: Kết quả xuất ra</span><br>
+                        <span class="keyword">Kết quả:</span> 20
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm quy trình I-P-O</h4>
+                        <div class="input-group">
+                            <label for="inputValue">Nhập giá trị (Input):</label>
+                            <input type="number" id="inputValue" value="25">
+                        </div>
+                        <div class="input-group">
+                            <label for="processType">Chọn xử lý (Process):</label>
+                            <select id="processType">
+                                <option value="square">Tính bình phương</option>
+                                <option value="cube">Tính lập phương</option>
+                                <option value="sqrt">Tính căn bậc hai</option>
+                                <option value="double">Nhân đôi</option>
+                            </select>
+                        </div>
+                        <button class="btn" onclick="testIPO()">
+                            <i class="fas fa-play"></i> Thực hiện I-P-O
+                        </button>
+                        <div class="result" id="ipoResult">
+                            <strong>Kết quả I-P-O:</strong>
+                            <div class="result-content" id="ipoResultContent"></div>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Ứng dụng của I-P-O trong thực tế:</h4>
+                        <ul>
+                            <li><strong>Form đăng ký:</strong> Input (thông tin người dùng) → Process (kiểm tra, lưu DB) → Output (thông báo thành công)</li>
+                            <li><strong>Tìm kiếm:</strong> Input (từ khóa) → Process (tìm trong database) → Output (danh sách kết quả)</li>
+                            <li><strong>Đăng nhập:</strong> Input (username/password) → Process (xác thực) → Output (cho phép truy cập hoặc từ chối)</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- PHẦN LƯU ĐỒ THUẬT TOÁN -->
+                <section id="flowchart" class="section">
+                    <h2><i class="fas fa-project-diagram"></i> LƯU ĐỒ THUẬT TOÁN</h2>
+
+                    <h3>1.3.2 Lưu đồ thuật toán</h3>
+                    
+                    <div class="definition-box">
+                        <h4><i class="fas fa-book"></i> Định nghĩa:</h4>
+                        <p><strong>Lưu đồ thuật toán</strong> hay lưu đồ là một biểu đồ biểu diễn trực quan của thuật toán hoặc quy trình. Nó sử dụng các ký hiệu và hình dạng đồ họa khác nhau để biểu diễn các bước, hành động và quyết định, và mô tả luồng thông tin giữa chúng.</p>
+                    </div>
+
+                    <h4>Các ký hiệu cơ bản trong lưu đồ:</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Hình dạng</th>
+                                    <th>Tên gọi</th>
+                                    <th>Ý nghĩa</th>
+                                    <th>Ví dụ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="text-align: center;">○</td>
+                                    <td>Điểm bắt đầu/kết thúc</td>
+                                    <td>Bắt đầu hoặc kết thúc thuật toán</td>
+                                    <td>Bắt đầu, Kết thúc</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;">▭</td>
+                                    <td>Xử lý</td>
+                                    <td>Thực hiện một phép tính hoặc thao tác</td>
+                                    <td>Tính tổng, Đọc dữ liệu</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;">◇</td>
+                                    <td>Quyết định</td>
+                                    <td>Kiểm tra điều kiện (có/không)</td>
+                                    <td>Số > 0?, a = b?</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;">▱</td>
+                                    <td>Nhập/Xuất</td>
+                                    <td>Nhận đầu vào hoặc hiển thị đầu ra</td>
+                                    <td>Nhập a, b; In kết quả</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center;">→</td>
+                                    <td>Đường đi</td>
+                                    <td>Chỉ hướng thực hiện các bước</td>
+                                    <td>Luồng thực thi</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>Ví dụ 1: Cộng hai số a và b</h4>
+                    <div class="flowchart">
+                        <img src="./img/fl1.PNG" alt="Lưu đồ cộng hai số">
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Mô tả lưu đồ cộng hai số</span>
+                        </div>
+                        <span class="keyword">1.</span> Bắt đầu<br>
+                        <span class="keyword">2.</span> Nhập giá trị a<br>
+                        <span class="keyword">3.</span> Nhập giá trị b<br>
+                        <span class="keyword">4.</span> Tính tổng = a + b<br>
+                        <span class="keyword">5.</span> Hiển thị tổng<br>
+                        <span class="keyword">6.</span> Kết thúc
+                    </div>
+
+                    <h4>Ví dụ 2: Kiểm tra số âm/dương</h4>
+                    <div class="flowchart">
+                        <img src="./img/fl2.PNG" alt="Lưu đồ kiểm tra số âm dương">
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Mô tả lưu đồ kiểm tra số âm/dương</span>
+                        </div>
+                        <span class="keyword">1.</span> Bắt đầu<br>
+                        <span class="keyword">2.</span> Nhập số n<br>
+                        <span class="keyword">3.</span> Kiểm tra: n > 0?<br>
+                        <span class="keyword">4.</span> Nếu <span class="keyword">ĐÚNG</span>: Hiển thị "Số dương"<br>
+                        <span class="keyword">5.</span> Nếu <span class="keyword">SAI</span>: Kiểm tra: n < 0?<br>
+                        <span class="keyword">6.</span> Nếu <span class="keyword">ĐÚNG</span>: Hiển thị "Số âm"<br>
+                        <span class="keyword">7.</span> Nếu <span class="keyword">SAI</span>: Hiển thị "Số không"<br>
+                        <span class="keyword">8.</span> Kết thúc
+                    </div>
+<!-- 
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Tạo lưu đồ đơn giản</h4>
+                        <div class="input-group">
+                            <label for="flowchartType">Chọn loại lưu đồ:</label>
+                            <select id="flowchartType">
+                                <option value="addition">Cộng hai số</option>
+                                <option value="checkNumber">Kiểm tra số âm/dương</option>
+                                <option value="findMax">Tìm số lớn nhất</option>
+                                <option value="factorial">Tính giai thừa</option>
+                            </select>
+                        </div>
+                        <button class="btn" onclick="showFlowchart()">
+                            <i class="fas fa-project-diagram"></i> Hiển thị lưu đồ
+                        </button>
+                        <div class="result" id="flowchartResult">
+                            <strong>Lưu đồ thuật toán:</strong>
+                            <div class="result-content" id="flowchartResultContent"></div>
+                        </div>
+                    </div> -->
+
+                    <div class="success-box">
+                        <h4><i class="fas fa-check-circle"></i> Lợi ích của lưu đồ thuật toán:</h4>
+                        <ul>
+                            <li><strong>Trực quan hóa</strong> thuật toán phức tạp</li>
+                            <li>Giúp <strong>phân tích và thiết kế</strong> chương trình</li>
+                            <li>Dễ dàng <strong>truyền đạt ý tưởng</strong> với người khác</li>
+                            <li>Hỗ trợ <strong>phát hiện lỗi logic</strong> sớm</li>
+                            <li>Là tài liệu <strong>hướng dẫn chi tiết</strong> để code</li>
+                        </ul>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <footer>
+            <p>Tổng quan về ngôn ngữ lập trình &copy; GV: Nguyễn Đình Mạnh</p>
+        </footer>
+    </div>
+
+    <script>
+        // Xử lý điều hướng
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    // Xóa class active từ tất cả các link và section
+                    navLinks.forEach(item => item.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+
+                    // Thêm class active cho link được click
+                    this.classList.add('active');
+
+                    // Hiển thị section tương ứng
+                    const targetId = this.getAttribute('href').substring(1);
+                    document.getElementById(targetId).classList.add('active');
+                    
+                    // Scroll to top khi chuyển section
+                    window.scrollTo(0, 0);
+                });
+            });
+        });
+
+        // Hàm copy code
+        function copyCode(button) {
+            const codeBlock = button.parentElement.parentElement;
+            const text = codeBlock.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Đã copy!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        // Khám phá ngôn ngữ lập trình
+        function exploreLanguage() {
+            const language = document.getElementById('languageSelect').value;
+            const result = document.getElementById('languageResult');
+            const output = document.getElementById('languageResultContent');
+
+            result.classList.add('active');
+
+            const languages = {
+                python: {
+                    name: "Python",
+                    year: "1991",
+                    creator: "Guido van Rossum",
+                    features: "Đơn giản, dễ học, đa năng, thư viện phong phú",
+                    usage: "Web development, Data Science, AI, Automation",
+                    code: "print('Hello, World!')"
+                },
+                java: {
+                    name: "Java",
+                    year: "1995",
+                    creator: "James Gosling (Sun Microsystems)",
+                    features: "Hướng đối tượng, đa nền tảng (Write Once, Run Anywhere)",
+                    usage: "Enterprise applications, Android apps, Web applications",
+                    code: "System.out.println(\"Hello, World!\");"
+                },
+                javascript: {
+                    name: "JavaScript",
+                    year: "1995",
+                    creator: "Brendan Eich",
+                    features: "Chạy trên trình duyệt, động, đa năng",
+                    usage: "Web development, Frontend, Backend (Node.js), Mobile apps",
+                    code: "console.log('Hello, World!');"
+                },
+                c: {
+                    name: "C",
+                    year: "1972",
+                    creator: "Dennis Ritchie",
+                    features: "Hiệu suất cao, gần với phần cứng, cấu trúc",
+                    usage: "Hệ điều hành, embedded systems, compiler development",
+                    code: "printf(\"Hello, World!\");"
+                },
+                "c++": {
+                    name: "C++",
+                    year: "1985",
+                    creator: "Bjarne Stroustrup",
+                    features: "Hướng đối tượng, hiệu suất cao, đa năng",
+                    usage: "Game development, system software, high-performance apps",
+                    code: "cout << \"Hello, World!\";"
+                },
+                csharp: {
+                    name: "C#",
+                    year: "2000",
+                    creator: "Microsoft (Anders Hejlsberg)",
+                    features: "Hướng đối tượng, type-safe, modern syntax",
+                    usage: "Windows applications, Web development (ASP.NET), Games (Unity)",
+                    code: "Console.WriteLine(\"Hello, World!\");"
+                }
+            };
+
+            const lang = languages[language];
+            let outputText = `=== THÔNG TIN NGÔN NGỮ ${lang.name.toUpperCase()} ===\n\n`;
+            outputText += `📅 Năm ra đời: ${lang.year}\n`;
+            outputText += `👨‍💻 Người tạo: ${lang.creator}\n`;
+            outputText += `✨ Đặc điểm: ${lang.features}\n`;
+            outputText += `🚀 Ứng dụng: ${lang.usage}\n\n`;
+            outputText += `💻 Ví dụ Hello World:\n${lang.code}`;
+
+            output.textContent = outputText;
+        }
+
+        // Thử nghiệm thuật giải
+        function testAlgorithm() {
+            const num1 = parseInt(document.getElementById('num1').value) || 0;
+            const num2 = parseInt(document.getElementById('num2').value) || 0;
+            const sum = num1 + num2;
+
+            const result = document.getElementById('algorithmResult');
+            const output = document.getElementById('algorithmResultContent');
+
+            result.classList.add('active');
+
+            let outputText = `=== THUẬT GIẢI TÍNH TỔNG HAI SỐ ===\n\n`;
+            outputText += `📋 Các bước thực hiện:\n`;
+            outputText += `1. Bắt đầu thuật toán\n`;
+            outputText += `2. Nhập số thứ nhất: ${num1}\n`;
+            outputText += `3. Nhập số thứ hai: ${num2}\n`;
+            outputText += `4. Tính tổng = ${num1} + ${num2}\n`;
+            outputText += `5. Hiển thị kết quả\n`;
+            outputText += `6. Kết thúc thuật toán\n\n`;
+            outputText += `🎯 Kết quả: ${num1} + ${num2} = ${sum}`;
+
+            output.textContent = outputText;
+        }
+
+        // Hiển thị quy trình phát triển
+        function showDevelopmentProcess() {
+            const problem = document.getElementById('problemSelect').value;
+            const result = document.getElementById('processResult');
+            const output = document.getElementById('processResultContent');
+
+            result.classList.add('active');
+
+            const processes = {
+                calculator: {
+                    title: "PHÁT TRIỂN ỨNG DỤNG MÁY TÍNH CẦM TAY",
+                    steps: [
+                        "1. HIỂU VẤN ĐỀ: Tạo ứng dụng thực hiện 4 phép toán cơ bản",
+                        "2. PHÂN TÍCH: Input: 2 số và phép toán; Output: Kết quả",
+                        "3. THIẾT KẾ: - Nhập số 1\n  - Nhập số 2\n  - Chọn phép toán\n  - Tính kết quả\n  - Hiển thị kết quả",
+                        "4. VIẾT MÃ: Code giao diện và logic tính toán",
+                        "5. KIỂM TRA: Test với nhiều bộ số và phép toán",
+                        "6. TỐI ƯU: Tối ưu hiệu suất, xử lý lỗi chia cho 0",
+                        "7. TRIỂN KHAI: Đóng gói và phân phối ứng dụng"
+                    ]
+                },
+                temperature: {
+                    title: "PHÁT TRIỂN ỨNG DỤNG CHUYỂN ĐỔI NHIỆT ĐỘ",
+                    steps: [
+                        "1. HIỂU VẤN ĐỀ: Chuyển đổi giữa Celsius, Fahrenheit, Kelvin",
+                        "2. PHÂN TÍCH: Công thức chuyển đổi, độ chính xác cần thiết",
+                        "3. THIẾT KẾ: - Chọn loại chuyển đổi\n  - Nhập giá trị\n  - Áp dụng công thức\n  - Hiển thị kết quả",
+                        "4. VIẾT MÃ: Implement các công thức chuyển đổi",
+                        "5. KIỂM TRA: Test với các giá trị đặc biệt (0°C, -40°C)",
+                        "6. TỐI ƯU: Làm tròn số thập phân phù hợp",
+                        "7. TRIỂN KHAI: Tạo ứng dụng web hoặc mobile"
+                    ]
+                },
+                bmi: {
+                    title: "PHÁT TRIỂN ỨNG DỤNG TÍNH CHỈ SỐ BMI",
+                    steps: [
+                        "1. HIỂU VẤN ĐỀ: Tính chỉ số khối cơ thể (BMI)",
+                        "2. PHÂN TÍCH: Công thức BMI = cân nặng/(chiều cao)^2",
+                        "3. THIẾT KẾ: - Nhập chiều cao (m)\n  - Nhập cân nặng (kg)\n  - Tính BMI\n  - Phân loại kết quả",
+                        "4. VIẾT MÃ: Code tính toán và phân loại BMI",
+                        "5. KIỂM TRA: Test với các trường hợp khác nhau",
+                        "6. TỐI ƯU: Thêm phân loại theo WHO",
+                        "7. TRIỂN KHAI: Ứng dụng sức khỏe cá nhân"
+                    ]
+                },
+                interest: {
+                    title: "PHÁT TRIỂN ỨNG DỤNG TÍNH LÃI SUẤT",
+                    steps: [
+                        "1. HIỂU VẤN ĐỀ: Tính lãi suất ngân hàng",
+                        "2. PHÂN TÍCH: Công thức lãi đơn, lãi kép",
+                        "3. THIẾT KẾ: - Nhập số tiền gốc\n  - Nhập lãi suất\n  - Nhập thời gian\n  - Chọn loại lãi\n  - Tính tổng",
+                        "4. VIẾT MÃ: Implement các công thức lãi suất",
+                        "5. KIỂM TRA: So sánh với kết quả tính tay",
+                        "6. TỐI ƯU: Format tiền tệ, làm tròn",
+                        "7. TRIỂN KHAI: Ứng dụng tài chính cá nhân"
+                    ]
+                }
+            };
+
+            const process = processes[problem];
+            let outputText = `${process.title}\n\n`;
+            outputText += process.steps.join('\n\n');
+
+            output.textContent = outputText;
+        }
+
+        // Thử nghiệm quy trình I-P-O
+        function testIPO() {
+            const inputValue = parseFloat(document.getElementById('inputValue').value) || 0;
+            const processType = document.getElementById('processType').value;
+            
+            let processName = "";
+            let outputValue = 0;
+            
+            switch(processType) {
+                case 'square':
+                    processName = "Tính bình phương";
+                    outputValue = inputValue * inputValue;
+                    break;
+                case 'cube':
+                    processName = "Tính lập phương";
+                    outputValue = inputValue * inputValue * inputValue;
+                    break;
+                case 'sqrt':
+                    processName = "Tính căn bậc hai";
+                    outputValue = Math.sqrt(inputValue);
+                    break;
+                case 'double':
+                    processName = "Nhân đôi";
+                    outputValue = inputValue * 2;
+                    break;
+            }
+
+            const result = document.getElementById('ipoResult');
+            const output = document.getElementById('ipoResultContent');
+
+            result.classList.add('active');
+
+            let outputText = `=== QUY TRÌNH I-P-O ===\n\n`;
+            outputText += `📥 INPUT (Nhập):\n`;
+            outputText += `  Giá trị: ${inputValue}\n\n`;
+            outputText += `⚙️ PROCESS (Xử lý):\n`;
+            outputText += `  Thao tác: ${processName}\n`;
+            
+            switch(processType) {
+                case 'square':
+                    outputText += `  Công thức: ${inputValue}² = ${inputValue} × ${inputValue}\n`;
+                    break;
+                case 'cube':
+                    outputText += `  Công thức: ${inputValue}³ = ${inputValue} × ${inputValue} × ${inputValue}\n`;
+                    break;
+                case 'sqrt':
+                    outputText += `  Công thức: √${inputValue}\n`;
+                    break;
+                case 'double':
+                    outputText += `  Công thức: ${inputValue} × 2\n`;
+                    break;
+            }
+            
+            outputText += `\n📤 OUTPUT (Xuất):\n`;
+            outputText += `  Kết quả: ${outputValue.toFixed(2)}`;
+
+            output.textContent = outputText;
+        }
+
+        // Hiển thị lưu đồ
+        function showFlowchart() {
+            const type = document.getElementById('flowchartType').value;
+            const result = document.getElementById('flowchartResult');
+            const output = document.getElementById('flowchartResultContent');
+
+            result.classList.add('active');
+
+            const flowcharts = {
+                addition: {
+                    title: "LƯU ĐỒ CỘNG HAI SỐ",
+                    steps: [
+                        "┌─────────────────┐",
+                        "│     BẮT ĐẦU     │",
+                        "└────────┬────────┘",
+                        "         │",
+                        "┌────────▼────────┐",
+                        "│   NHẬP SỐ a    │",
+                        "└────────┬────────┘",
+                        "         │",
+                        "┌────────▼────────┐",
+                        "│   NHẬP SỐ b    │",
+                        "└────────┬────────┘",
+                        "         │",
+                        "┌────────▼────────┐",
+                        "│ TÍNH tổng = a+b │",
+                        "└────────┬────────┘",
+                        "         │",
+                        "┌────────▼────────┐",
+                        "│ HIỂN THỊ tổng  │",
+                        "└────────┬────────┘",
+                        "         │",
+                        "┌────────▼────────┐",
+                        "│     KẾT THÚC    │",
+                        "└─────────────────┘"
+                    ]
+                },
+                checkNumber: {
+                    title: "LƯU ĐỒ KIỂM TRA SỐ ÂM/DƯƠNG",
+                    steps: [
+                        "┌─────────────────┐",
+                        "│     BẮT ĐẦU     │",
+                        "└────────┬────────┘",
+                        "         │",
+                        "┌────────▼────────┐",
+                        "│   NHẬP SỐ n    │",
+                        "└────────┬────────┘",
+                        "         │",
+                        "┌────────▼────────┐",
+                        "│    n > 0 ?     │ ←┐",
+                        "└──────┬─────┬────┘  │",
+                        "    ĐÚNG│     │SAI   │",
+                        "       │      │      │",
+                        "┌──────▼─┐ ┌──▼─────┐│",
+                        "│SỐ DƯƠNG│ │ n < 0 ?├┘",
+                        "└──────┬─┘ └──┬──┬──┘",
+                        "       │    ĐÚNG│ │SAI",
+                        "       │       │ │",
+                        "┌──────▼──────▼─▼──┐",
+                        "│    SỐ ÂM     SỐ 0 │",
+                        "└──────┬──────┬─────┘",
+                        "       │      │",
+                        "       └──┬───┘",
+                        "          │",
+                        "┌─────────▼─────────┐",
+                        "│      KẾT THÚC     │",
+                        "└───────────────────┘"
+                    ]
+                },
+                findMax: {
+                    title: "LƯU ĐỒ TÌM SỐ LỚN NHẤT",
+                    steps: [
+                        "┌─────────────────┐",
+                        "│     BẮT ĐẦU     │",
+                        "└────────┬────────┘",
+                        "         │",
+                        "┌────────▼────────┐",
+                        "│ NHẬP 3 SỐ a,b,c│",
+                        "└────────┬────────┘",
+                        "         │",
+                        "┌────────▼────────┐",
+                        "│   max = a       │",
+                        "└────────┬────────┘",
+                        "         │",
+                        "┌────────▼────────┐",
+                        "│    b > max ?    │",
+                        "└──────┬─────┬────┘",
+                        "    ĐÚNG│     │SAI",
+                        "       │      │",
+                        "┌──────▼─┐    │",
+                        "│ max = b│    │",
+                        "└──────┬─┘    │",
+                        "       │      │",
+                        "       └──┬───┘",
+                        "          │",
+                        "┌─────────▼─────────┐",
+                        "│    c > max ?      │",
+                        "└──────┬─────┬──────┘",
+                        "    ĐÚNG│     │SAI",
+                        "       │      │",
+                        "┌──────▼─┐    │",
+                        "│ max = c│    │",
+                        "└──────┬─┘    │",
+                        "       │      │",
+                        "       └──┬───┘",
+                        "          │",
+                        "┌─────────▼─────────┐",
+                        "│ HIỂN THỊ max      │",
+                        "└─────────┬─────────┘",
+                        "          │",
+                        "┌─────────▼─────────┐",
+                        "│      KẾT THÚC     │",
+                        "└───────────────────┘"
+                    ]
+                },
+                factorial: {
+                    title: "LƯU ĐỒ TÍNH GIAI THỪA",
+                    steps: [
+                        "┌─────────────────┐",
+                        "│     BẮT ĐẦU     │",
+                        "└────────┬────────┘",
+                        "         │",
+                        "┌────────▼────────┐",
+                        "│   NHẬP SỐ n    │",
+                        "└────────┬────────┘",
+                        "         │",
+                        "┌────────▼────────┐",
+                        "│ factorial = 1   │",
+                        "└────────┬────────┘",
+                        "         │",
+                        "┌────────▼────────┐",
+                        "│     i = 1       │",
+                        "└────────┬────────┘",
+                        "         │",
+                        "┌────────▼────────┐",
+                        "│    i <= n ?     │ ←┐",
+                        "└──────┬─────┬────┘  │",
+                        "    ĐÚNG│     │SAI   │",
+                        "       │      │      │",
+                        "┌──────▼─┐ ┌──▼─────┐│",
+                        "│factorial│ │HIỂN THỊ││",
+                        "│ =fact*i │ │factorial│",
+                        "└──────┬─┘ └────┬────┘",
+                        "       │         │",
+                        "┌──────▼─────────┘",
+                        "│    i = i + 1    │",
+                        "└──────┬──────────┘",
+                        "       │",
+                        "       └──────────┐",
+                        "                  │",
+                        "┌─────────────────▼┐",
+                        "│     KẾT THÚC     │",
+                        "└──────────────────┘"
+                    ]
+                }
+            };
+
+            const flowchart = flowcharts[type];
+            let outputText = `${flowchart.title}\n\n`;
+            outputText += flowchart.steps.join('\n');
+
+            output.textContent = outputText;
+        }
+
+        // Lưu trạng thái khi refresh
+        window.addEventListener('load', function() {
+            // Khôi phục trạng thái active của section
+            const activeSection = localStorage.getItem('activeSection') || 'intro';
+            const activeLink = document.querySelector(`a[href="#${activeSection}"]`);
+            
+            if (activeLink) {
+                activeLink.click();
+            }
+        });
+
+        // Lưu trạng thái khi chuyển section
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                const sectionId = this.getAttribute('href').substring(1);
+                localStorage.setItem('activeSection', sectionId);
+            });
+        });
+    </script>
+</body>
+
+</html>

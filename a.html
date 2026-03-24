@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Mô phỏng duyệt mảng - Infinite</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        text-align: center;
+        padding: 50px;
+        color: white;
+    }
+
+    h1 {
+        margin-bottom: 40px;
+    }
+
+    .wrapper {
+        position: relative;
+        display: inline-block;
+    }
+
+    .array {
+        display: flex;
+    }
+
+    .item {
+        width: 100px;
+        padding: 15px;
+        margin: 5px;
+        background: white;
+        color: black;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: 0.4s;
+    }
+
+    .active {
+        background: #ffcc00;
+        transform: scale(1.1);
+        box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    }
+
+    .arrow {
+        position: absolute;
+        top: -35px;
+        font-size: 28px;
+        transition: 0.4s;
+    }
+
+    .index {
+        margin-top: 30px;
+        font-size: 18px;
+        font-weight: bold;
+    }
+</style>
+</head>
+<body>
+
+<h1>Mô phỏng duyệt mảng (Loop vô hạn)</h1>
+
+<div class="wrapper">
+    <div class="arrow" id="arrow">⬇️</div>
+
+    <div class="array" id="arrayContainer">
+        <div class="item">Toyota</div>
+        <div class="item">Nissan</div>
+        <div class="item">Ford</div>
+        <div class="item">Honda</div>
+        <div class="item">Vinfast</div>
+    </div>
+</div>
+
+<div class="index" id="indexDisplay">
+    Index hiện tại: 0
+</div>
+
+<script>
+const items = document.querySelectorAll(".item");
+const arrow = document.getElementById("arrow");
+const indexDisplay = document.getElementById("indexDisplay");
+
+let i = 0;
+
+function moveArrow(index) {
+    const item = items[index];
+    const rect = item.getBoundingClientRect();
+    const parentRect = item.parentElement.getBoundingClientRect();
+
+    arrow.style.left = (item.offsetLeft + item.offsetWidth/2 - 10) + "px";
+}
+
+function traverse() {
+
+    items.forEach(item => item.classList.remove("active"));
+
+    items[i].classList.add("active");
+    indexDisplay.innerHTML = "Index hiện tại: " + i;
+
+    moveArrow(i);
+
+    i++;
+
+    if (i >= items.length) {
+        i = 0; // quay lại đầu -> loop vô hạn
+    }
+}
+
+setInterval(traverse, 1000);
+
+// đặt vị trí ban đầu
+moveArrow(0);
+
+</script>
+
+</body>
+</html>

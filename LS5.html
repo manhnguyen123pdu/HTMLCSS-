@@ -1,0 +1,2028 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MẢNG </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --info: #17a2b8;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+
+        body {
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 80vh;
+        }
+
+        .sidebar {
+            height: 80vh;
+            overflow: scroll;
+            background: var(--light);
+            padding: 20px;
+            border-right: 3px solid var(--secondary);
+        }
+
+        .sidebar ul {
+            padding: 0;
+        }
+
+        .nav-list {
+            list-style: none;
+            position: sticky;
+            top: 20px;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--secondary);
+            color: white;
+            transform: translateX(5px);
+            border-color: var(--secondary);
+        }
+        .nav-link1{
+             display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .main-content {
+            padding: 30px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: var(--accent);
+            margin: 25px 0 15px;
+            padding-left: 15px;
+            border-left: 4px solid var(--accent);
+        }
+
+        h4 {
+            color: var(--info);
+            margin: 20px 0 10px;
+        }
+
+        h5 {
+            color: var(--dark);
+            margin: 15px 0 8px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul,
+        ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            line-height: 1.4;
+            border: 2px solid #444;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn {
+            background: #555;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .keyword {
+            color: #569cd6;
+        }
+
+        .string {
+            color: #ce9178;
+        }
+
+        .comment {
+            color: #6a9955;
+        }
+
+        .number {
+            color: #b5cea8;
+        }
+
+        .class-name {
+            color: #4ec9b0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: var(--secondary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid var(--info);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .interactive-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #e9ecef;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 5px;
+        }
+
+        .btn-run {
+            background: var(--success);
+        }
+
+        .btn-warning {
+            background: var(--warning);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background: white;
+            border-left: 4px solid var(--warning);
+            display: none;
+        }
+
+        .result.active {
+            display: block;
+        }
+
+        .result-content {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border: 1px solid #e9ecef;
+            white-space: pre-wrap;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-right: none;
+                border-bottom: 3px solid var(--secondary);
+            }
+        }
+
+        .visual-array {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .array-item {
+            width: 60px;
+            height: 60px;
+            background: var(--secondary);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 5px;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .array-index {
+            position: absolute;
+            top: -25px;
+            font-size: 12px;
+            color: var(--dark);
+        }
+
+        .array-value {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .algorithm-steps {
+            background: #f0f7ff;
+            border-left: 4px solid #4dabf7;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .algorithm-steps ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .algorithm-steps li {
+            margin-bottom: 5px;
+        }
+
+        .method-demo {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+
+
+        .demo .wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .demo .array {
+            display: flex;
+        }
+
+        .demo .item {
+            width: 100px;
+            padding: 15px;
+            margin: 5px;
+            background: white;
+            color: black;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: 0.4s;
+        }
+
+        .demo .active {
+            background: #ffcc00;
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .demo .arrow {
+            position: absolute;
+            top: -35px;
+            font-size: 28px;
+            transition: 0.4s;
+        }
+
+        .demo .index {
+            margin-top: 30px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-layer-group"></i> BÀI 5: MẢNG </h1>
+        </header>
+
+        <div class="content-wrapper">
+            <nav class="sidebar">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#intro" class="nav-link active"><i class="fas fa-home"></i> Mảng là
+                            gì?</a></li>
+                    <li class="nav-item"><a href="#why-array" class="nav-link"><i class="fas fa-question-circle"></i>
+                            Tại sao dùng mảng?</a></li>
+                    <li class="nav-item"><a href="#declaration" class="nav-link"><i class="fas fa-code"></i> Khai báo
+                            mảng</a></li>
+                    <li class="nav-item"><a href="#access" class="nav-link"><i class="fas fa-key"></i> Truy cập phần
+                            tử</a></li>
+                    <li class="nav-item"><a href="#methods" class="nav-link"><i class="fas fa-tools"></i> Phương thức
+                            mảng</a></li>
+                    <li class="nav-item"><a href="#iteration" class="nav-link"><i class="fas fa-sync"></i> Duyệt
+                            mảng</a></li>
+                    <li class="nav-item"><a href="#advanced" class="nav-link"><i class="fas fa-cogs"></i> Mảng nâng
+                            cao</a></li>
+                    <li class="nav-item"><a href="#algorithms" class="nav-link"><i class="fas fa-brain"></i> Giải thuật
+                            mảng</a></li>
+                    <li class="nav-item"><a href="./child/moPhong.html" class="nav-link1"></i> Mô phỏng</a></li>
+                    <li class="nav-item"><a href="#bt" class="nav-link"><i class="fas fa-brain"></i> Bài tập</a></li>
+                </ul>
+            </nav>
+
+            <main class="main-content">
+                <!-- PHẦN GIỚI THIỆU MẢNG -->
+                <section id="intro" class="section active">
+                    <h2><i class="fas fa-home"></i> MẢNG LÀ GÌ?</h2>
+
+                    <h3>Định nghĩa</h3>
+                    <p><strong>Mảng (Array)</strong> trong JavaScript là một kiểu dữ liệu đặc biệt dùng để lưu trữ nhiều
+                        giá trị trong một biến duy nhất.</p>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Đặc điểm quan trọng</h4>
+                        <ul>
+                            <li>Các giá trị trong mảng được lưu theo thứ tự</li>
+                            <li>Mỗi giá trị có một chỉ số (index) riêng để truy xuất</li>
+                            <li>Index bắt đầu từ 0</li>
+                            <li>Mảng có thể chứa nhiều kiểu dữ liệu khác nhau (number, string, boolean, object,...)</li>
+                        </ul>
+                    </div>
+
+                    <h4>Cách hình dung:</h4>
+                    <p>Giống như 1 ngăn kéo đựng đồ. Mỗi ngăn là một phần tử trong mảng:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ minh họa</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        let arr = ["Táo", "Cam", "Chuối"]<br>
+                        <span class="comment">// Index: 0 1 2</span>
+                    </div>
+
+                    <div class="visual-array">
+                        <div class="array-item">
+                            <div class="array-index">Index 0</div>
+                            <div class="array-value">"Táo"</div>
+                        </div>
+                        <div class="array-item">
+                            <div class="array-index">Index 1</div>
+                            <div class="array-value">"Cam"</div>
+                        </div>
+                        <div class="array-item">
+                            <div class="array-index">Index 2</div>
+                            <div class="array-value">"Chuối"</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN TẠI SAO DÙNG MẢNG -->
+                <section id="why-array" class="section">
+                    <h2><i class="fas fa-question-circle"></i> TẠI SAO PHẢI DÙNG MẢNG?</h2>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Trường hợp</th>
+                                    <th>Nếu dùng biến thường</th>
+                                    <th>Nếu dùng mảng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Lưu 3 tên học sinh</strong></td>
+                                    <td>
+                                        <div class="code-block"
+                                            style="margin: 5px 0; padding: 10px; font-size: 0.9rem;">
+                                            let a = "Nam";<br>
+                                            let b = "Lan";<br>
+                                            let c = "Mai";
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="code-block"
+                                            style="margin: 5px 0; padding: 10px; font-size: 0.9rem;">
+                                            let students = ["Nam", "Lan", "Mai"];
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Truy cập tên thứ 2</strong></td>
+                                    <td>
+                                        <div class="code-block"
+                                            style="margin: 5px 0; padding: 10px; font-size: 0.9rem;">
+                                            console.log(b);
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="code-block"
+                                            style="margin: 5px 0; padding: 10px; font-size: 0.9rem;">
+                                            console.log(students[1]);
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Duyệt qua 3 người</strong></td>
+                                    <td>
+                                        <div class="code-block"
+                                            style="margin: 5px 0; padding: 10px; font-size: 0.9rem;">
+                                            console.log(a);<br>
+                                            console.log(b);<br>
+                                            console.log(c);
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="code-block"
+                                            style="margin: 5px 0; padding: 10px; font-size: 0.9rem;">
+                                            for(let i = 0; i < students.length; i++) {<br>
+                                                &nbsp;&nbsp;console.log("Học sinh", i + 1, ":", students[i]);<br>
+                                                }
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>Ưu điểm khi dùng mảng:</h4>
+                    <ul>
+                        <li><strong>Dễ tổ chức dữ liệu:</strong> thay vì nhiều biến, gom vào 1</li>
+                        <li><strong>Truy xuất nhanh bằng chỉ số</strong></li>
+                        <li><strong>Dễ thao tác hàng loạt:</strong> thêm, xoá, sắp xếp, lọc...</li>
+                        <li><strong>Phù hợp vòng lặp, thuật toán</strong></li>
+                    </ul>
+
+                    <div class="success-box">
+                        <h4><i class="fas fa-check-circle"></i> Tổng kết phần này</h4>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Thuộc tính</th>
+                                        <th>Ý nghĩa</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Lưu trữ danh sách</strong></td>
+                                        <td>Lưu nhiều giá trị vào 1 biến</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Có thứ tự</strong></td>
+                                        <td>Truy cập bằng chỉ số</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Dễ thao tác</strong></td>
+                                        <td>Có nhiều phương thức sẵn</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Cần thiết</strong></td>
+                                        <td>Cho vòng lặp, bài toán, thuật toán</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN KHAI BÁO MẢNG -->
+                <section id="declaration" class="section">
+                    <h2><i class="fas fa-code"></i> KHAI BÁO MẢNG</h2>
+
+                    <h3>Mục Đích</h3>
+                    <p>Cho JS biết rằng ta cần lưu trữ một danh sách nhiều giá trị.</p>
+
+                    <h4>Cú Pháp</h4>
+
+                    <h5>Cách 1: Sử dụng dấu ngoặc vuông "[ ]" để khai báo mảng (Array literal)</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        let fruits = ["Táo", "Cam", "Chuối"];
+                    </div>
+
+                    <h5>Cách 2: Sử dụng từ khoá new (Array constructor)</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        let numbers = new Array(1, 2, 3);
+                    </div>
+
+                    <h5>Cách 3: Khai báo mảng rỗng</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        let empty = [];
+                    </div>
+                    <h3>Các thành phần trong mảng</h3>
+                    <img style="width: 100%;" src="./img//arr.PNG" alt="">
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Lưu ý quan trọng</h4>
+                        <p><strong>Các thành phần trong mảng:</strong> Mỗi phần tử được phân cách bằng dấu phẩy và có
+                            thể là bất kỳ kiểu dữ liệu nào.</p>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm khai báo mảng</h4>
+                        <div class="input-group">
+                            <label for="arrayElements">Nhập các phần tử (phân cách bằng dấu phẩy):</label>
+                            <input type="text" id="arrayElements" value="Táo, Cam, Chuối, Xoài">
+                        </div>
+                        <button class="btn" onclick="testArrayDeclaration()">
+                            <i class="fas fa-play"></i> Khai báo mảng
+                        </button>
+                        <div class="result" id="declarationResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="declarationResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN TRUY CẬP PHẦN TỬ -->
+                <section id="access" class="section">
+                    <h2><i class="fas fa-key"></i> TRUY CẬP PHẦN TỬ TRONG MẢNG</h2>
+
+                    <h3>Mục Đích</h3>
+                    <p>Lấy ra giá trị cần thiết từ trong danh sách.</p>
+
+                    <h4>Cú Pháp</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        tên_mảng[vị_trí]
+                    </div>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Chú Thích</h4>
+                        <ul>
+                            <li>Vị trí (index) bắt đầu từ 0</li>
+                            <li>Muốn truy cập phần tử thứ i thì dùng arr[i-1]</li>
+                        </ul>
+                    </div>
+
+                    <h4>Ví Dụ</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        let fruits = ["Táo", "Cam", "Chuối"];<br>
+                        console.log(fruits[0]); <span class="comment">// "Táo"</span><br>
+                        console.log(fruits[1]); <span class="comment">// "Cam"</span><br>
+                        console.log(fruits[2]); <span class="comment">// "Chuối"</span>
+                    </div>
+
+                    <h4>Truy Cập Cuối Mảng</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        let last = fruits[fruits.length - 1];<br>
+                        console.log(last); <span class="comment">// "Chuối"</span>
+                    </div>
+
+                    <div class="note">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Lỗi Thường Gặp</h4>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Lỗi</th>
+                                        <th>Giải thích</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>arr[-1]</td>
+                                        <td>Không tồn tại</td>
+                                    </tr>
+                                    <tr>
+                                        <td>arr[100]</td>
+                                        <td>Vượt phạm vi mảng</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm truy cập mảng</h4>
+                        <div class="input-group">
+                            <label for="accessArray">Mảng mẫu: [10, 20, 30, 40, 50]</label>
+                        </div>
+                        <div class="input-group">
+                            <label for="accessIndex">Nhập index để truy cập (0-4):</label>
+                            <input type="number" id="accessIndex" value="2" min="0" max="4">
+                        </div>
+                        <button class="btn" onclick="testArrayAccess()">
+                            <i class="fas fa-play"></i> Truy cập phần tử
+                        </button>
+                        <div class="result" id="accessResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="accessResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN PHƯƠNG THỨC MẢNG -->
+                <section id="methods" class="section">
+                    <h2><i class="fas fa-tools"></i> PHƯƠNG THỨC TRONG MẢNG</h2>
+
+                    <h3>5.1 push() – Thêm vào cuối mảng</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        array.push(element1, element2, ...)
+                    </div>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tên tham số</th>
+                                    <th>Ý nghĩa</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>element1</td>
+                                    <td>Phần tử đầu tiên muốn thêm</td>
+                                </tr>
+                                <tr>
+                                    <td>element2</td>
+                                    <td>(Tuỳ chọn) phần tử thứ hai,...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="method-demo">
+                        <p><strong>Đặc điểm:</strong></p>
+                        <ul>
+                            <li>Thêm phần tử vào cuối mảng gốc</li>
+                            <li>Không tạo mảng mới, thay đổi trực tiếp mảng cũ</li>
+                            <li>Trả về độ dài mới của mảng</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        let arr = [1, 2, 3];<br>
+                        let newLength = arr.push(4); <span class="comment">// thêm 4 vào cuối</span><br>
+                        console.log(arr); <span class="comment">// [1, 2, 3, 4]</span><br>
+                        console.log(newLength); <span class="comment">// 4</span>
+                    </div>
+
+                    <h3>5.2 unshift() – Thêm vào đầu mảng</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        array.unshift(element1, element2, ...)
+                    </div>
+
+                    <div class="method-demo">
+                        <p><strong>Đặc điểm:</strong></p>
+                        <ul>
+                            <li>Thêm phần tử vào đầu mảng gốc</li>
+                            <li>Không tạo mảng mới</li>
+                            <li>Trả về độ dài mới của mảng</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        let arr = [1, 2, 3];<br>
+                        let newLength = arr.unshift(0); <span class="comment">// thêm 0 vào đầu</span><br>
+                        console.log(arr); <span class="comment">// [0, 1, 2, 3]</span><br>
+                        console.log(newLength); <span class="comment">// 4</span>
+                    </div>
+
+                    <h3>5.3 splice() – Thêm vào vị trí bất kỳ</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        array.splice(start, deleteCount, item1, item2, ...)
+                    </div>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tên tham số</th>
+                                    <th>Ý nghĩa</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>start</td>
+                                    <td>Vị trí (index) bắt đầu thao tác (thêm/xoá)</td>
+                                </tr>
+                                <tr>
+                                    <td>deleteCount</td>
+                                    <td>Số phần tử muốn xoá kể từ vị trí start</td>
+                                </tr>
+                                <tr>
+                                    <td>item1, item2…</td>
+                                    <td>(Tuỳ chọn) các phần tử muốn chèn vào tại vị trí start</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="method-demo">
+                        <p><strong>Đặc điểm:</strong></p>
+                        <ul>
+                            <li>Có thể thêm ở giữa, đầu, cuối</li>
+                            <li>Không tạo mảng mới (thay đổi mảng gốc)</li>
+                            <li>Trả về mảng các phần tử bị xóa (nếu có)</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        let arr = [1, 2, 4, 5];<br>
+                        arr.splice(2, 0, 3); <span class="comment">// tại vị trí 2, xóa 0 phần tử, thêm số 3</span><br>
+                        console.log(arr); <span class="comment">// [1, 2, 3, 4, 5]</span>
+                    </div>
+
+                    <h3>5.4 Toán tử spread (...) – Tạo mảng mới</h3>
+                    <div class="method-demo">
+                        <p><strong>Đặc điểm:</strong></p>
+                        <ul>
+                            <li>Không làm thay đổi mảng gốc</li>
+                            <li>Tạo mảng mới với phần tử thêm vào bất kỳ đâu</li>
+                            <li>Rất phù hợp trong lập trình hàm (functional programming)</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        let arr = [2, 3, 4];<br>
+                        let newArr = [1, ...arr]; <span class="comment">// thêm 1 vào đầu, tạo mảng mới</span><br>
+                        console.log(newArr); <span class="comment">// [1, 2, 3, 4]</span><br>
+                        console.log(arr); <span class="comment">// [2, 3, 4] – mảng gốc không đổi</span>
+                    </div>
+
+                    <h3>5.5 pop() – Xoá phần tử cuối cùng</h3>
+                    <div class="method-demo">
+                        <p><strong>Đặc điểm:</strong></p>
+                        <ul>
+                            <li>Không tạo mảng mới</li>
+                            <li>Thay đổi mảng gốc</li>
+                            <li>Trả về phần tử đã bị xoá</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        let arr = [1, 2, 3];<br>
+                        let removed = arr.pop(); <br>
+                        console.log(arr); <span class="comment">// [1, 2]</span><br>
+                        console.log(removed); <span class="comment">// 3</span>
+                    </div>
+
+                    <h3>5.6 shift() – Xoá phần tử đầu tiên</h3>
+                    <div class="method-demo">
+                        <p><strong>Đặc điểm:</strong></p>
+                        <ul>
+                            <li>Không tạo mảng mới</li>
+                            <li>Thay đổi mảng gốc</li>
+                            <li>Trả về phần tử đã bị xoá</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        let arr = [1, 2, 3];<br>
+                        let removed = arr.shift(); <br>
+                        console.log(arr); <span class="comment">// [2, 3]</span><br>
+                        console.log(removed); <span class="comment">// 1</span>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm phương thức mảng</h4>
+                        <div class="input-group">
+                            <label>Chọn phương thức:</label>
+                            <select id="methodSelect">
+                                <option value="push">push() - Thêm vào cuối</option>
+                                <option value="unshift">unshift() - Thêm vào đầu</option>
+                                <option value="pop">pop() - Xóa cuối</option>
+                                <option value="shift">shift() - Xóa đầu</option>
+                            </select>
+                        </div>
+                        <div class="input-group" id="elementInputGroup">
+                            <label for="elementToAdd">Nhập phần tử cần thêm:</label>
+                            <input type="text" id="elementToAdd" value="New Element">
+                        </div>
+                        <button class="btn" onclick="testArrayMethods()">
+                            <i class="fas fa-play"></i> Thực hiện
+                        </button>
+                        <div class="result" id="methodsResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="methodsResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN DUYỆT MẢNG -->
+                <section id="iteration" class="section">
+                    <h2><i class="fas fa-sync"></i> DUYỆT MẢNG</h2>
+                    <div style="display: flex; flex-direction: column;
+                    justify-content: center;align-items: center;" class="demo">
+                        <div class="wrapper">
+                            <div class="arrow" id="arrow">⬇️</div>
+
+                            <div class="array" id="arrayContainer">
+                                <div class="item">Toyota</div>
+                                <div class="item">Nissan</div>
+                                <div class="item">Ford</div>
+                                <div class="item">Honda</div>
+                                <div class="item">Vinfast</div>
+                            </div>
+                        </div>
+
+                        <div class="index" id="indexDisplay">
+                            Index hiện tại: 0
+                        </div>
+
+                    </div>
+                    <h3>Khái niệm</h3>
+
+                    <p><strong>Duyệt mảng (array iteration)</strong> là quá trình đi qua từng phần tử trong mảng, thường
+                        để:</p>
+                    <ul>
+                        <li>In ra giá trị</li>
+                        <li>Tính toán (cộng, lọc, tìm...)</li>
+                        <li>Thay đổi hoặc tạo ra mảng</li>
+                    </ul>
+
+                    <h4>6.1 for thường (có chỉ số)</h4>
+                    <div class="method-demo">
+                        <p><strong>Đặc điểm:</strong></p>
+                        <ul>
+                            <li>Duyệt từng phần tử bằng chỉ số i</li>
+                            <li>Có thể thay đổi phần tử trong mảng</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        for (let i = 0; i < arr.length; i++) {<br>
+                            &nbsp;&nbsp;<span class="comment">// sử dụng arr[i]</span><br>
+                            }
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        let arr = [10, 20, 30];<br>
+                        for (let i = 0; i < arr.length; i++) {<br>
+                            &nbsp;&nbsp;console.log(`Phần tử thứ ${i}: ${arr[i]}`);<br>
+                            }
+                    </div>
+
+                    <h4>6.2 for...of (duyệt giá trị)</h4>
+                    <div class="method-demo">
+                        <p><strong>Đặc điểm:</strong></p>
+                        <ul>
+                            <li>Duyệt trực tiếp qua giá trị từng phần tử</li>
+                            <li>Không biết chỉ số</li>
+                            <li>Không nên dùng để thay đổi mảng gốc</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        for (let value of arr) {<br>
+                        &nbsp;&nbsp;<span class="comment">// sử dụng value</span><br>
+                        }
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        let arr = [10, 20, 30];<br>
+                        for (let value of arr) {<br>
+                        &nbsp;&nbsp;console.log(value); <span class="comment">// 10, 20, 30</span><br>
+                        }
+                    </div>
+
+                    <h4>6.3 for...in (duyệt chỉ số – không khuyến khích với mảng)</h4>
+                    <div class="method-demo">
+                        <p><strong>Đặc điểm:</strong></p>
+                        <ul>
+                            <li>Duyệt qua các chỉ số (index)</li>
+                            <li>Dễ nhầm lẫn với đối tượng (object)</li>
+                            <li>Không nên dùng để duyệt mảng trong thực tế</li>
+                        </ul>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        let arr = ['a', 'b', 'c'];<br>
+                        for (let i in arr) {<br>
+                        &nbsp;&nbsp;console.log(i, arr[i]);<br>
+                        }
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm duyệt mảng</h4>
+                        <div class="input-group">
+                            <label>Chọn phương pháp duyệt:</label>
+                            <select id="iterationMethod">
+                                <option value="for">for thường (với index)</option>
+                                <option value="forof">for...of (duyệt giá trị)</option>
+                                <option value="forin">for...in (không khuyến khích)</option>
+                            </select>
+                        </div>
+                        <button class="btn" onclick="testArrayIteration()">
+                            <i class="fas fa-play"></i> Duyệt mảng
+                        </button>
+                        <div class="result" id="iterationResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="iterationResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN MẢNG NÂNG CAO -->
+                <section id="advanced" class="section">
+                    <h2><i class="fas fa-cogs"></i> MẢNG LỒNG & DESTRUCTURING</h2>
+
+                    <h3>8.1 Mảng lồng (Nested Arrays)</h3>
+                    <p>Mảng có thể chứa các mảng khác bên trong.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        let matrix = [<br>
+                        &nbsp;&nbsp;[1, 2],<br>
+                        &nbsp;&nbsp;[3, 4]<br>
+                        ];<br>
+                        console.log(matrix[1][0]); <span class="comment">// 3</span>
+                    </div>
+
+                    <h3>8.2 Destructuring (Phân rã mảng)</h3>
+                    <p>Lấy giá trị từ mảng và gán vào các biến riêng biệt.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        let [a, b] = [10, 20];<br>
+                        console.log(a); <span class="comment">// 10</span><br>
+                        console.log(b); <span class="comment">// 20</span>
+                    </div>
+
+                    <h3>8.3 Spread Operator (...)</h3>
+                    <p>Toán tử spread cho phép sao chép hoặc kết hợp các mảng.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        let arr1 = [1, 2];<br>
+                        let arr2 = [...arr1, 3];<br>
+                        console.log(arr2); <span class="comment">// [1, 2, 3]</span>
+                    </div>
+                </section>
+
+                <!-- PHẦN GIẢI THUẬT MẢNG -->
+                <section id="algorithms" class="section">
+                    <h2><i class="fas fa-brain"></i> GIẢI THUẬT VỚI MẢNG</h2>
+
+                    <h3>Bài toán 1: Tính tổng các phần tử trong mảng</h3>
+                    <div class="algorithm-steps">
+                        <h4>Mục tiêu:</h4>
+                        <p>Tính tổng tất cả các số trong một mảng.</p>
+
+                        <h4>Tư duy giải thuật:</h4>
+                        <ol>
+                            <li>Khởi tạo biến sum = 0</li>
+                            <li>Duyệt qua từng phần tử trong mảng</li>
+                            <li>Cộng từng phần tử vào biến sum</li>
+                            <li>Sau khi duyệt xong, in hoặc trả về sum</li>
+                        </ol>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        let arr = [1, 2, 3, 4];<br>
+                        let sum = 0;<br>
+                        <br>
+                        for (let i = 0; i < arr.length; i++) {<br>
+                            &nbsp;&nbsp;sum += arr[i];<br>
+                            }<br>
+                            <br>
+                            console.log(sum); <span class="comment">// 10</span>
+                    </div>
+
+                    <h3>Bài toán 2: Tìm phần tử lớn nhất / nhỏ nhất</h3>
+                    <div class="algorithm-steps">
+                        <h4>Mục tiêu:</h4>
+                        <p>Tìm giá trị lớn nhất và nhỏ nhất trong mảng.</p>
+
+                        <h4>Tư duy giải thuật:</h4>
+                        <ol>
+                            <li>Gán max và min bằng phần tử đầu tiên arr[0]</li>
+                            <li>Duyệt qua mảng:</li>
+                            <li>Nếu phần tử lớn hơn max thì cập nhật max</li>
+                            <li>Nếu phần tử nhỏ hơn min thì cập nhật min</li>
+                        </ol>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        let arr = [3, 7, 2, 9, 4];<br>
+                        let max = arr[0];<br>
+                        let min = arr[0];<br>
+                        <br>
+                        for (let i = 1; i < arr.length; i++) {<br>
+                            &nbsp;&nbsp;if (arr[i] > max) max = arr[i];<br>
+                            &nbsp;&nbsp;if (arr[i] < min) min=arr[i];<br>
+                                }<br>
+                                <br>
+                                console.log("Max:", max); <span class="comment">// 9</span><br>
+                                console.log("Min:", min); <span class="comment">// 2</span>
+                    </div>
+
+                    <h3>Bài toán 3: Đảo ngược mảng</h3>
+                    <div class="algorithm-steps">
+                        <h4>Mục tiêu:</h4>
+                        <p>Tạo một mảng mới chứa các phần tử đảo ngược của mảng ban đầu.</p>
+
+                        <h4>Tư duy giải thuật:</h4>
+                        <ol>
+                            <li>Duyệt từ cuối mảng về đầu</li>
+                            <li>Dùng push() để thêm phần tử vào mảng mới</li>
+                        </ol>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        let arr = [1, 2, 3, 4];<br>
+                        let reversed = [];<br>
+                        <br>
+                        for (let i = arr.length - 1; i >= 0; i--) {<br>
+                        &nbsp;&nbsp;reversed.push(arr[i]);<br>
+                        }<br>
+                        console.log(reversed); <span class="comment">// [4, 3, 2, 1]</span>
+                    </div>
+
+                    <h3>Bài toán 4: Loại bỏ phần tử trùng nhau</h3>
+                    <div class="algorithm-steps">
+                        <h4>Mục tiêu:</h4>
+                        <p>Lọc ra các phần tử duy nhất, bỏ các phần tử bị lặp.</p>
+
+                        <h4>Tư duy giải thuật:</h4>
+                        <ol>
+                            <li>Tạo mảng mới unique</li>
+                            <li>Với mỗi phần tử trong mảng:</li>
+                            <li>Nếu nó chưa có trong unique thì thêm vào</li>
+                            <li>Dùng includes() để kiểm tra trùng</li>
+                        </ol>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        let arr = [1, 2, 2, 3, 4, 4, 5];<br>
+                        let unique = [];<br>
+                        <br>
+                        for (let i = 0; i < arr.length; i++) {<br>
+                            &nbsp;&nbsp;if (!unique.includes(arr[i])) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;unique.push(arr[i]);<br>
+                            &nbsp;&nbsp;}<br>
+                            }<br>
+                            <br>
+                            console.log(unique); <span class="comment">// [1, 2, 3, 4, 5]</span>
+                    </div>
+
+                    <h3>Bài toán 5: Đếm số lần xuất hiện của phần tử</h3>
+                    <div class="algorithm-steps">
+                        <h4>Mục tiêu:</h4>
+                        <p>Biết mỗi phần tử xuất hiện bao nhiêu lần trong mảng.</p>
+
+                        <h4>Tư duy giải thuật:</h4>
+                        <ol>
+                            <li>Tạo một mảng rỗng result để chứa các cặp [value, count]</li>
+                            <li>Duyệt từng phần tử val trong mảng arr</li>
+                            <li>Với mỗi val, kiểm tra xem nó đã có trong result hay chưa</li>
+                            <li>Nếu có, tăng biến đếm (count) của nó lên</li>
+                            <li>Nếu chưa có, thêm [val, 1] vào result</li>
+                        </ol>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        let arr = [1, 2, 2, 3, 1, 1, 4];<br>
+                        let result = [];<br>
+                        <br>
+                        for (let i = 0; i < arr.length; i++) {<br>
+                            &nbsp;&nbsp;let found = false;<br>
+                            <br>
+                            &nbsp;&nbsp;<span class="comment">// Kiểm tra phần tử đã có trong result chưa</span><br>
+                            &nbsp;&nbsp;for (let j = 0; j < result.length; j++) {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;if (result[j][0] === arr[i]) {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result[j][1]++; <span class="comment">// tăng
+                                    count</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;found = true;<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                                &nbsp;&nbsp;}<br>
+                                <br>
+                                &nbsp;&nbsp;<span class="comment">// Nếu chưa có thì thêm mới vào result</span><br>
+                                &nbsp;&nbsp;if (!found) {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;result.push([arr[i], 1]);<br>
+                                &nbsp;&nbsp;}<br>
+                                }<br>
+                                <br>
+                                <span class="comment">// In kết quả</span><br>
+                                for (let i = 0; i < result.length; i++) {<br>
+                                    &nbsp;&nbsp;console.log(`Phần tử ${result[i][0]} xuất hiện ${result[i][1]}
+                                    lần`);<br>
+                                    }
+                    </div>
+
+                    <h3>Bài toán 6: Sắp xếp tăng dần hoặc giảm dần</h3>
+
+                    <h4>Giải thuật Bubble Sort (Sắp xếp nổi bọt)</h4>
+                    <div class="algorithm-steps">
+                        <p><strong>Ý tưởng:</strong></p>
+                        <ol>
+                            <li>Lặp qua mảng nhiều lần</li>
+                            <li>Mỗi lần duyệt, nếu phần tử sau < phần tử trước (với tăng dần), thì đổi chỗ</li>
+                            <li>Làm đến khi không còn cặp nào cần đổi nữa</li>
+                        </ol>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Bubble Sort - Tăng dần</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        let arr = [5, 2, 8, 1, 3];<br>
+                        for (let i = 0; i < arr.length - 1; i++) {<br>
+                            &nbsp;&nbsp;for (let j = 0; j < arr.length - 1 - i; j++) {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;if (arr[j] > arr[j + 1]) {<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// hoán đổi</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;let temp = arr[j];<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arr[j] = arr[j + 1];<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;arr[j + 1] = temp;<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                                &nbsp;&nbsp;}<br>
+                                }<br>
+                                console.log("Tăng dần:", arr); <span class="comment">// [1, 2, 3, 5, 8]</span>
+                    </div>
+
+                    <p><strong>Giảm dần:</strong> Chỉ cần đổi dấu điều kiện > thành << /p>
+
+                            <h4>Giải thuật Selection Sort (Sắp xếp chọn)</h4>
+                            <div class="algorithm-steps">
+                                <p><strong>Ý tưởng:</strong></p>
+                                <ol>
+                                    <li>Duyệt qua từng vị trí trong mảng</li>
+                                    <li>Mỗi vị trí, tìm phần tử nhỏ nhất (hoặc lớn nhất) phía sau nó</li>
+                                    <li>Đổi chỗ phần tử hiện tại với phần tử nhỏ nhất (hoặc lớn nhất) đó</li>
+                                </ol>
+                            </div>
+
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span>Selection Sort</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                let arr = [5, 2, 8, 1, 3];<br>
+                                <br>
+                                for (let i = 0; i < arr.length - 1; i++) {<br>
+                                    &nbsp;&nbsp;let minIndex = i;<br>
+                                    &nbsp;&nbsp;for (let j = i + 1; j < arr.length; j++) {<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;if (arr[j] < arr[minIndex]) {<br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;minIndex = j;<br>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                                            &nbsp;&nbsp;}<br>
+                                            <br>
+                                            &nbsp;&nbsp;<span class="comment">// Hoán đổi</span><br>
+                                            &nbsp;&nbsp;let temp = arr[i];<br>
+                                            &nbsp;&nbsp;arr[i] = arr[minIndex];<br>
+                                            &nbsp;&nbsp;arr[minIndex] = temp;<br>
+                                            }<br>
+                                            <br>
+                                            console.log("Tăng dần:", arr); <span class="comment">// [1, 2, 3, 5,
+                                                8]</span>
+                            </div>
+
+                            <h3>Bài toán 7: Tìm tất cả chỉ số của phần tử X</h3>
+                            <div class="algorithm-steps">
+                                <h4>Mục tiêu:</h4>
+                                <p>Tìm tất cả các vị trí (index) mà phần tử X xuất hiện.</p>
+
+                                <h4>Tư duy giải thuật:</h4>
+                                <ol>
+                                    <li>Duyệt mảng</li>
+                                    <li>Nếu phần tử bằng X → lưu lại chỉ số</li>
+                                </ol>
+                            </div>
+
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span>Ví dụ</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                let arr = [1, 2, 3, 2, 4, 2];<br>
+                                let x = 2;<br>
+                                let indexes = [];<br>
+                                <br>
+                                for (let i = 0; i < arr.length; i++) {<br>
+                                    &nbsp;&nbsp;if (arr[i] === x) {<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;indexes.push(i);<br>
+                                    &nbsp;&nbsp;}<br>
+                                    }<br>
+                                    <br>
+                                    console.log(indexes); <span class="comment">// [1, 3, 5]</span>
+                            </div>
+
+                            <h3>Bài toán 8: Tìm cặp phần tử có tổng bằng X</h3>
+                            <div class="algorithm-steps">
+                                <h4>Mục tiêu:</h4>
+                                <p>Tìm tất cả cặp số trong mảng có tổng bằng một số X cho trước.</p>
+
+                                <h4>Tư duy giải thuật:</h4>
+                                <ol>
+                                    <li>Duyệt 2 vòng lặp lồng nhau (i, j)</li>
+                                    <li>Với mỗi cặp (i, j) khác nhau → kiểm tra tổng</li>
+                                </ol>
+                            </div>
+
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span>Ví dụ</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                let arr = [1, 2, 3, 4, 5];<br>
+                                let target = 6;<br>
+                                <br>
+                                for (let i = 0; i < arr.length; i++) {<br>
+                                    &nbsp;&nbsp;for (let j = i + 1; j < arr.length; j++) {<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;if (arr[i] + arr[j] === target) {<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(`[${arr[i]}, ${arr[j]}]`);<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                                        &nbsp;&nbsp;}<br>
+                                        }<br>
+                                        <span class="comment">// Kết quả: [1,5], [2,4]</span>
+                            </div>
+
+                            <h3>Bài toán 9: Gộp nhiều mảng thành một</h3>
+                            <div class="algorithm-steps">
+                                <h4>Mục tiêu:</h4>
+                                <p>Tạo mảng mới chứa tất cả phần tử của 2 hay nhiều mảng.</p>
+
+                                <h4>Tư duy giải thuật:</h4>
+                                <ol>
+                                    <li>Dùng toán tử spread ... hoặc concat()</li>
+                                </ol>
+                            </div>
+
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span>Ví dụ</span>
+                                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                let a = [1, 2];<br>
+                                let b = [3, 4];<br>
+                                let c = [5];<br>
+                                <br>
+                                let merged = [...a, ...b, ...c];<br>
+                                console.log(merged); <span class="comment">// [1, 2, 3, 4, 5]</span>
+                            </div>
+
+                            <div class="interactive-section">
+                                <h4><i class="fas fa-play-circle"></i> Thử nghiệm giải thuật</h4>
+                                <div class="input-group">
+                                    <label for="algorithmSelect">Chọn bài toán:</label>
+                                    <select id="algorithmSelect">
+                                        <option value="sum">Bài 1: Tính tổng</option>
+                                        <option value="minmax">Bài 2: Tìm min/max</option>
+                                        <option value="reverse">Bài 3: Đảo ngược mảng</option>
+                                        <option value="unique">Bài 4: Loại bỏ trùng</option>
+                                        <option value="count">Bài 5: Đếm phần tử</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label for="algorithmArray">Nhập mảng (phân cách bằng dấu phẩy):</label>
+                                    <input type="text" id="algorithmArray" value="1,2,3,4,5,2,3,4">
+                                </div>
+                                <button class="btn btn-run" onclick="testAlgorithms()">
+                                    <i class="fas fa-play"></i> Chạy giải thuật
+                                </button>
+                                <div class="result" id="algorithmResult">
+                                    <strong>Kết quả:</strong>
+                                    <div class="result-content" id="algorithmResultContent"></div>
+                                </div>
+                            </div>
+                </section>
+
+                <section id="bt" class="section">
+                    <!-- Bài 1 -->
+                    <h3>Bài 1: Tính tổng các số chẵn</h3>
+
+                    <table border="1" cellpadding="8" cellspacing="0">
+                        <tr>
+                            <th>Input</th>
+                            <th>Output</th>
+                        </tr>
+                        <tr>
+                            <td>[1, 2, 3, 4, 5, 6]</td>
+                            <td>12 (2 + 4 + 6)</td>
+                        </tr>
+                    </table>
+                    <!-- Bài 2 -->
+                    <h3>Bài 2: Tính trung bình cộng các số lẻ</h3>
+                    <table border="1" cellpadding="8" cellspacing="0">
+                        <tr>
+                            <th>Input</th>
+                            <th>Output</th>
+                        </tr>
+                        <tr>
+                            <td>[1, 2, 3, 4, 5]</td>
+                            <td>3 (TBC của 1, 3, 5)</td>
+                        </tr>
+                    </table>
+
+                    <!-- Bài 3 -->
+                    <h3>Bài 3: Kiểm tra mảng đối xứng</h3>
+                    <p>Một mảng được gọi là đối xứng nếu khi đọc từ trái sang phải hoặc từ phải sang trái đều giống
+                        nhau. Nói cách khác, phần tử đầu bằng phần tử cuối, phần tử thứ hai bằng phần tử áp chót, v.v…
+                    </p>
+                    <p><strong>Input:</strong> Một mảng số nguyên arr (có thể nhập sẵn trong code hoặc nhập từ prompt),
+                        độ dài mảng ≥ 1</p>
+                    <p><strong>Output:</strong> In ra "Mảng đối xứng" nếu mảng thỏa điều kiện đối xứng, ngược lại in
+                        "Mảng không đối xứng"</p>
+
+                    <table border="1" cellpadding="8" cellspacing="0">
+                        <tr>
+                            <th>Input</th>
+                            <th>Output</th>
+                        </tr>
+                        <tr>
+                            <td>[1, 2, 3, 2, 1]</td>
+                            <td>Mảng đối xứng</td>
+                        </tr>
+                        <tr>
+                            <td>[1, 2, 3, 4, 5]</td>
+                            <td>Mảng không đối xứng</td>
+                        </tr>
+                        <tr>
+                            <td>[5, 5, 5, 5]</td>
+                            <td>Mảng đối xứng</td>
+                        </tr>
+                    </table>
+
+                    <!-- Bài 4 -->
+                    <h3>Bài 4: Lọc điểm đạt</h3>
+                    <p>Lớp học của bạn có danh sách điểm của các học sinh trong một kỳ thi. Mỗi điểm là một số nguyên từ
+                        0 đến 10. Hãy viết chương trình loại bỏ các học sinh có điểm dưới 5, và chỉ giữ lại danh sách
+                        các học sinh có điểm đạt (≥ 5).</p>
+
+                    <table border="1" cellpadding="8" cellspacing="0">
+                        <tr>
+                            <th>Input</th>
+                            <th>Output</th>
+                        </tr>
+                        <tr>
+                            <td>[8, 4, 6, 3, 7, 10, 2, 5]</td>
+                            <td>[8, 6, 7, 10, 5]</td>
+                        </tr>
+                    </table>
+
+                    <!-- Bài 5 -->
+                    <h3>Bài 5: Di chuyển số 0 về cuối mảng</h3>
+                    <p>Trong một trại lính số học, có rất nhiều chiến binh mang số hiệu 0, nhưng họ lại bị rải rác khắp
+                        nơi trong hàng quân. Thủ lĩnh ra lệnh: "Tất cả binh sĩ mang số 0 phải được di chuyển về cuối
+                        hàng. Thứ tự các binh sĩ khác phải giữ nguyên như cũ!"</p>
+
+                    <table border="1" cellpadding="8" cellspacing="0">
+                        <tr>
+                            <th>Input</th>
+                            <th>Output</th>
+                        </tr>
+                        <tr>
+                            <td>[1, 0, 2, 0, 3, 4]</td>
+                            <td>[1, 2, 3, 4, 0, 0]</td>
+                        </tr>
+                        <tr>
+                            <td>[0, 0, 1, 2, 3]</td>
+                            <td>[1, 2, 3, 0, 0]</td>
+                        </tr>
+                        <tr>
+                            <td>[5, 0, 7, 0, 0, 9]</td>
+                            <td>[5, 7, 9, 0, 0, 0]</td>
+                        </tr>
+                    </table>
+
+                    <!-- Bài 6 -->
+                    <h3>Bài 6: Đếm cặp số có tổng bằng K</h3>
+                    <p>Bạn được giao nhiệm vụ tổ chức một trò chơi "bắt cặp". Có một danh sách gồm các số nguyên, đại
+                        diện cho điểm số của từng người chơi. Một cặp được xem là "hoàn hảo" nếu tổng điểm của họ đúng
+                        bằng một số nguyên K đã cho trước.</p>
+                    <p><strong>Lưu ý:</strong> Một cặp chỉ tính 1 lần (không phân biệt vị trí), không dùng lại 1 phần tử
+                        cho nhiều cặp.</p>
+
+                    <table border="1" cellpadding="8" cellspacing="0">
+                        <tr>
+                            <th>Input arr</th>
+                            <th>K</th>
+                            <th>Output</th>
+                            <th>Giải thích</th>
+                        </tr>
+                        <tr>
+                            <td>[1, 5, 3, 7, 9]</td>
+                            <td>10</td>
+                            <td>2</td>
+                            <td>(1,9) và (3,7)</td>
+                        </tr>
+                        <tr>
+                            <td>[2, 4, 6, 8, 10]</td>
+                            <td>12</td>
+                            <td>2</td>
+                            <td>(2,10) và (4,8)</td>
+                        </tr>
+                        <tr>
+                            <td>[1, 2, 3, 4, 5]</td>
+                            <td>7</td>
+                            <td>2</td>
+                            <td>(2,5) và (3,4)</td>
+                        </tr>
+                        <tr>
+                            <td>[0, 1, 2, 3, 4]</td>
+                            <td>4</td>
+                            <td>2</td>
+                            <td>(0,4) và (1,3)</td>
+                        </tr>
+                    </table>
+
+                </section>
+            </main>
+        </div>
+
+        <footer>
+            <p>Bài 5: Mảng &copy; GV: Nguyễn Đình Mạnh</p>
+        </footer>
+    </div>
+
+    <script>
+        // Xử lý điều hướng
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    // Xóa class active từ tất cả các link và section
+                    navLinks.forEach(item => item.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+
+                    // Thêm class active cho link được click
+                    this.classList.add('active');
+
+                    // Hiển thị section tương ứng
+                    const targetId = this.getAttribute('href').substring(1);
+                    document.getElementById(targetId).classList.add('active');
+                });
+            });
+
+            // Ẩn hiện input element dựa trên phương thức được chọn
+            const methodSelect = document.getElementById('methodSelect');
+            const elementInputGroup = document.getElementById('elementInputGroup');
+
+            if (methodSelect) {
+                methodSelect.addEventListener('change', function () {
+                    const method = this.value;
+                    if (method === 'pop' || method === 'shift') {
+                        elementInputGroup.style.display = 'none';
+                    } else {
+                        elementInputGroup.style.display = 'block';
+                    }
+                });
+            }
+        });
+
+        // Hàm copy code
+        function copyCode(button) {
+            const codeBlock = button.parentElement.parentElement;
+            const text = codeBlock.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Đã copy!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        // Thử nghiệm khai báo mảng
+        function testArrayDeclaration() {
+            const elements = document.getElementById('arrayElements').value;
+            const arr = elements.split(',').map(item => item.trim());
+
+            const result = document.getElementById('declarationResult');
+            const output = document.getElementById('declarationResultContent');
+
+            result.classList.add('active');
+            output.textContent = `Mảng đã khai báo: ${JSON.stringify(arr)}\n\n` +
+                `Số phần tử: ${arr.length}\n` +
+                `Phần tử đầu tiên: ${arr[0]}\n` +
+                `Phần tử cuối cùng: ${arr[arr.length - 1]}\n` +
+                `Toàn bộ mảng:\n${arr.map((item, index) => `  [${index}]: "${item}"`).join('\n')}`;
+        }
+
+        // Thử nghiệm truy cập mảng
+        function testArrayAccess() {
+            const arr = [10, 20, 30, 40, 50];
+            const index = parseInt(document.getElementById('accessIndex').value);
+
+            const result = document.getElementById('accessResult');
+            const output = document.getElementById('accessResultContent');
+
+            result.classList.add('active');
+
+            if (index >= 0 && index < arr.length) {
+                output.textContent = `Mảng: ${JSON.stringify(arr)}\n\n` +
+                    `Truy cập arr[${index}]: ${arr[index]}\n\n` +
+                    `Thông tin khác:\n` +
+                    `- Độ dài mảng: ${arr.length}\n` +
+                    `- Truy cập cuối: arr[${arr.length - 1}] = ${arr[arr.length - 1]}\n` +
+                    `- Truy cập đầu: arr[0] = ${arr[0]}`;
+            } else {
+                output.textContent = `LỖI: Index ${index} nằm ngoài phạm vi mảng!\n` +
+                    `Phạm vi hợp lệ: 0 đến ${arr.length - 1}`;
+            }
+        }
+
+        // Thử nghiệm phương thức mảng
+        function testArrayMethods() {
+            const method = document.getElementById('methodSelect').value;
+            const element = document.getElementById('elementToAdd').value.trim();
+
+            let arr = [1, 2, 3, 4, 5];
+            let originalArr = [...arr];
+            let result;
+
+            const resultDiv = document.getElementById('methodsResult');
+            const output = document.getElementById('methodsResultContent');
+
+            resultDiv.classList.add('active');
+
+            switch (method) {
+                case 'push':
+                    result = arr.push(element);
+                    output.textContent = `Phương thức: arr.push("${element}")\n\n` +
+                        `Mảng ban đầu: ${JSON.stringify(originalArr)}\n` +
+                        `Mảng sau khi push: ${JSON.stringify(arr)}\n` +
+                        `Kết quả trả về (độ dài mới): ${result}`;
+                    break;
+
+                case 'unshift':
+                    result = arr.unshift(element);
+                    output.textContent = `Phương thức: arr.unshift("${element}")\n\n` +
+                        `Mảng ban đầu: ${JSON.stringify(originalArr)}\n` +
+                        `Mảng sau khi unshift: ${JSON.stringify(arr)}\n` +
+                        `Kết quả trả về (độ dài mới): ${result}`;
+                    break;
+
+                case 'pop':
+                    result = arr.pop();
+                    output.textContent = `Phương thức: arr.pop()\n\n` +
+                        `Mảng ban đầu: ${JSON.stringify(originalArr)}\n` +
+                        `Mảng sau khi pop: ${JSON.stringify(arr)}\n` +
+                        `Kết quả trả về (phần tử bị xóa): ${result}`;
+                    break;
+
+                case 'shift':
+                    result = arr.shift();
+                    output.textContent = `Phương thức: arr.shift()\n\n` +
+                        `Mảng ban đầu: ${JSON.stringify(originalArr)}\n` +
+                        `Mảng sau khi shift: ${JSON.stringify(arr)}\n` +
+                        `Kết quả trả về (phần tử bị xóa): ${result}`;
+                    break;
+            }
+        }
+
+        // Thử nghiệm duyệt mảng
+        function testArrayIteration() {
+            const method = document.getElementById('iterationMethod').value;
+            const arr = ['Táo', 'Cam', 'Chuối', 'Xoài', 'Mận'];
+
+            const resultDiv = document.getElementById('iterationResult');
+            const output = document.getElementById('iterationResultContent');
+
+            resultDiv.classList.add('active');
+
+            let result = `Mảng: ${JSON.stringify(arr)}\n\n`;
+            result += `Kết quả duyệt (${method}):\n\n`;
+
+            switch (method) {
+                case 'for':
+                    for (let i = 0; i < arr.length; i++) {
+                        result += `  arr[${i}] = "${arr[i]}"\n`;
+                    }
+                    result += `\nTổng số phần tử: ${arr.length}`;
+                    break;
+
+                case 'forof':
+                    let index = 0;
+                    for (let value of arr) {
+                        result += `  Phần tử ${index}: "${value}"\n`;
+                        index++;
+                    }
+                    result += `\nLưu ý: for...of chỉ lấy giá trị, không biết index`;
+                    break;
+
+                case 'forin':
+                    for (let i in arr) {
+                        result += `  Index: ${i}, Giá trị: "${arr[i]}"\n`;
+                    }
+                    result += `\nLưu ý: for...in không khuyến khích cho mảng`;
+                    break;
+            }
+
+            output.textContent = result;
+        }
+
+        // Thử nghiệm giải thuật
+        function testAlgorithms() {
+            const algorithm = document.getElementById('algorithmSelect').value;
+            const input = document.getElementById('algorithmArray').value;
+            const arr = input.split(',').map(item => {
+                const num = parseInt(item.trim());
+                return isNaN(num) ? item.trim() : num;
+            });
+
+            const resultDiv = document.getElementById('algorithmResult');
+            const output = document.getElementById('algorithmResultContent');
+
+            resultDiv.classList.add('active');
+
+            let result = `Mảng đầu vào: ${JSON.stringify(arr)}\n\n`;
+
+            switch (algorithm) {
+                case 'sum':
+                    let sum = 0;
+                    for (let i = 0; i < arr.length; i++) {
+                        if (typeof arr[i] === 'number') {
+                            sum += arr[i];
+                        }
+                    }
+                    result += `Bài toán 1: Tính tổng\n`;
+                    result += `Tổng các phần tử: ${sum}\n`;
+                    result += `Công thức: sum = ${arr.filter(x => typeof x === 'number').join(' + ')} = ${sum}`;
+                    break;
+
+                case 'minmax':
+                    if (arr.length === 0 || !arr.every(x => typeof x === 'number')) {
+                        result += `Lỗi: Mảng phải chứa số`;
+                        break;
+                    }
+
+                    let max = arr[0];
+                    let min = arr[0];
+
+                    for (let i = 1; i < arr.length; i++) {
+                        if (arr[i] > max) max = arr[i];
+                        if (arr[i] < min) min = arr[i];
+                    }
+
+                    result += `Bài toán 2: Tìm min/max\n`;
+                    result += `Giá trị lớn nhất: ${max}\n`;
+                    result += `Giá trị nhỏ nhất: ${min}\n`;
+                    result += `Phạm vi giá trị: ${min} đến ${max}`;
+                    break;
+
+                case 'reverse':
+                    let reversed = [];
+                    for (let i = arr.length - 1; i >= 0; i--) {
+                        reversed.push(arr[i]);
+                    }
+
+                    result += `Bài toán 3: Đảo ngược mảng\n`;
+                    result += `Mảng đảo ngược: ${JSON.stringify(reversed)}\n`;
+                    result += `So sánh:\n`;
+                    result += `  Ban đầu: ${JSON.stringify(arr)}\n`;
+                    result += `  Đảo ngược: ${JSON.stringify(reversed)}`;
+                    break;
+
+                case 'unique':
+                    let unique = [];
+                    for (let i = 0; i < arr.length; i++) {
+                        if (!unique.includes(arr[i])) {
+                            unique.push(arr[i]);
+                        }
+                    }
+
+                    result += `Bài toán 4: Loại bỏ trùng lặp\n`;
+                    result += `Mảng duy nhất: ${JSON.stringify(unique)}\n`;
+                    result += `Số phần tử ban đầu: ${arr.length}\n`;
+                    result += `Số phần tử sau khi lọc: ${unique.length}\n`;
+                    result += `Đã loại bỏ: ${arr.length - unique.length} phần tử trùng`;
+                    break;
+
+                case 'count':
+                    let countMap = {};
+                    for (let i = 0; i < arr.length; i++) {
+                        const key = arr[i];
+                        if (countMap[key]) {
+                            countMap[key]++;
+                        } else {
+                            countMap[key] = 1;
+                        }
+                    }
+
+                    result += `Bài toán 5: Đếm số lần xuất hiện\n`;
+                    for (const [key, value] of Object.entries(countMap)) {
+                        result += `  "${key}": ${value} lần\n`;
+                    }
+                    break;
+            }
+
+            output.textContent = result;
+        }
+
+
+        const items = document.querySelectorAll(".item");
+        const arrow = document.getElementById("arrow");
+        const indexDisplay = document.getElementById("indexDisplay");
+
+        let i = 0;
+
+        function moveArrow(index) {
+            const item = items[index];
+            const rect = item.getBoundingClientRect();
+            const parentRect = item.parentElement.getBoundingClientRect();
+
+            arrow.style.left = (item.offsetLeft + item.offsetWidth / 2 - 10) + "px";
+        }
+
+        function traverse() {
+
+            items.forEach(item => item.classList.remove("active"));
+
+            items[i].classList.add("active");
+            indexDisplay.innerHTML = "Index hiện tại: " + i;
+
+            moveArrow(i);
+
+            i++;
+
+            if (i >= items.length) {
+                i = 0; // quay lại đầu -> loop vô hạn
+            }
+        }
+
+        setInterval(traverse, 1000);
+
+        // đặt vị trí ban đầu
+        moveArrow(0);
+
+
+
+    </script>
+</body>
+
+</html>

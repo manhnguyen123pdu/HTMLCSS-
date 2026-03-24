@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khóa Học JavaScript</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --success: #4cc9f0;
+            --card-bg: #ffffff;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --gradient: linear-gradient(135deg, #4361ee, #3a0ca3);
+        }
+
+        body {
+            height: 100vh;
+            padding: 10px;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 0 20px;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        h1 {
+            font-size: 2.3rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .progress-container {
+            max-width: 700px;
+            margin: 10px auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 5px 15px var(--shadow);
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient);
+            width: 20%;
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        /* Main Layout */
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 3fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Lessons Panel */
+        .lessons-panel {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px var(--shadow);
+            height: fit-content;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .panel-header h2 {
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+
+        .lesson-count {
+            background: var(--primary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .lessons-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .lesson-item {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .lesson-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.15);
+            border-color: var(--primary);
+        }
+
+        .lesson-item.active {
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(114, 9, 183, 0.1));
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.2);
+        }
+
+        .lesson-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: var(--gradient);
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .lesson-item.active .lesson-number {
+            background: var(--accent);
+            box-shadow: 0 0 0 4px rgba(247, 37, 133, 0.2);
+        }
+
+        .lesson-content {
+            flex-grow: 1;
+        }
+
+        .lesson-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+
+        .lesson-content p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .lesson-status {
+            font-size: 1.5rem;
+            color: #ddd;
+        }
+
+        .lesson-item.completed .lesson-status {
+            color: var(--success);
+        }
+
+        .lesson-item.active .lesson-status {
+            color: var(--primary);
+        }
+
+        /* Lesson Detail Panel */
+        .lesson-detail {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px var(--shadow);
+            display: none;
+        }
+
+        .lesson-detail.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .detail-header h2 {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .lesson-tags {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .tag {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .tag.practice {
+            background: rgba(76, 201, 240, 0.1);
+            color: var(--success);
+        }
+
+        .tag.important {
+            background: rgba(247, 37, 133, 0.1);
+            color: var(--accent);
+        }
+
+        .detail-content {
+            margin-bottom: 30px;
+        }
+
+        .detail-content h3 {
+            font-size: 1.5rem;
+            margin: 25px 0 15px;
+            color: var(--primary-dark);
+        }
+
+        .detail-content p {
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+        }
+
+        .code-example {
+            background: #1e1e1e;
+            color: #f8f8f2;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Roboto Mono', monospace;
+            overflow-x: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .code-example .keyword {
+            color: #ff79c6;
+        }
+
+        .code-example .function {
+            color: #50fa7b;
+        }
+
+        .code-example .variable {
+            color: #8be9fd;
+        }
+
+        .code-example .string {
+            color: #f1fa8c;
+        }
+
+        .detail-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-prev {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-prev:hover {
+            background: rgba(67, 97, 238, 0.1);
+        }
+
+        .btn-next {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-next:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.4);
+        }
+
+        .btn-complete {
+            background: var(--success);
+            color: white;
+            padding: 10px 25px;
+        }
+
+        .btn-complete:hover {
+            background: #3ab8d9;
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--gray);
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+            margin-top: 30px;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        @media (max-width: 1400px) {
+            h1 {
+                font-size: 32px;
+            }
+
+            header {
+                padding: 0;
+            }
+
+            .progress-container {
+                margin: 0 auto;
+            }
+
+            .panel-header h2 {
+                font-size: 20px;
+            }
+
+            .lesson-content h3 {
+                font-size: 15px;
+            }
+
+            .detail-header h2 {
+                font-size: 22px;
+            }
+
+            .detail-header {
+                padding: 0;
+                margin: 0;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .main-content {
+                gap: 20px;
+            }
+
+            .lessons-panel,
+            .lesson-detail {
+                padding: 20px;
+            }
+
+            .lesson-item {
+                padding: 15px;
+            }
+
+            .detail-actions {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .stats {
+                flex-wrap: wrap;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fab fa-js-square"></i>
+                <h1>Khóa Học JavaScript Cơ Bản</h1>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-info">
+                    <span>Tiến độ học tập</span>
+                    <span>20%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <!-- Danh sách bài học -->
+            <div class="lessons-panel">
+                <div class="panel-header">
+                    <h2>Nội dung khóa học</h2>
+                    <div class="lesson-count">11 bài học</div>
+                </div>
+
+                <div class="lessons-list">
+                    <!-- Bài học sẽ được tạo bằng JavaScript -->
+                </div>
+            </div>
+
+            <!-- Chi tiết bài học -->
+            <div class="lesson-detail" id="lesson-detail">
+                <!-- Nội dung sẽ được điền bằng JavaScript -->
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2023 Khóa Học JavaScript. Được thiết kế để học tập và thực hành.</p>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value">11</div>
+                    <div class="stat-label">Bài học</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">Bài thực hành</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">0</div>
+                    <div class="stat-label">Đã hoàn thành</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">∞</div>
+                    <div class="stat-label">Kiến thức</div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Dữ liệu bài học
+        const lessons = [
+            {
+                id: 1,
+                title: "Giới thiệu JavaScript & Toán tử",
+                description: "Làm quen với JavaScript và các toán tử cơ bản",
+                content: ` <a href="./ls2.html"><img style="width:100%" src="./img/94baec10-bece-4e70-84d9-87a12e8f7b45.png" alt=""></a>`,
+                tags: []
+            },
+            {
+                id: 2,
+                title: "Câu lệnh điều kiện",
+                description: "Sử dụng if, else, switch để điều khiển luồng chương trình",
+                content: ` <a href="./ls3.html"><img style="width:100%" src="./img/conditional.png" alt=""></a>`,
+                tags: ["Cơ bản", "Nhập môn"]
+            },
+            {
+                id: 3,
+                title: "Vòng lặp",
+                description: "Sử dụng for, while, do...while để lặp lại các thao tác",
+                content: ` <a href="./ls4.html"><img style="width:100%" src="./img/loop.png" alt=""></a>`,
+                tags: ["Cơ bản", "Logic"]
+            },
+            {
+                id: 4,
+                title: "Thực hành",
+                description: "Bài tập thực hành vòng lặp và điều kiện",
+                content: `
+                    <h3>Bài tập thực hành</h3>
+                    <p>Hãy hoàn thành các bài tập sau để nắm vững kiến thức về vòng lặp và câu lệnh điều kiện.</p>
+                    
+                    <h3>Bài 1: Kiểm tra số chẵn/lẻ</h3>
+                    <p>Viết chương trình in ra tất cả các số chẵn từ 1 đến 20.</p>
+                    
+                    <div class="code-example">
+                        <span class="comment">// Gợi ý: Sử dụng vòng lặp for và toán tử %</span><br>
+                        <span class="keyword">for</span> (<span class="keyword">let</span> <span class="variable">i</span> = <span class="number">1</span>; <span class="variable">i</span> <= <span class="number">20</span>; <span class="variable">i</span>++) {<br>
+                        &nbsp;&nbsp;<span class="keyword">if</span> (<span class="variable">i</span> % <span class="number">2</span> === <span class="number">0</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">i</span> + <span class="string">" là số chẵn"</span>);<br>
+                        &nbsp;&nbsp;}<br>
+                        }
+                    </div>
+                    
+                    <h3>Bài 2: Tính tổng</h3>
+                    <p>Viết chương trình tính tổng các số từ 1 đến 100.</p>
+                    
+                    <div class="code-example">
+                        <span class="keyword">let</span> <span class="variable">sum</span> = <span class="number">0</span>;<br><br>
+                        
+                        <span class="keyword">for</span> (<span class="keyword">let</span> <span class="variable">i</span> = <span class="number">1</span>; <span class="variable">i</span> <= <span class="number">100</span>; <span class="variable">i</span>++) {<br>
+                        &nbsp;&nbsp;<span class="variable">sum</span> += <span class="variable">i</span>;<br>
+                        }<br><br>
+                        
+                        <span class="variable">console</span>.<span class="function">log</span>(<span class="string">"Tổng từ 1 đến 100 là: "</span> + <span class="variable">sum</span>);
+                    </div>
+                    
+                    <h3>Bài 3: FizzBuzz</h3>
+                    <p>Viết chương trình in các số từ 1 đến 100. Nhưng với bội số của 3 in "Fizz", bội số của 5 in "Buzz", bội số của cả 3 và 5 in "FizzBuzz".</p>
+                    
+                    <div class="code-example">
+                        <span class="keyword">for</span> (<span class="keyword">let</span> <span class="variable">i</span> = <span class="number">1</span>; <span class="variable">i</span> <= <span class="number">100</span>; <span class="variable">i</span>++) {<br>
+                        &nbsp;&nbsp;<span class="keyword">if</span> (<span class="variable">i</span> % <span class="number">15</span> === <span class="number">0</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">console</span>.<span class="function">log</span>(<span class="string">"FizzBuzz"</span>);<br>
+                        &nbsp;&nbsp;} <span class="keyword">else if</span> (<span class="variable">i</span> % <span class="number">3</span> === <span class="number">0</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">console</span>.<span class="function">log</span>(<span class="string">"Fizz"</span>);<br>
+                        &nbsp;&nbsp;} <span class="keyword">else if</span> (<span class="variable">i</span> % <span class="number">5</span> === <span class="number">0</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">console</span>.<span class="function">log</span>(<span class="string">"Buzz"</span>);<br>
+                        &nbsp;&nbsp;} <span class="keyword">else</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">console</span>.<span class="function">log</span>(<span class="variable">i</span>);<br>
+                        &nbsp;&nbsp;}<br>
+                        }
+                    </div>
+                `,
+                tags: ["Thực hành", "Bài tập"]
+            },
+            {
+                id: 5,
+                title: "Mảng",
+                description: "Làm việc với mảng - cấu trúc dữ liệu quan trọng",
+                content: ` <a href="./LS5.html"><img style="width:100%" src="./img/array.png" alt=""></a>`,
+                tags: ["Cơ bản", "Dữ liệu"]
+            },
+            {
+                id: 6,
+                title: "Object",
+                description: "Làm việc với đối tượng trong JavaScript",
+                content: ` <a href="./LS6.html"><img style="width:100%" src="./img/object.png" alt=""></a>`,
+                tags: ["Cơ bản", "Dữ liệu"]
+            },
+            {
+                id: 7,
+                title: "Hàm",
+                description: "Tạo và sử dụng hàm trong JavaScript",
+                content: ` <a href="./ls8.html"><img style="width:100%" src="./img/fuction.png" alt=""></a>`,
+                tags: ["Quan trọng", "Chức năng"]
+            },
+            {
+                id: 8,
+                title: "Thực hành",
+                description: "Bài tập thực hành về hàm và đối tượng",
+                content: `
+                    <h3>Bài tập thực hành nâng cao</h3>
+                    <p>Áp dụng kiến thức về hàm và object để giải quyết các bài toán thực tế.</p>
+                    
+                    <h3>Bài 1: Quản lý sinh viên</h3>
+                    <p>Tạo một chương trình quản lý sinh viên với các chức năng thêm, xóa, tìm kiếm.</p>
+                    
+                    <div class="code-example">
+                        <span class="keyword">let</span> <span class="variable">students</span> = [];<br><br>
+                        
+                        <span class="keyword">function</span> <span class="function">addStudent</span>(<span class="variable">id</span>, <span class="variable">name</span>, <span class="variable">grade</span>) {<br>
+                        &nbsp;&nbsp;<span class="variable">students</span>.<span class="function">push</span>({<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="property">id</span>: <span class="variable">id</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="property">name</span>: <span class="variable">name</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="property">grade</span>: <span class="variable">grade</span><br>
+                        &nbsp;&nbsp;});<br>
+                        }<br><br>
+                        
+                        <span class="keyword">function</span> <span class="function">findStudent</span>(<span class="variable">id</span>) {<br>
+                        &nbsp;&nbsp;<span class="keyword">return</span> <span class="variable">students</span>.<span class="function">find</span>(<span class="function">student</span> => <span class="variable">student</span>.<span class="property">id</span> === <span class="variable">id</span>);<br>
+                        }<br><br>
+                        
+                        <span class="keyword">function</span> <span class="function">getAverageGrade</span>() {<br>
+                        &nbsp;&nbsp;<span class="keyword">if</span> (<span class="variable">students</span>.<span class="property">length</span> === <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;<br>
+                        &nbsp;&nbsp;<span class="keyword">let</span> <span class="variable">total</span> = <span class="variable">students</span>.<span class="function">reduce</span>((<span class="variable">sum</span>, <span class="variable">student</span>) => <span class="variable">sum</span> + <span class="variable">student</span>.<span class="property">grade</span>, <span class="number">0</span>);<br>
+                        &nbsp;&nbsp;<span class="keyword">return</span> <span class="variable">total</span> / <span class="variable">students</span>.<span class="property">length</span>;<br>
+                        }
+                    </div>
+                    
+                    <h3>Bài 2: Tính tiền tip</h3>
+                    <p>Viết hàm tính tiền tip dựa trên hóa đơn và mức độ hài lòng.</p>
+                    
+                    <div class="code-example">
+                        <span class="keyword">function</span> <span class="function">calculateTip</span>(<span class="variable">bill</span>, <span class="variable">rating</span> = <span class="string">'good'</span>) {<br>
+                        &nbsp;&nbsp;<span class="keyword">let</span> <span class="variable">tipRates</span> = {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="property">'excellent'</span>: <span class="number">0.2</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="property">'good'</span>: <span class="number">0.15</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="property">'average'</span>: <span class="number">0.1</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="property">'poor'</span>: <span class="number">0.05</span><br>
+                        &nbsp;&nbsp;};<br><br>
+                        
+                        &nbsp;&nbsp;<span class="keyword">let</span> <span class="variable">rate</span> = <span class="variable">tipRates</span>[<span class="variable">rating</span>.<span class="function">toLowerCase</span>()] || <span class="number">0</span>;<br>
+                        &nbsp;&nbsp;<span class="keyword">return</span> <span class="variable">bill</span> * <span class="variable">rate</span>;<br>
+                        }<br><br>
+                        
+                        <span class="variable">console</span>.<span class="function">log</span>(<span class="function">calculateTip</span>(<span class="number">100</span>, <span class="string">'excellent'</span>)); <span class="comment">// 20</span><br>
+                        <span class="variable">console</span>.<span class="function">log</span>(<span class="function">calculateTip</span>(<span class="number">100</span>)); <span class="comment">// 15</span>
+                    </div>
+                `,
+                tags: ["Thực hành", "Ứng dụng"]
+            },
+            {
+                id: 9,
+                title: "DOM",
+                description: "Thao tác với DOM - Mô hình đối tượng tài liệu",
+                content: ` <a href="./ls9.html"><img style="width:100%" src="./img/Dom.png" alt=""></a>`,
+                tags: ["Quan trọng", "Frontend"]
+            },
+            {
+                id: 10,
+                title: "Sự kiện & Tương tác",
+                description: "Xử lý sự kiện và tạo tương tác người dùng",
+                content: ` <a href="./LS10.html"><img style="width:100%" src="./img/event.png" alt=""></a>`,
+                tags: ["Tương tác", "Frontend"]
+            },
+            {
+                id: 11,
+                title: "ES6",
+                description: "ECMASCRIPT 2015",
+                content: ` <a href="./LS12.html"><img style="width:100%" src="./img/es6.png" alt=""></a>`,
+                tags: ["Frontend"]
+            },
+            {
+                id: 12,
+                title: "Thực hành",
+                description: "Dự án tổng hợp cuối khóa",
+                content: `
+                    <h3>Dự án: Tạo ứng dụng Todo List</h3>
+                    <p>Áp dụng tất cả kiến thức đã học để tạo một ứng dụng Todo List hoàn chỉnh.</p>
+                    
+                    <h3>Yêu cầu chức năng</h3>
+                    <ul>
+                        <li>Thêm công việc mới</li>
+                        <li>Đánh dấu công việc đã hoàn thành</li>
+                        <li>Xóa công việc</li>
+                        <li>Lọc công việc (tất cả, đã hoàn thành, chưa hoàn thành)</li>
+                        <li>Lưu trữ dữ liệu trong localStorage</li>
+                    </ul>
+                    
+                    <h3>HTML cơ bản</h3>
+                    <div class="code-example">
+                        <span class="comment">&lt;div id="todo-app"&gt;</span><br>
+                        &nbsp;&nbsp;<span class="comment">&lt;h1&gt;Todo List&lt;/h1&gt;</span><br>
+                        &nbsp;&nbsp;<span class="comment">&lt;div class="input-section"&gt;</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">&lt;input type="text" id="todo-input" placeholder="Thêm công việc mới..."&gt;</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">&lt;button id="add-btn"&gt;Thêm&lt;/button&gt;</span><br>
+                        &nbsp;&nbsp;<span class="comment">&lt;/div&gt;</span><br>
+                        &nbsp;&nbsp;<span class="comment">&lt;div class="filters"&gt;</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">&lt;button class="filter-btn active" data-filter="all"&gt;Tất cả&lt;/button&gt;</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">&lt;button class="filter-btn" data-filter="pending"&gt;Chưa hoàn thành&lt;/button&gt;</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">&lt;button class="filter-btn" data-filter="completed"&gt;Đã hoàn thành&lt;/button&gt;</span><br>
+                        &nbsp;&nbsp;<span class="comment">&lt;/div&gt;</span><br>
+                        &nbsp;&nbsp;<span class="comment">&lt;ul id="todo-list"&gt;&lt;/ul&gt;</span><br>
+                        <span class="comment">&lt;/div&gt;</span>
+                    </div>
+                    
+                    <h3>JavaScript cơ bản</h3>
+                    <div class="code-example">
+                        <span class="keyword">class</span> <span class="class-name">TodoApp</span> {<br>
+                        &nbsp;&nbsp;<span class="function">constructor</span>() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.<span class="property">todos</span> = <span class="variable">JSON</span>.<span class="function">parse</span>(<span class="variable">localStorage</span>.<span class="function">getItem</span>(<span class="string">'todos'</span>)) || [];<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.<span class="property">currentFilter</span> = <span class="string">'all'</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.<span class="function">init</span>();<br>
+                        &nbsp;&nbsp;}<br><br>
+                        
+                        &nbsp;&nbsp;<span class="function">init</span>() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Khởi tạo các sự kiện</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">document</span>.<span class="function">getElementById</span>(<span class="string">'add-btn'</span>).<span class="function">addEventListener</span>(<span class="string">'click'</span>, () => <span class="keyword">this</span>.<span class="function">addTodo</span>());<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">document</span>.<span class="function">querySelectorAll</span>(<span class="string">'.filter-btn'</span>).<span class="function">forEach</span>(<span class="function">btn</span> => {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">btn</span>.<span class="function">addEventListener</span>(<span class="string">'click'</span>, (<span class="variable">e</span>) => <span class="keyword">this</span>.<span class="function">setFilter</span>(<span class="variable">e</span>));<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.<span class="function">render</span>();<br>
+                        &nbsp;&nbsp;}<br><br>
+                        
+                        &nbsp;&nbsp;<span class="function">addTodo</span>() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Thêm todo mới</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Cập nhật localStorage</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Render lại danh sách</span><br>
+                        &nbsp;&nbsp;}<br><br>
+                        
+                        &nbsp;&nbsp;<span class="function">render</span>() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Hiển thị danh sách todo</span><br>
+                        &nbsp;&nbsp;}<br>
+                        }<br><br>
+                        
+                        <span class="comment">// Khởi chạy ứng dụng</span><br>
+                        <span class="keyword">new</span> <span class="class-name">TodoApp</span>();
+                    </div>
+                    
+                    <h3>Thử thách nâng cao</h3>
+                    <ul>
+                        <li>Thêm tính năng chỉnh sửa todo</li>
+                        <li>Thêm hẹn giờ/ngày cho todo</li>
+                        <li>Thêm tính năng tìm kiếm</li>
+                        <li>Thêm sắp xếp theo ngày/ưu tiên</li>
+                        <li>Thêm chế độ dark/light mode</li>
+                    </ul>
+                `,
+                tags: ["Dự án", "Tổng hợp", "Quan trọng"]
+            }
+        ];
+
+        // Khởi tạo ứng dụng
+        document.addEventListener('DOMContentLoaded', function () {
+            const lessonsList = document.querySelector('.lessons-list');
+            const lessonDetail = document.getElementById('lesson-detail');
+            const progressFill = document.querySelector('.progress-fill');
+            const completedCountElement = document.querySelector('.stat-item:nth-child(3) .stat-value');
+
+            let completedLessons = JSON.parse(localStorage.getItem('completedLessons')) || [];
+            let currentLessonId = 1;
+
+            // Tạo danh sách bài học
+            lessons.forEach(lesson => {
+                const lessonItem = document.createElement('div');
+                lessonItem.className = `lesson-item ${lesson.id === currentLessonId ? 'active' : ''} ${completedLessons.includes(lesson.id) ? 'completed' : ''}`;
+                lessonItem.dataset.id = lesson.id;
+
+                lessonItem.innerHTML = `
+                    <div class="lesson-number">${lesson.id}</div>
+                    <div class="lesson-content">
+                        <h3>${lesson.title}</h3>
+                        <p>${lesson.description}</p>
+                    </div>
+                    <div class="lesson-status">
+                        <i class="fas ${completedLessons.includes(lesson.id) ? 'fa-check-circle' : 'fa-circle'}"></i>
+                    </div>
+                `;
+
+                lessonItem.addEventListener('click', function () {
+                    const lessonId = parseInt(this.dataset.id);
+                    showLessonDetail(lessonId);
+                });
+
+                lessonsList.appendChild(lessonItem);
+            });
+
+            // Hiển thị bài học đầu tiên
+            showLessonDetail(currentLessonId);
+
+            // Cập nhật tiến độ
+            updateProgress();
+
+            // Hàm hiển thị chi tiết bài học
+            function showLessonDetail(lessonId) {
+                currentLessonId = lessonId;
+                const lesson = lessons.find(l => l.id === lessonId);
+
+                if (!lesson) return;
+
+                // Cập nhật active state
+                document.querySelectorAll('.lesson-item').forEach(item => {
+                    item.classList.remove('active');
+                    if (parseInt(item.dataset.id) === lessonId) {
+                        item.classList.add('active');
+                    }
+                });
+
+                // Cập nhật nội dung chi tiết
+                const tagsHTML = lesson.tags.map(tag => {
+                    const tagClass = tag === "Thực hành" || tag === "Dự án" ? "practice" :
+                        tag === "Quan trọng" ? "important" : "";
+                    return `<span class="tag ${tagClass}">${tag}</span>`;
+                }).join('');
+
+                lessonDetail.innerHTML = `
+                    <div class="detail-header">
+                        <div>
+                            <h2>${lesson.title}</h2>
+                            <div class="lesson-tags">${tagsHTML}</div>
+                        </div>
+                        <div>
+                            <button class="btn btn-complete complete-lesson" data-id="${lesson.id}">
+                                <i class="fas fa-check"></i> Đánh dấu hoàn thành
+                            </button>
+                        </div>
+                    </div>
+                    <div class="detail-content">
+                        ${lesson.content}
+                    </div>
+                    <div class="detail-actions">
+                        <button class="btn btn-prev" ${lessonId === 1 ? 'disabled' : ''}>
+                            <i class="fas fa-arrow-left"></i> Bài trước
+                        </button>
+                        <button class="btn btn-next" ${lessonId === lessons.length ? 'disabled' : ''}>
+                            Bài tiếp theo <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                `;
+
+                lessonDetail.classList.add('active');
+
+                // Thêm sự kiện cho nút hoàn thành
+                const completeBtn = lessonDetail.querySelector('.complete-lesson');
+                if (completeBtn) {
+                    completeBtn.addEventListener('click', function () {
+                        const id = parseInt(this.dataset.id);
+                        toggleLessonComplete(id);
+                    });
+                }
+
+                // Thêm sự kiện cho nút điều hướng
+                const prevBtn = lessonDetail.querySelector('.btn-prev');
+                const nextBtn = lessonDetail.querySelector('.btn-next');
+
+                if (prevBtn && !prevBtn.disabled) {
+                    prevBtn.addEventListener('click', () => {
+                        if (lessonId > 1) showLessonDetail(lessonId - 1);
+                    });
+                }
+
+                if (nextBtn && !nextBtn.disabled) {
+                    nextBtn.addEventListener('click', () => {
+                        if (lessonId < lessons.length) showLessonDetail(lessonId + 1);
+                    });
+                }
+
+                // Cập nhật trạng thái nút hoàn thành
+                updateCompleteButton(lessonId);
+            }
+
+            // Hàm đánh dấu hoàn thành bài học
+            function toggleLessonComplete(lessonId) {
+                const index = completedLessons.indexOf(lessonId);
+
+                if (index === -1) {
+                    // Chưa hoàn thành -> đánh dấu hoàn thành
+                    completedLessons.push(lessonId);
+
+                    // Hiệu ứng
+                    const lessonItem = document.querySelector(`.lesson-item[data-id="${lessonId}"]`);
+                    const statusIcon = lessonItem.querySelector('.lesson-status i');
+
+                    statusIcon.classList.remove('fa-circle');
+                    statusIcon.classList.add('fa-check-circle');
+                    lessonItem.classList.add('completed');
+
+                    // Thông báo
+                    showNotification(`Đã hoàn thành bài ${lessonId}: ${lessons.find(l => l.id === lessonId).title}`);
+                } else {
+                    // Đã hoàn thành -> bỏ đánh dấu
+                    completedLessons.splice(index, 1);
+
+                    // Hiệu ứng
+                    const lessonItem = document.querySelector(`.lesson-item[data-id="${lessonId}"]`);
+                    const statusIcon = lessonItem.querySelector('.lesson-status i');
+
+                    statusIcon.classList.remove('fa-check-circle');
+                    statusIcon.classList.add('fa-circle');
+                    lessonItem.classList.remove('completed');
+
+                    // Thông báo
+                    showNotification(`Đã bỏ đánh dấu hoàn thành bài ${lessonId}`);
+                }
+
+                // Lưu vào localStorage
+                localStorage.setItem('completedLessons', JSON.stringify(completedLessons));
+
+                // Cập nhật tiến độ và thống kê
+                updateProgress();
+                updateCompleteButton(lessonId);
+            }
+
+            // Hàm cập nhật nút hoàn thành
+            function updateCompleteButton(lessonId) {
+                const completeBtn = document.querySelector('.complete-lesson');
+                if (!completeBtn) return;
+
+                const isCompleted = completedLessons.includes(lessonId);
+
+                if (isCompleted) {
+                    completeBtn.innerHTML = '<i class="fas fa-times"></i> Bỏ đánh dấu hoàn thành';
+                    completeBtn.style.background = '#6c757d';
+                } else {
+                    completeBtn.innerHTML = '<i class="fas fa-check"></i> Đánh dấu hoàn thành';
+                    completeBtn.style.background = '';
+                }
+            }
+
+            // Hàm cập nhật tiến độ
+            function updateProgress() {
+                const progress = (completedLessons.length / lessons.length) * 100;
+                progressFill.style.width = `${progress}%`;
+
+                // Cập nhật thống kê
+                completedCountElement.textContent = completedLessons.length;
+
+                // Cập nhật text tiến độ
+                const progressText = document.querySelector('.progress-info span:last-child');
+                if (progressText) {
+                    progressText.textContent = `${Math.round(progress)}%`;
+                }
+            }
+
+            // Hàm hiển thị thông báo
+            function showNotification(message) {
+                // Tạo thông báo
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: var(--primary);
+                    color: white;
+                    padding: 15px 25px;
+                    border-radius: 10px;
+                    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                    z-index: 1000;
+                    transform: translateX(150%);
+                    transition: transform 0.3s ease;
+                `;
+                notification.textContent = message;
+
+                document.body.appendChild(notification);
+
+                // Hiển thị thông báo
+                setTimeout(() => {
+                    notification.style.transform = 'translateX(0)';
+                }, 10);
+
+                // Ẩn thông báo sau 3 giây
+                setTimeout(() => {
+                    notification.style.transform = 'translateX(150%)';
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 300);
+                }, 3000);
+            }
+
+            // Thêm hiệu ứng khi click vào các bài học
+            document.querySelectorAll('.lesson-item').forEach(item => {
+                item.addEventListener('click', function () {
+                    // Hiệu ứng nhấp nháy
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+
+            // Khởi tạo nút hoàn thành cho bài học đầu tiên
+            updateCompleteButton(currentLessonId);
+        });
+    </script>
+</body>
+
+</html>

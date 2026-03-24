@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BUỔI 6: ES6 (ECMAScript 2015) TRONG JAVASCRIPT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --info: #17a2b8;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+
+        body {
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 80vh;
+        }
+
+        .sidebar {
+            height: 85vh;
+            overflow: scroll;
+            background: var(--light);
+            padding: 20px;
+            border-right: 3px solid var(--secondary);
+        }
+
+        .sidebar ul {
+            padding: 0;
+        }
+
+        .nav-list {
+            list-style: none;
+            position: sticky;
+            top: 20px;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--secondary);
+            color: white;
+            transform: translateX(5px);
+            border-color: var(--secondary);
+        }
+
+        .nav-link1 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .main-content {
+            padding: 30px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: var(--accent);
+            margin: 25px 0 15px;
+            padding-left: 15px;
+            border-left: 4px solid var(--accent);
+        }
+
+        h4 {
+            color: var(--info);
+            margin: 20px 0 10px;
+        }
+
+        h5 {
+            color: var(--dark);
+            margin: 15px 0 8px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul,
+        ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            line-height: 1.4;
+            border: 2px solid #444;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn {
+            background: #555;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .keyword {
+            color: #569cd6;
+        }
+
+        .string {
+            color: #ce9178;
+        }
+
+        .comment {
+            color: #6a9955;
+        }
+
+        .number {
+            color: #b5cea8;
+        }
+
+        .class-name {
+            color: #4ec9b0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: var(--secondary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid var(--info);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .interactive-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #e9ecef;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 5px;
+        }
+
+        .btn-run {
+            background: var(--success);
+        }
+
+        .btn-warning {
+            background: var(--warning);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background: white;
+            border-left: 4px solid var(--warning);
+            display: none;
+        }
+
+        .result.active {
+            display: block;
+        }
+
+        .result-content {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border: 1px solid #e9ecef;
+            white-space: pre-wrap;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+        }
+ @media (max-width: 1400px) {
+      .sidebar {
+            height: 78vh;
+      }
+ }
+        @media (max-width: 768px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-right: none;
+                border-bottom: 3px solid var(--secondary);
+            }
+        }
+
+        .visual-array {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .array-item {
+            width: 60px;
+            height: 60px;
+            background: var(--secondary);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 5px;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .array-index {
+            position: absolute;
+            top: -25px;
+            font-size: 12px;
+            color: var(--dark);
+        }
+
+        .array-value {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .algorithm-steps {
+            background: #f0f7ff;
+            border-left: 4px solid #4dabf7;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .algorithm-steps ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .algorithm-steps li {
+            margin-bottom: 5px;
+        }
+
+        .method-demo {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+
+
+        .demo .wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .demo .array {
+            display: flex;
+        }
+
+        .demo .item {
+            width: 100px;
+            padding: 15px;
+            margin: 5px;
+            background: white;
+            color: black;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: 0.4s;
+        }
+
+        .demo .active {
+            background: #ffcc00;
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .demo .arrow {
+            position: absolute;
+            top: -35px;
+            font-size: 28px;
+            transition: 0.4s;
+        }
+
+        .demo .index {
+            margin-top: 30px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fab fa-js"></i> BUỔI 12: ES6 (ECMASCRIPT 2015)</h1>
+        </header>
+
+        <div class="content-wrapper">
+            <nav class="sidebar">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#let-const" class="nav-link active"><i class="fas fa-code"></i> 1. let và const</a></li>
+                    <li class="nav-item"><a href="#arrow-function" class="nav-link"><i class="fas fa-arrow-right"></i> 2. Arrow Function</a></li>
+                    <li class="nav-item"><a href="#template-string" class="nav-link"><i class="fas fa-quote-right"></i> 3. Template String</a></li>
+                    <li class="nav-item"><a href="#destructuring" class="nav-link"><i class="fas fa-cubes"></i> 4. Destructuring</a></li>
+                    <li class="nav-item"><a href="#rest-operator" class="nav-link"><i class="fas fa-ellipsis-h"></i> 5. Rest Operator</a></li>
+                    <li class="nav-item"><a href="#module" class="nav-link"><i class="fas fa-cube"></i> 6. Module (Import/Export)</a></li>
+                    <li class="nav-item"><a href="#array-methods" class="nav-link"><i class="fas fa-list"></i> 7. Function Array</a></li>
+                    <li class="nav-item"><a href="#exercise1" class="nav-link"><i class="fas fa-dumbbell"></i> Bài 1: Quản lý sản phẩm</a></li>
+                    <li class="nav-item"><a href="#homework" class="nav-link"><i class="fas fa-home"></i> BTVN</a></li>
+                </ul>
+            </nav>
+
+            <main class="main-content">
+                <!-- PHẦN 1: LET VÀ CONST -->
+                <section id="let-const" class="section active">
+                    <h2><i class="fas fa-code"></i> 1. let VÀ const TRONG ES6</h2>
+
+                    <h3>let là gì?</h3>
+                    <ul>
+                        <li>Dùng để khai báo biến.</li>
+                        <li>Có block scope (phạm vi trong { })</li>
+                        <li>Có thể gán lại giá trị mới</li>
+                    </ul>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ let</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> x = 10;<br>
+                        x = 20; <span class="comment">// ok</span><br>
+                        console.log(x); <span class="comment">// 20</span>
+                    </div>
+
+                    <h3>const là gì?</h3>
+                    <ul>
+                        <li>Dùng để khai báo hằng số (constant)</li>
+                        <li>Có block scope</li>
+                        <li>Không được gán lại giá trị</li>
+                    </ul>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ const</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> y = 5;<br>
+                        y = 10; <span class="comment">// Lỗi: Assignment to constant variable</span>
+                    </div>
+
+                    <p><strong>Nhưng với object hoặc array, bạn vẫn có thể thay đổi nội dung bên trong:</strong></p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ const với object/array</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> arr = [1, 2];<br>
+                        arr.push(3); <span class="comment">// hợp lệ</span><br>
+                        console.log(arr); <span class="comment">// [1, 2, 3]</span><br>
+                        <br>
+                        <span class="keyword">const</span> obj = { name: <span class="string">"Tom"</span> };<br>
+                        obj.name = <span class="string">"Jerry"</span>; <span class="comment">// OK</span>
+                    </div>
+
+                    <h4>So sánh var, let, const</h4>
+                    <div class="table-container">
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Tính năng</th>
+                                    <th>var</th>
+                                    <th>let</th>
+                                    <th>const</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Phạm vi (scope)</strong></td>
+                                    <td>function scope</td>
+                                    <td>block scope {}</td>
+                                    <td>block scope {}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Hoisting</strong></td>
+                                    <td>Có (lên đầu hàm)</td>
+                                    <td>Có nhưng không dùng trước khi khai báo</td>
+                                    <td>Có nhưng không dùng trước khi khai báo</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Gán lại</strong></td>
+                                    <td>Có thể</td>
+                                    <td>Có thể</td>
+                                    <td>Không thể</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Khai báo lại</strong></td>
+                                    <td>Có thể</td>
+                                    <td>Không thể</td>
+                                    <td>Không thể</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>Hoisting</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ hoisting</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        console.log(a); <span class="comment">// undefined</span><br>
+                        <span class="keyword">var</span> a = 10;<br>
+                        <br>
+                        console.log(b); <span class="comment">// Lỗi ReferenceError</span><br>
+                        <span class="keyword">let</span> b = 20;
+                    </div>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Giải thích:</h4>
+                        <p>var được "kéo lên" đầu nhưng chưa có giá trị<br>
+                        let/const cũng được hoisting nhưng nằm trong "Temporal Dead Zone" → không thể sử dụng trước khi khai báo</p>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm let và const</h4>
+                        <button class="btn" onclick="testLetConst()"><i class="fas fa-play"></i> Chạy thử</button>
+                        <div class="result" id="letConstResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="letConstResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN 2: ARROW FUNCTION -->
+                <section id="arrow-function" class="section">
+                    <h2><i class="fas fa-arrow-right"></i> 2. ARROW FUNCTION – HÀM MŨI TÊN</h2>
+
+                    <h4>Cú pháp cơ bản</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> sayHello = (name) => {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <span class="string">`Hello, ${name}`</span>;<br>
+                        };
+                    </div>
+                </section>
+
+                <!-- PHẦN 3: TEMPLATE STRING -->
+                <section id="template-string" class="section">
+                    <h2><i class="fas fa-quote-right"></i> 3. TEMPLATE STRING (CHUỖI MẪU)</h2>
+
+                    <p>Dùng dấu (backtick) thay vì dấu nháy đơn ' hoặc nháy kép "</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ cơ bản</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> name = <span class="string">"Alice"</span>;<br>
+                        <span class="keyword">const</span> message = <span class="string">`Hello, ${name}!`</span>;<br>
+                        console.log(message); <span class="comment">// Hello, Alice!</span>
+                    </div>
+
+                    <div class="note">
+                        <p><i class="fas fa-info-circle"></i> Lưu ý: Dấu backtick nằm ngay dưới phím Esc trên bàn phím tiếng Anh.</p>
+                    </div>
+
+                    <h4>Chèn biến hoặc biểu thức bằng ${...}</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> a = 5;<br>
+                        <span class="keyword">let</span> b = 10;<br>
+                        <br>
+                        console.log(<span class="string">`Tổng của ${a} và ${b} là ${a + b}`</span>);
+                    </div>
+
+                    <h4>Chuỗi nhiều dòng</h4>
+                    <p><strong>Trước ES6:</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Trước ES6</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> msg = <span class="string">"Hello\n"</span> +<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"This is line 2\n"</span> +<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"This is line 3"</span>;
+                    </div>
+
+                    <p><strong>Với ES6:</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>ES6</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> msg = <span class="string">`Hello<br>This is line 2<br>This is line 3`</span>;
+                    </div>
+
+                    <h4>Sử dụng trong HTML</h4>
+                    <p>Bạn có thể dùng template string để tạo HTML động:</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> product = <span class="string">"Laptop"</span>;<br>
+                        <span class="keyword">const</span> price = 15000000;<br>
+                        <br>
+                        <span class="keyword">const</span> html = <span class="string">`<br>
+  &lt;div class="product"&gt;<br>
+    &lt;h2&gt;${product}&lt;/h2&gt;<br>
+    &lt;p&gt;Price: ${price.toLocaleString()} VND&lt;/p&gt;<br>
+  &lt;/div&gt;<br>
+`</span>;<br>
+                        <br>
+                        document.body.innerHTML = html;
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm Template String</h4>
+                        <div class="input-group">
+                            <label for="tsName">Nhập tên:</label>
+                            <input type="text" id="tsName" value="Alice">
+                        </div>
+                        <div class="input-group">
+                            <label for="tsAge">Nhập tuổi:</label>
+                            <input type="number" id="tsAge" value="25">
+                        </div>
+                        <button class="btn" onclick="testTemplateString()"><i class="fas fa-play"></i> Tạo chuỗi</button>
+                        <div class="result" id="tsResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="tsResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN 4: DESTRUCTURING -->
+                <section id="destructuring" class="section">
+                    <h2><i class="fas fa-cubes"></i> 4. DESTRUCTURING – PHÂN RÃ MẢNG & ĐỐI TƯỢNG</h2>
+
+                    <h3>Array Destructuring (Phân rã Mảng)</h3>
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> arr = [1, 2, 3];<br>
+                        <span class="keyword">const</span> [a, b, c] = arr;<br>
+                        <br>
+                        console.log(a); <span class="comment">// 1</span><br>
+                        console.log(b); <span class="comment">// 2</span>
+                    </div>
+
+                    <h4>Bỏ qua phần tử:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> [x, , z] = [10, 20, 30];<br>
+                        console.log(z); <span class="comment">// 30</span>
+                    </div>
+
+                    <h4>Giá trị mặc định:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> [m, n, o = 100] = [1, 2];<br>
+                        console.log(o); <span class="comment">// 100</span>
+                    </div>
+
+                    <h4>Trao đổi biến (swap):</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> a = 1, b = 2;<br>
+                        [a, b] = [b, a];<br>
+                        console.log(a, b); <span class="comment">// 2 1</span>
+                    </div>
+
+                    <h3>Object Destructuring (Phân rã Đối tượng)</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> user = { name: <span class="string">"Alice"</span>, age: 25 };<br>
+                        <span class="keyword">const</span> { name, age } = user;<br>
+                        console.log(name); <span class="comment">// Alice</span>
+                    </div>
+
+                    <h4>Đổi tên biến:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> person = { firstName: <span class="string">"Bob"</span>, age: 30 };<br>
+                        <span class="keyword">const</span> { firstName: ten, age: tuoi } = person;<br>
+                        console.log(ten);  <span class="comment">// Bob</span>
+                    </div>
+
+                    <h4>Giá trị mặc định:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> { role = <span class="string">"guest"</span> } = {};<br>
+                        console.log(role); <span class="comment">// guest</span>
+                    </div>
+
+                    <h4>Lồng nhau (nested):</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> obj = {<br>
+                        &nbsp;&nbsp;user: {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;name: <span class="string">"Tom"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;address: {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;city: <span class="string">"Hanoi"</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;}<br>
+                        };<br>
+                        <br>
+                        <span class="keyword">const</span> {<br>
+                        &nbsp;&nbsp;user: {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;name,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;address: { city }<br>
+                        &nbsp;&nbsp;}<br>
+                        } = obj;<br>
+                        <br>
+                        console.log(name); <span class="comment">// Tom</span><br>
+                        console.log(city); <span class="comment">// Hanoi</span>
+                    </div>
+
+                    <h4>Kết hợp với Rest operator</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Vị trí dùng</th>
+                                    <th>Ý nghĩa</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>[a, ...b] = arr</td>
+                                    <td>b chứa các phần tử còn lại</td>
+                                </tr>
+                                <tr>
+                                    <td>{x, ...y} = obj</td>
+                                    <td>y chứa thuộc tính còn lại</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> [a, ...rest] = [1, 2, 3, 4];<br>
+                        console.log(rest); <span class="comment">// [2, 3, 4]</span><br>
+                        <br>
+                        <span class="keyword">const</span> { x, ...others } = { x: 1, y: 2, z: 3 };<br>
+                        console.log(others); <span class="comment">// { y: 2, z: 3 }</span>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm Destructuring</h4>
+                        <button class="btn" onclick="testDestructuring()"><i class="fas fa-play"></i> Chạy thử</button>
+                        <div class="result" id="destructuringResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="destructuringResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN 5: REST OPERATOR -->
+                <section id="rest-operator" class="section">
+                    <h2><i class="fas fa-ellipsis-h"></i> 5. REST OPERATOR</h2>
+
+                    <h3>Mục đích:</h3>
+                    <p>Rest operator (...) dùng để gom nhiều phần tử (của mảng, đối số hàm, hoặc thuộc tính object) thành một mảng duy nhất hoặc một object duy nhất.</p>
+
+                    <h4>Hữu ích khi:</h4>
+                    <ul>
+                        <li>Muốn nhận nhiều đối số mà không cần liệt kê rõ ràng từng cái.</li>
+                        <li>Sao chép phần còn lại của mảng/object sau khi đã "tách" một vài phần tử đầu.</li>
+                    </ul>
+
+                    <h3>Với mảng:</h3>
+                    <h4>Nối mảng</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> arr1 = [1, 2];<br>
+                        <span class="keyword">const</span> arr2 = [3, 4];<br>
+                        <br>
+                        <span class="keyword">const</span> combined = [...arr1, ...arr2];<br>
+                        console.log(combined); <span class="comment">// [1, 2, 3, 4]</span>
+                    </div>
+
+                    <h4>Sao chép mảng (deep copy nông)</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> original = [10, 20];<br>
+                        <span class="keyword">const</span> copy = [...original];<br>
+                        <br>
+                        copy.push(30);<br>
+                        console.log(original); <span class="comment">// [10, 20]</span><br>
+                        console.log(copy);     <span class="comment">// [10, 20, 30]</span>
+                    </div>
+
+                    <h4>Truyền mảng vào hàm</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> numbers = [5, 10, 15];<br>
+                        <br>
+                        console.log(Math.max(...numbers)); <span class="comment">// 15</span>
+                    </div>
+
+                    <h3>Với object:</h3>
+                    <h4>Sao chép đối tượng</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> person = { name: <span class="string">"Linh"</span>, age: 22 };<br>
+                        <span class="keyword">const</span> clone = { ...person };<br>
+                        <br>
+                        console.log(clone); <span class="comment">// { name: "Linh", age: 22 }</span>
+                    </div>
+
+                    <h4>Gộp nhiều object</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> a = { x: 1 };<br>
+                        <span class="keyword">const</span> b = { y: 2 };<br>
+                        <br>
+                        <span class="keyword">const</span> merged = { ...a, ...b };<br>
+                        console.log(merged); <span class="comment">// { x: 1, y: 2 }</span>
+                    </div>
+
+                    <h4>Ghi đè thuộc tính</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> obj1 = { name: <span class="string">"Nam"</span>, age: 18 };<br>
+                        <span class="keyword">const</span> obj2 = { age: 20 };<br>
+                        <br>
+                        <span class="keyword">const</span> final = { ...obj1, ...obj2 };<br>
+                        console.log(final); <span class="comment">// { name: "Nam", age: 20 }</span>
+                    </div>
+
+                    <h4>So sánh ...rest và ...spread</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Loại</th>
+                                    <th>Vị trí</th>
+                                    <th>Ý nghĩa</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>...rest</strong></td>
+                                    <td>Trong destructuring hoặc tham số</td>
+                                    <td>Gom lại phần còn lại</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>...spread</strong></td>
+                                    <td>Trong biểu thức hoặc khởi tạo</td>
+                                    <td>Trải ra các phần tử</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ minh họa</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> arr = [1, 2, 3, 4];<br>
+                        <span class="keyword">const</span> [first, ...rest] = arr; <span class="comment">// rest = [2, 3, 4]</span><br>
+                        <br>
+                        <span class="keyword">const</span> newArr = [...rest, 5, 6]; <span class="comment">// newArr = [2, 3, 4, 5, 6]</span>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm Rest Operator</h4>
+                        <button class="btn" onclick="testRestOperator()"><i class="fas fa-play"></i> Chạy thử</button>
+                        <div class="result" id="restResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="restResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN 6: MODULE -->
+                <section id="module" class="section">
+                    <h2><i class="fas fa-cube"></i> 6. MODULE (IMPORT/EXPORT)</h2>
+
+                    <h3>Mục đích:</h3>
+                    <ul>
+                        <li>Giúp chia nhỏ mã nguồn thành các module riêng biệt, dễ quản lý và tái sử dụng.</li>
+                        <li>Hỗ trợ import/export trực tiếp trong JavaScript ES6.</li>
+                        <li>Tránh biến toàn cục và giúp bảo mật code tốt hơn.</li>
+                    </ul>
+
+                    <div class="note">
+                        <p><i class="fas fa-info-circle"></i> Lưu ý: Khi dùng import/export, cần chạy trong môi trường hỗ trợ module như:</p>
+                        <ul>
+                            <li>Trình duyệt (dùng &lt;script type="module"&gt;)</li>
+                            <li>Node.js (dùng file .mjs hoặc bật "type": "module" trong package.json)</li>
+                        </ul>
+                    </div>
+
+                    <h4>Ví dụ:</h4>
+                    <p><strong>📁 File: mathUtils.js</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>mathUtils.js</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// Export biến</span><br>
+                        <span class="keyword">export</span> <span class="keyword">const</span> PI = 3.14;<br>
+                        <br>
+                        <span class="comment">// Export hàm</span><br>
+                        <span class="keyword">export</span> <span class="keyword">function</span> <span class="class-name">add</span>(a, b) {<br>
+                        &nbsp;&nbsp;<span class="keyword">return</span> a + b;<br>
+                        }<br>
+                        <br>
+                        <span class="comment">// Export mặc định</span><br>
+                        <span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">function</span> <span class="class-name">multiply</span>(a, b) {<br>
+                        &nbsp;&nbsp;<span class="keyword">return</span> a * b;<br>
+                        }
+                    </div>
+
+                    <p><strong>📁 File: main.js</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>main.js</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// Import có tên</span><br>
+                        <span class="keyword">import</span> { PI, add } from <span class="string">"./mathUtils.js"</span>;<br>
+                        <br>
+                        <span class="comment">// Import mặc định</span><br>
+                        <span class="keyword">import</span> multiply from <span class="string">"./mathUtils.js"</span>;<br>
+                        <br>
+                        console.log(PI); <span class="comment">// 3.14</span><br>
+                        console.log(add(2, 3)); <span class="comment">// 5</span><br>
+                        console.log(multiply(2, 3)); <span class="comment">// 6</span>
+                    </div>
+
+                    <h4>Giải thích chi tiết:</h4>
+                    <ul>
+                        <li><strong>export:</strong>
+                            <ul>
+                                <li>export const PI = 3.14;: cho phép file khác import biến này.</li>
+                                <li>export function add(...) {}: export hàm có tên.</li>
+                                <li>export default: mỗi file chỉ có 1 export mặc định.</li>
+                            </ul>
+                        </li>
+                        <li><strong>import:</strong>
+                            <ul>
+                                <li>{ PI, add }: dùng dấu ngoặc để import các phần tử có tên.</li>
+                                <li>import multiply from ...: dùng không có dấu ngoặc cho export mặc định.</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <p><strong>Trong HTML:</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>HTML</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;<span class="keyword">script</span> <span class="string">type="module"</span> <span class="string">src="main.js"</span>&gt;&lt;/<span class="keyword">script</span>&gt;
+                    </div>
+
+                    <div class="note">
+                        <p><i class="fas fa-info-circle"></i> Mặc định module chạy trong chế độ strict (use strict).</p>
+                    </div>
+                </section>
+
+                <!-- PHẦN 7: FUNCTION ARRAY -->
+                <section id="array-methods" class="section">
+                    <h2><i class="fas fa-list"></i> 7. FUNCTION ARRAY</h2>
+
+                    <h3>forEach()</h3>
+                    <p><strong>Mục đích:</strong> Duyệt qua từng phần tử trong mảng, không trả về giá trị mới (chỉ dùng để thao tác từng phần tử).</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> numbers = [1, 2, 3, 4];<br>
+                        <br>
+                        numbers.forEach((num)=> {<br>
+                        &nbsp;&nbsp;console.log(<span class="string">"Số:"</span>, num);<br>
+                        });
+                    </div>
+                    <p><strong>Giải thích:</strong> forEach() lặp qua từng phần tử num trong mảng numbers. Hàm truyền vào là một callback function chạy cho mỗi phần tử. Không thể break hay return khỏi forEach() như for thường.</p>
+
+                    <h3>map()</h3>
+                    <p><strong>Mục đích:</strong> Trả về một mảng mới sau khi xử lý từng phần tử trong mảng cũ.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> numbers = [1, 2, 3];<br>
+                        <br>
+                        <span class="keyword">const</span> squares = numbers.map((num)=> {<br>
+                        &nbsp;&nbsp;<span class="keyword">return</span> num * num;<br>
+                        });<br>
+                        <br>
+                        console.log(squares); <span class="comment">// [1, 4, 9]</span>
+                    </div>
+                    <p><strong>Giải thích:</strong> map() tạo ra mảng mới squares bằng cách bình phương từng số trong numbers. map() luôn trả về một mảng có cùng số phần tử với mảng ban đầu.</p>
+
+                    <h3>filter()</h3>
+                    <p><strong>Mục đích:</strong> Lọc các phần tử thỏa điều kiện và trả về mảng mới.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> numbers = [5, 12, 8, 130, 44];<br>
+                        <br>
+                        <span class="keyword">const</span> bigNumbers = numbers.filter((num)=>{<br>
+                        &nbsp;&nbsp;<span class="keyword">return</span> num > 10;<br>
+                        });<br>
+                        <br>
+                        console.log(bigNumbers); <span class="comment">// [12, 130, 44]</span>
+                    </div>
+                    <p><strong>Giải thích:</strong> filter() trả về mảng chứa các phần tử > 10. Nếu điều kiện true → giữ lại phần tử, nếu false → loại bỏ.</p>
+
+                    <h3>find()</h3>
+                    <p><strong>Mục đích:</strong> Tìm phần tử đầu tiên trong mảng thỏa điều kiện, nếu không có trả về undefined.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> users = [<br>
+                        &nbsp;&nbsp;{ id: 1, name: <span class="string">"An"</span> },<br>
+                        &nbsp;&nbsp;{ id: 2, name: <span class="string">"Bình"</span> },<br>
+                        &nbsp;&nbsp;{ id: 3, name: <span class="string">"An"</span> }<br>
+                        ];<br>
+                        <br>
+                        <span class="keyword">const</span> result = users.find(user=> {<br>
+                        &nbsp;&nbsp;<span class="keyword">return</span> user.name === <span class="string">"An"</span>;<br>
+                        });<br>
+                        <br>
+                        console.log(result); <span class="comment">// { id: 1, name: "An" }</span>
+                    </div>
+                    <p><strong>Giải thích:</strong> find() dừng lại ngay khi tìm thấy phần tử phù hợp. Trả về object { id: 1, name: "An" } là phần tử đầu tiên tên "An".</p>
+
+                    <h3>findIndex()</h3>
+                    <p><strong>Mục đích:</strong> Tìm vị trí chỉ mục (index) của phần tử đầu tiên thỏa điều kiện.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> numbers = [5, 10, 15, 20];<br>
+                        <span class="keyword">let</span> index = numbers.findIndex(num => num > 10);<br>
+                        console.log(index); <span class="comment">// 2</span>
+                    </div>
+                    <p><strong>Giải thích:</strong> Trả về -1 nếu không tìm thấy. Giống find() nhưng trả về vị trí thay vì phần tử.</p>
+
+                    <h3>some()</h3>
+                    <p><strong>Mục đích:</strong> Kiểm tra ít nhất một phần tử trong mảng thỏa điều kiện.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> ages = [3, 10, 18, 20];<br>
+                        <br>
+                        <span class="keyword">const</span> hasAdult = ages.some(age => age >= 18);<br>
+                        console.log(hasAdult); <span class="comment">// true</span>
+                    </div>
+                    <p><strong>Giải thích:</strong> Có ít nhất một phần tử >= 18 nên trả về true.</p>
+
+                    <h3>every()</h3>
+                    <p><strong>Mục đích:</strong> Kiểm tra tất cả phần tử trong mảng thỏa điều kiện.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> result = ages.every(age => age >= 3);<br>
+                        console.log(result); <span class="comment">// true</span>
+                    </div>
+                    <p><strong>Giải thích:</strong> Tất cả tuổi >= 3 nên trả về true. Nếu chỉ cần 1 cái sai → false.</p>
+
+                    <h3>sort()</h3>
+                    <p><strong>Mục đích:</strong> Sắp xếp các phần tử trong mảng. Mặc định là theo chuỗi Unicode.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> products = [<br>
+                        &nbsp;&nbsp;{ id: 1, name: <span class="string">"iPhone"</span>, price: 27000000 },<br>
+                        &nbsp;&nbsp;{ id: 2, name: <span class="string">"Samsung"</span>, price: 20000000 },<br>
+                        &nbsp;&nbsp;{ id: 3, name: <span class="string">"Xiaomi"</span>, price: 15000000 },<br>
+                        ];<br>
+                        <br>
+                        <span class="comment">// Sắp xếp tăng dần</span><br>
+                        products.sort((a, b) => a.price - b.price);<br>
+                        console.log(products);<br>
+                        <br>
+                        <span class="comment">// sắp xếp giảm dần</span><br>
+                        products.sort((a, b) => b.price - a.price);<br>
+                        console.log(products);
+                    </div>
+                    <p><strong>Giải thích:</strong> Dễ gây lỗi với số nếu không truyền hàm so sánh (vì mặc định sắp xếp chuỗi). Sửa bằng sort((a, b) => a - b) cho tăng dần, b - a cho giảm dần.</p>
+
+                    <h3>reduce()</h3>
+                    <p><strong>Mục đích:</strong> Dùng để tính toán tích lũy (tổng, tích, nối chuỗi, gộp đối tượng,...)</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ: Tính tổng các số</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> nums = [1, 2, 3, 4];<br>
+                        <span class="keyword">let</span> sum = nums.reduce((acc, curr) => acc + curr, 0);<br>
+                        console.log(sum); <span class="comment">// 10</span>
+                    </div>
+                    <p><strong>Giải thích:</strong> acc: giá trị tích lũy (accumulator), curr: phần tử hiện tại, 0: giá trị khởi đầu của acc. Có thể dùng cho các bài toán như: tổng, trung bình, đếm, gộp...</p>
+                </section>
+
+                <!-- PHẦN BÀI 1: QUẢN LÝ DANH SÁCH SẢN PHẨM -->
+                <section id="exercise1" class="section">
+                    <h2><i class="fas fa-dumbbell"></i> BÀI 1: QUẢN LÝ DANH SÁCH SẢN PHẨM</h2>
+
+                    <p>Cho mảng sản phẩm:</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>products.js</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> products = [<br>
+                        &nbsp;&nbsp;{ id: 1, name: <span class="string">"iPhone 14"</span>, price: 27000000, category: <span class="string">"Smartphone"</span> },<br>
+                        &nbsp;&nbsp;{ id: 2, name: <span class="string">"Samsung S22"</span>, price: 23000000, category: <span class="string">"Smartphone"</span> },<br>
+                        &nbsp;&nbsp;{ id: 3, name: <span class="string">"MacBook Air"</span>, price: 32000000, category: <span class="string">"Laptop"</span> },<br>
+                        &nbsp;&nbsp;{ id: 4, name: <span class="string">"Dell XPS"</span>, price: 29000000, category: <span class="string">"Laptop"</span> },<br>
+                        &nbsp;&nbsp;{ id: 5, name: <span class="string">"Sony WH-1000XM5"</span>, price: 9000000, category: <span class="string">"Headphone"</span> },<br>
+                        ];
+                    </div>
+
+                    <h4>Yêu cầu:</h4>
+
+                    <p><strong>1. In ra tên tất cả sản phẩm kèm theo giá (sử dụng forEach)</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>forEach</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        products.forEach(p => {<br>
+                        &nbsp;&nbsp;console.log(<span class="string">`Tên: ${p.name} - Giá: ${p.price.toLocaleString()}đ`</span>);<br>
+                        });
+                    </div>
+
+                    <p><strong>2. Lọc ra các sản phẩm có giá từ 25 triệu trở lên (sử dụng filter)</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>filter</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> expensive = products.filter(p => p.price >= 25000000);<br>
+                        console.log(<span class="string">"Sản phẩm đắt tiền:"</span>, expensive);
+                    </div>
+
+                    <p><strong>3. Tạo mảng mới chỉ chứa tên sản phẩm (sử dụng map)</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>map</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> productNames = products.map(p => p.name);<br>
+                        console.log(<span class="string">"Tên sản phẩm:"</span>, productNames);
+                    </div>
+
+                    <p><strong>4. Tính tổng giá tất cả sản phẩm (sử dụng reduce)</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>reduce</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> total = products.reduce((sum, p) => sum + p.price, 0);<br>
+                        console.log(<span class="string">"Tổng tiền:"</span>, total.toLocaleString() + <span class="string">"đ"</span>);
+                    </div>
+
+                    <p><strong>5. Sắp xếp sản phẩm theo giá tăng dần (sử dụng sort)</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>sort</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> sortedAsc = [...products].sort((a, b) => a.price - b.price);<br>
+                        console.log(<span class="string">"Sắp xếp tăng:"</span>, sortedAsc);
+                    </div>
+                    <p>Ghi chú: Dùng [...] để không làm thay đổi mảng gốc.</p>
+
+                    <p><strong>6. Tìm sản phẩm đầu tiên thuộc loại "Laptop" (sử dụng find)</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>find</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> laptop = products.find(p => p.category === <span class="string">"Laptop"</span>);<br>
+                        console.log(<span class="string">"Laptop đầu tiên:"</span>, laptop);
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm Bài 1</h4>
+                        <button class="btn" onclick="testBai1()"><i class="fas fa-play"></i> Chạy bài tập</button>
+                        <div class="result" id="bai1Result">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="bai1ResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN BTVN -->
+                <section id="homework" class="section">
+                    <h2><i class="fas fa-home"></i> BTVN: QUẢN LÝ DANH SÁCH SẢN PHẨM</h2>
+
+                    <p>Cho danh sách các sản phẩm như sau:</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>products.js</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> products = [<br>
+                        &nbsp;&nbsp;{ id: <span class="string">"P01"</span>, name: <span class="string">"Laptop Dell"</span>, category: <span class="string">"Laptop"</span>, price: 21000000, quantity: 5 },<br>
+                        &nbsp;&nbsp;{ id: <span class="string">"P02"</span>, name: <span class="string">"iPhone 14"</span>, category: <span class="string">"Smartphone"</span>, price: 19000000, quantity: 10 },<br>
+                        &nbsp;&nbsp;{ id: <span class="string">"P03"</span>, name: <span class="string">"Tai nghe Sony"</span>, category: <span class="string">"Headphones"</span>, price: 2500000, quantity: 20 },<br>
+                        &nbsp;&nbsp;{ id: <span class="string">"P04"</span>, name: <span class="string">"Macbook Pro"</span>, category: <span class="string">"Laptop"</span>, price: 35000000, quantity: 3 },<br>
+                        &nbsp;&nbsp;{ id: <span class="string">"P05"</span>, name: <span class="string">"Samsung Galaxy"</span>, category: <span class="string">"Smartphone"</span>, price: 18000000, quantity: 8 },<br>
+                        ];
+                    </div>
+
+                    <h4>Yêu cầu xử lý:</h4>
+                    <ol>
+                        <li>In ra danh sách tất cả sản phẩm theo định dạng: "Tên sản phẩm - Danh mục - Giá - Số lượng".</li>
+                        <li>Lọc ra các sản phẩm có giá > 20 triệu.</li>
+                        <li>Tính tổng giá trị kho (giá × số lượng cho từng sản phẩm, rồi cộng lại).</li>
+                        <li>Sắp xếp danh sách sản phẩm theo giá tăng dần.</li>
+                        <li>Tạo mảng mới chỉ chứa tên và giá sản phẩm ([{name, price}]).</li>
+                        <li>Tìm sản phẩm có giá cao nhất.</li>
+                        <li>Đếm số lượng sản phẩm theo từng loại (Laptop, Smartphone...).</li>
+                    </ol>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm BTVN</h4>
+                        <button class="btn" onclick="testHomework()"><i class="fas fa-play"></i> Chạy BTVN</button>
+                        <div class="result" id="homeworkResult">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="homeworkResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <footer>
+            <p>Giáo trình JavaScript - Buổi 6: ES6 (ECMAScript 2015) &copy; GV: Nguyễn Đình Mạnh</p>
+        </footer>
+    </div>
+
+    <script>
+        // Xử lý điều hướng
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    navLinks.forEach(item => item.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+
+                    this.classList.add('active');
+
+                    const targetId = this.getAttribute('href').substring(1);
+                    document.getElementById(targetId).classList.add('active');
+                });
+            });
+        });
+
+        // Hàm copy code
+        function copyCode(button) {
+            const codeBlock = button.parentElement.parentElement;
+            const text = codeBlock.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Đã copy!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        // Test let và const
+        function testLetConst() {
+            const result = document.getElementById('letConstResult');
+            const output = document.getElementById('letConstResultContent');
+            
+            result.classList.add('active');
+            
+            let outputText = "=== THỬ NGHIỆM LET VÀ CONST ===\n\n";
+            
+            // Test let
+            outputText += "1. let x = 10;\n";
+            let x = 10;
+            outputText += `x = ${x}\n`;
+            x = 20;
+            outputText += `Sau khi gán x = 20 → x = ${x}\n\n`;
+            
+            // Test const với object
+            outputText += "2. const obj = { name: 'Tom' };\n";
+            const obj = { name: "Tom" };
+            outputText += `obj.name = ${obj.name}\n`;
+            obj.name = "Jerry";
+            outputText += `Sau khi obj.name = 'Jerry' → obj.name = ${obj.name}\n\n`;
+            
+            // Test const với array
+            outputText += "3. const arr = [1, 2];\n";
+            const arr = [1, 2];
+            outputText += `arr = [${arr}]\n`;
+            arr.push(3);
+            outputText += `Sau khi arr.push(3) → arr = [${arr}]\n`;
+            
+            output.textContent = outputText;
+        }
+
+        // Test Template String
+        function testTemplateString() {
+            const name = document.getElementById('tsName').value || 'Alice';
+            const age = document.getElementById('tsAge').value || 25;
+            
+            const result = document.getElementById('tsResult');
+            const output = document.getElementById('tsResultContent');
+            
+            result.classList.add('active');
+            
+            const message = `Xin chào, tôi là ${name}. Năm nay tôi ${age} tuổi.`;
+            const html = `
+<div class="demo-html">
+    <h3>Thông tin cá nhân</h3>
+    <p><strong>Tên:</strong> ${name}</p>
+    <p><strong>Tuổi:</strong> ${age}</p>
+    <p><strong>Năm sinh:</strong> ${2025 - age}</p>
+</div>`;
+            
+            output.innerHTML = `<strong>Chuỗi thường:</strong> ${message}\n\n<strong>HTML động:</strong>\n${html}`;
+        }
+
+        // Test Destructuring
+        function testDestructuring() {
+            const result = document.getElementById('destructuringResult');
+            const output = document.getElementById('destructuringResultContent');
+            
+            result.classList.add('active');
+            
+            let outputText = "=== THỬ NGHIỆM DESTRUCTURING ===\n\n";
+            
+            // Array destructuring
+            const arr = [10, 20, 30, 40];
+            const [first, second, ...rest] = arr;
+            outputText += "1. Array Destructuring:\n";
+            outputText += `Mảng gốc: [${arr}]\n`;
+            outputText += `[first, second, ...rest] = [${first}, ${second}, [${rest}]]\n\n`;
+            
+            // Object destructuring
+            const user = { name: "Nguyễn Văn A", age: 25, email: "a@example.com" };
+            const { name, age, email } = user;
+            outputText += "2. Object Destructuring:\n";
+            outputText += `Object gốc: ${JSON.stringify(user)}\n`;
+            outputText += `name = ${name}, age = ${age}, email = ${email}\n\n`;
+            
+            // Swap variables
+            let a = 5, b = 10;
+            outputText += `3. Swap variables:\nTrước: a = ${a}, b = ${b}\n`;
+            [a, b] = [b, a];
+            outputText += `Sau swap: a = ${a}, b = ${b}\n`;
+            
+            output.textContent = outputText;
+        }
+
+        // Test Rest Operator
+        function testRestOperator() {
+            const result = document.getElementById('restResult');
+            const output = document.getElementById('restResultContent');
+            
+            result.classList.add('active');
+            
+            let outputText = "=== THỬ NGHIỆM REST OPERATOR ===\n\n";
+            
+            // Rest với mảng
+            const arr = [1, 2, 3, 4, 5];
+            const [first, second, ...restArr] = arr;
+            outputText += "1. Rest với mảng (destructuring):\n";
+            outputText += `Mảng gốc: [${arr}]\n`;
+            outputText += `first = ${first}, second = ${second}\n`;
+            outputText += `rest = [${restArr}]\n\n`;
+            
+            // Spread để nối mảng
+            const arr1 = [1, 2];
+            const arr2 = [3, 4];
+            const combined = [...arr1, ...arr2];
+            outputText += "2. Spread để nối mảng:\n";
+            outputText += `arr1 = [${arr1}], arr2 = [${arr2}]\n`;
+            outputText += `combined = [...arr1, ...arr2] = [${combined}]\n\n`;
+            
+            // Spread với object
+            const obj1 = { a: 1, b: 2 };
+            const obj2 = { c: 3, d: 4 };
+            const merged = { ...obj1, ...obj2 };
+            outputText += "3. Spread để gộp object:\n";
+            outputText += `obj1 = ${JSON.stringify(obj1)}\n`;
+            outputText += `obj2 = ${JSON.stringify(obj2)}\n`;
+            outputText += `merged = {...obj1, ...obj2} = ${JSON.stringify(merged)}\n`;
+            
+            output.textContent = outputText;
+        }
+
+        // Test Bài 1
+        function testBai1() {
+            const products = [
+                { id: 1, name: "iPhone 14", price: 27000000, category: "Smartphone" },
+                { id: 2, name: "Samsung S22", price: 23000000, category: "Smartphone" },
+                { id: 3, name: "MacBook Air", price: 32000000, category: "Laptop" },
+                { id: 4, name: "Dell XPS", price: 29000000, category: "Laptop" },
+                { id: 5, name: "Sony WH-1000XM5", price: 9000000, category: "Headphone" },
+            ];
+
+            const result = document.getElementById('bai1Result');
+            const output = document.getElementById('bai1ResultContent');
+            
+            result.classList.add('active');
+            
+            let outputText = "=== KẾT QUẢ BÀI 1 ===\n\n";
+            
+            // 1. forEach
+            outputText += "1. Danh sách sản phẩm (forEach):\n";
+            products.forEach(p => {
+                outputText += `   Tên: ${p.name} - Giá: ${p.price.toLocaleString()}đ\n`;
+            });
+            outputText += "\n";
+            
+            // 2. filter
+            const expensive = products.filter(p => p.price >= 25000000);
+            outputText += "2. Sản phẩm giá >= 25 triệu (filter):\n";
+            expensive.forEach(p => {
+                outputText += `   ${p.name}: ${p.price.toLocaleString()}đ\n`;
+            });
+            outputText += "\n";
+            
+            // 3. map
+            const productNames = products.map(p => p.name);
+            outputText += "3. Tên sản phẩm (map):\n";
+            outputText += `   [${productNames.join(', ')}]\n\n`;
+            
+            // 4. reduce
+            const total = products.reduce((sum, p) => sum + p.price, 0);
+            outputText += `4. Tổng giá tất cả sản phẩm (reduce): ${total.toLocaleString()}đ\n\n`;
+            
+            // 5. sort
+            const sortedAsc = [...products].sort((a, b) => a.price - b.price);
+            outputText += "5. Sắp xếp theo giá tăng dần (sort):\n";
+            sortedAsc.forEach(p => {
+                outputText += `   ${p.name}: ${p.price.toLocaleString()}đ\n`;
+            });
+            outputText += "\n";
+            
+            // 6. find
+            const laptop = products.find(p => p.category === "Laptop");
+            outputText += `6. Laptop đầu tiên (find): ${laptop.name} - ${laptop.price.toLocaleString()}đ\n`;
+            
+            output.textContent = outputText;
+        }
+
+        // Test BTVN
+        function testHomework() {
+            const products = [
+                { id: "P01", name: "Laptop Dell", category: "Laptop", price: 21000000, quantity: 5 },
+                { id: "P02", name: "iPhone 14", category: "Smartphone", price: 19000000, quantity: 10 },
+                { id: "P03", name: "Tai nghe Sony", category: "Headphones", price: 2500000, quantity: 20 },
+                { id: "P04", name: "Macbook Pro", category: "Laptop", price: 35000000, quantity: 3 },
+                { id: "P05", name: "Samsung Galaxy", category: "Smartphone", price: 18000000, quantity: 8 },
+            ];
+
+            const result = document.getElementById('homeworkResult');
+            const output = document.getElementById('homeworkResultContent');
+            
+            result.classList.add('active');
+            
+            let outputText = "=== KẾT QUẢ BTVN ===\n\n";
+            
+            // 1. In danh sách
+            outputText += "1. Danh sách sản phẩm:\n";
+            products.forEach(p => {
+                outputText += `   ${p.name} - ${p.category} - ${p.price.toLocaleString()}đ - SL: ${p.quantity}\n`;
+            });
+            outputText += "\n";
+            
+            // 2. Lọc giá > 20tr
+            const expensive = products.filter(p => p.price > 20000000);
+            outputText += "2. Sản phẩm giá > 20 triệu:\n";
+            expensive.forEach(p => {
+                outputText += `   ${p.name}: ${p.price.toLocaleString()}đ\n`;
+            });
+            outputText += "\n";
+            
+            // 3. Tổng giá trị kho
+            const totalValue = products.reduce((sum, p) => sum + (p.price * p.quantity), 0);
+            outputText += `3. Tổng giá trị kho: ${totalValue.toLocaleString()}đ\n\n`;
+            
+            // 4. Sắp xếp theo giá tăng dần
+            const sortedByPrice = [...products].sort((a, b) => a.price - b.price);
+            outputText += "4. Sắp xếp theo giá tăng dần:\n";
+            sortedByPrice.forEach(p => {
+                outputText += `   ${p.name}: ${p.price.toLocaleString()}đ\n`;
+            });
+            outputText += "\n";
+            
+            // 5. Mảng mới chỉ chứa tên và giá
+            const namePrice = products.map(p => ({ name: p.name, price: p.price }));
+            outputText += "5. Mảng tên và giá:\n";
+            namePrice.forEach(item => {
+                outputText += `   { name: "${item.name}", price: ${item.price.toLocaleString()}đ }\n`;
+            });
+            outputText += "\n";
+            
+            // 6. Sản phẩm giá cao nhất
+            const maxPrice = Math.max(...products.map(p => p.price));
+            const mostExpensive = products.find(p => p.price === maxPrice);
+            outputText += `6. Sản phẩm giá cao nhất: ${mostExpensive.name} - ${mostExpensive.price.toLocaleString()}đ\n\n`;
+            
+            // 7. Đếm số lượng theo loại
+            const categoryCount = {};
+            products.forEach(p => {
+                categoryCount[p.category] = (categoryCount[p.category] || 0) + 1;
+            });
+            outputText += "7. Số lượng sản phẩm theo loại:\n";
+            for (const [category, count] of Object.entries(categoryCount)) {
+                outputText += `   ${category}: ${count} sản phẩm\n`;
+            }
+            
+            output.textContent = outputText;
+        }
+    </script>
+</body>
+
+</html>

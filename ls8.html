@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HÀM (FUNCTION)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --info: #17a2b8;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+
+        body {
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 80vh;
+        }
+
+        .sidebar {
+            height: 85vh;
+            overflow: scroll;
+            background: var(--light);
+            padding: 20px;
+            border-right: 3px solid var(--secondary);
+        }
+
+        .sidebar ul {
+            padding: 0;
+        }
+
+        .nav-list {
+            list-style: none;
+            position: sticky;
+            top: 20px;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--secondary);
+            color: white;
+            transform: translateX(5px);
+            border-color: var(--secondary);
+        }
+
+        .nav-link1 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .main-content {
+            padding: 30px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: var(--accent);
+            margin: 25px 0 15px;
+            padding-left: 15px;
+            border-left: 4px solid var(--accent);
+        }
+
+        h4 {
+            color: var(--info);
+            margin: 20px 0 10px;
+        }
+
+        h5 {
+            color: var(--dark);
+            margin: 15px 0 8px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul,
+        ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            line-height: 1.4;
+            border: 2px solid #444;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn {
+            background: #555;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .keyword {
+            color: #569cd6;
+        }
+
+        .string {
+            color: #ce9178;
+        }
+
+        .comment {
+            color: #6a9955;
+        }
+
+        .number {
+            color: #b5cea8;
+        }
+
+        .class-name {
+            color: #4ec9b0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: var(--secondary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid var(--info);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .interactive-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #e9ecef;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 5px;
+        }
+
+        .btn-run {
+            background: var(--success);
+        }
+
+        .btn-warning {
+            background: var(--warning);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background: white;
+            border-left: 4px solid var(--warning);
+            display: none;
+        }
+
+        .result.active {
+            display: block;
+        }
+
+        .result-content {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border: 1px solid #e9ecef;
+            white-space: pre-wrap;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+        }
+ @media (max-width: 1400px) {
+      .sidebar {
+            height: 78vh;
+      }
+ }
+        @media (max-width: 768px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-right: none;
+                border-bottom: 3px solid var(--secondary);
+            }
+        }
+
+        .visual-array {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .array-item {
+            width: 60px;
+            height: 60px;
+            background: var(--secondary);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 5px;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .array-index {
+            position: absolute;
+            top: -25px;
+            font-size: 12px;
+            color: var(--dark);
+        }
+
+        .array-value {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .algorithm-steps {
+            background: #f0f7ff;
+            border-left: 4px solid #4dabf7;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .algorithm-steps ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .algorithm-steps li {
+            margin-bottom: 5px;
+        }
+
+        .method-demo {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+
+
+        .demo .wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .demo .array {
+            display: flex;
+        }
+
+        .demo .item {
+            width: 100px;
+            padding: 15px;
+            margin: 5px;
+            background: white;
+            color: black;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: 0.4s;
+        }
+
+        .demo .active {
+            background: #ffcc00;
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .demo .arrow {
+            position: absolute;
+            top: -35px;
+            font-size: 28px;
+            transition: 0.4s;
+        }
+
+        .demo .index {
+            margin-top: 30px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-function"></i> BÀI 7: HÀM (FUNCTION) </h1>
+        </header>
+
+        <div class="content-wrapper">
+            <nav class="sidebar">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#intro" class="nav-link active"><i class="fas fa-home"></i>  Hàm là gì?</a></li>
+                    <li class="nav-item"><a href="#function-call" class="nav-link"><i class="fas fa-phone"></i>  Gọi hàm</a></li>
+                    <li class="nav-item"><a href="#return" class="nav-link"><i class="fas fa-undo"></i>  Return</a></li>
+                    <li class="nav-item"><a href="#void-function" class="nav-link"><i class="fas fa-ban"></i>  Hàm không trả giá trị</a></li>
+                    <li class="nav-item"><a href="#arrow-function" class="nav-link"><i class="fas fa-arrow-right"></i> Arrow Function</a></li>
+                    <li class="nav-item"><a href="#function-expression" class="nav-link"><i class="fas fa-code"></i>  Function Expression</a></li>
+                    <li class="nav-item"><a href="#default-params" class="nav-link"><i class="fas fa-sliders-h"></i> Tham số mặc định</a></li>
+                    <li class="nav-item"><a href="#recursion" class="nav-link"><i class="fas fa-sync-alt"></i>Đệ quy</a></li>
+                    <li class="nav-item"><a href="#callback" class="nav-link"><i class="fas fa-redo"></i> Callback</a></li>
+                    <li class="nav-item"><a href="#pass-by-value-reference" class="nav-link"><i class="fas fa-exchange-alt"></i>  Tham trị & Tham chiếu</a></li>
+                    <li class="nav-item"><a href="#rest-parameter" class="nav-link"><i class="fas fa-ellipsis-h"></i>  Rest Parameter</a></li>
+                    <li class="nav-item"><a href="#spread-operator" class="nav-link"><i class="fas fa-expand"></i>  Spread Operator</a></li>
+                    <li class="nav-item"><a href="#iife" class="nav-link"><i class="fas fa-bolt"></i>  IIFE</a></li>
+                    <li class="nav-item"><a href="#hoisting" class="nav-link"><i class="fas fa-arrow-up"></i>  Hoisting</a></li>
+                    <li class="nav-item"><a href="#nested-function" class="nav-link"><i class="fas fa-level-down-alt"></i>  Hàm trong hàm</a></li>
+                    <li class="nav-item"><a href="#closure" class="nav-link"><i class="fas fa-lock"></i>  Closure</a></li>
+                    <li class="nav-item"><a href="#exercises" class="nav-link"><i class="fas fa-dumbbell"></i> Bài tập</a></li>
+                </ul>
+            </nav>
+
+            <main class="main-content">
+                <!-- PHẦN I: HÀM LÀ GÌ? -->
+                <section id="intro" class="section active">
+                    <h2><i class="fas fa-home"></i> I. HÀM (FUNCTION) LÀ GÌ?</h2>
+
+                    <h3>Định nghĩa:</h3>
+                    <p>Hàm là một khối mã (code) dùng để thực hiện một công việc cụ thể, có thể được định nghĩa một lần và tái sử dụng nhiều lần ở bất cứ đâu trong chương trình.</p>
+
+                    <h4>Mục đích sử dụng:</h4>
+                    <ul>
+                        <li>Tránh lặp lại code (DRY: Don't Repeat Yourself)</li>
+                        <li>Tăng tính tổ chức, dễ đọc, dễ quản lý</li>
+                        <li>Có thể chia chương trình lớn thành các phần nhỏ (module hóa)</li>
+                        <li>Cho phép tái sử dụng logic nhiều nơi</li>
+                    </ul>
+
+                    <h4>Cú pháp tổng quát:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> tenHam(thamSo1, thamSo2, ...) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Thân hàm: chứa các lệnh sẽ thực thi</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> giaTriTraVe;<br>
+                        }
+                    </div>
+
+                    <h4>Giải thích cú pháp từng phần:</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Thành phần</th>
+                                    <th>Giải thích</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>function</strong></td>
+                                    <td>Từ khóa để khai báo một hàm</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>tenHam</strong></td>
+                                    <td>Tên định danh (tùy ý) để gọi lại hàm</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>(thamSo1, thamSo2, ...)</strong></td>
+                                    <td>Danh sách các tham số truyền vào (parameters)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{...}</strong></td>
+                                    <td>Thân hàm – nơi chứa các lệnh được thực hiện khi gọi hàm</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>return</strong></td>
+                                    <td>Từ khóa để trả giá trị ra khỏi hàm</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>Ví dụ minh hoạ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ hàm tính tổng</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> <span class="class-name">tinhTong</span>(a, b) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// a và b là các tham số nhận giá trị khi gọi hàm</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">let</span> tong = a + b; <span class="comment">// Thực hiện tính tổng</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> tong; <span class="comment">// Trả lại kết quả tổng</span><br>
+                        }<br>
+                        <br>
+                        <span class="keyword">let</span> kq = tinhTong(5, 10); <span class="comment">// Gọi hàm với a=5, b=10 → nhận kết quả là 15</span><br>
+                        console.log(kq); <span class="comment">// In ra: 15</span>
+                    </div>
+
+                    <div class="info-box">
+                        <p><i class="fas fa-info-circle"></i> <strong>Kết quả:</strong> 15</p>
+                    </div>
+                </section>
+
+                <!-- PHẦN II: GỌI HÀM -->
+                <section id="function-call" class="section">
+                    <h2><i class="fas fa-phone"></i> II. GỌI HÀM (FUNCTION CALL)</h2>
+
+                    <h3>Định nghĩa:</h3>
+                    <p>Gọi hàm là hành động kích hoạt hàm để nó thực thi phần thân bên trong và (nếu có) trả lại kết quả.</p>
+
+                    <h4>Mục đích sử dụng:</h4>
+                    <ul>
+                        <li>Thực hiện logic đã viết trong hàm</li>
+                        <li>Có thể gọi bao nhiêu lần cũng được</li>
+                        <li>Truyền đối số khác nhau → nhận kết quả khác nhau</li>
+                    </ul>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        tenHam(doiSo1, doiSo2, ...);
+                    </div>
+
+                    <h4>Giải thích:</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Thành phần</th>
+                                    <th>Ý nghĩa</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>tenHam</strong></td>
+                                    <td>Tên hàm đã khai báo trước đó</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>(doiSo1, doiSo2, ...)</strong></td>
+                                    <td>Đối số truyền vào (arguments) để xử lý</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>Ví dụ có giải thích:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> <span class="class-name">chao</span>(ten) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Chào bạn"</span>, ten);<br>
+                        }<br>
+                        <br>
+                        chao(<span class="string">"Lan"</span>); <span class="comment">// Gọi hàm và truyền "Lan" vào → In: Chào bạn Lan</span><br>
+                        chao(<span class="string">"Minh"</span>); <span class="comment">// In: Chào bạn Minh</span>
+                    </div>
+                </section>
+
+                <!-- PHẦN III: RETURN -->
+                <section id="return" class="section">
+                    <h2><i class="fas fa-undo"></i> III. return – GIÁ TRỊ TRẢ VỀ</h2>
+
+                    <h3>Định nghĩa:</h3>
+                    <p>return là từ khóa dùng để trả giá trị từ hàm ra ngoài. Khi gặp return, hàm sẽ kết thúc ngay lập tức.</p>
+
+                    <h4>Mục đích:</h4>
+                    <ul>
+                        <li>Trả kết quả xử lý về cho nơi gọi hàm</li>
+                        <li>Có thể lưu trữ kết quả để tiếp tục xử lý</li>
+                    </ul>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">return</span> bieuThucTraVe;
+                    </div>
+
+                    <h4>Giải thích:</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Thành phần</th>
+                                    <th>Ý nghĩa</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>return</strong></td>
+                                    <td>Kết thúc hàm và trả lại kết quả</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>bieuThucTraVe</strong></td>
+                                    <td>Giá trị cụ thể (số, chuỗi, biến, phép tính, ...)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> <span class="class-name">binhPhuong</span>(x) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> x * x; <span class="comment">// Trả về bình phương</span><br>
+                        }<br>
+                        <span class="keyword">let</span> kq = binhPhuong(7); <span class="comment">// Nhận kết quả 49</span><br>
+                        console.log(kq); <span class="comment">// In ra: 49</span>
+                    </div>
+                </section>
+
+                <!-- PHẦN IV: HÀM KHÔNG TRẢ GIÁ TRỊ -->
+                <section id="void-function" class="section">
+                    <h2><i class="fas fa-ban"></i> IV. HÀM KHÔNG TRẢ GIÁ TRỊ (VOID FUNCTION)</h2>
+
+                    <h3>Định nghĩa:</h3>
+                    <p>Là hàm không có từ khóa return, chỉ thực hiện một hành động nào đó (in ra, thay đổi dữ liệu, …)</p>
+
+                    <h4>Mục đích:</h4>
+                    <ul>
+                        <li>In ra màn hình</li>
+                        <li>Cập nhật dữ liệu</li>
+                        <li>Gửi thông báo,...</li>
+                    </ul>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> tenHam() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Thực hiện công việc nhưng không return</span><br>
+                        }
+                    </div>
+
+                    <h4>Giải thích:</h4>
+                    <p>Nếu không có return, hàm sẽ trả về undefined mặc định</p>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> <span class="class-name">thongBao</span>() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Hệ thống đang khởi động..."</span>);<br>
+                        }<br>
+                        <br>
+                        <span class="keyword">let</span> x = thongBao(); <span class="comment">// In ra nhưng x là undefined</span><br>
+                        console.log(x); <span class="comment">// undefined</span>
+                    </div>
+                </section>
+
+                <!-- PHẦN V: ARROW FUNCTION -->
+                <section id="arrow-function" class="section">
+                    <h2><i class="fas fa-arrow-right"></i> V. Arrow Function (Hàm mũi tên)</h2>
+
+                    <h3>Định nghĩa:</h3>
+                    <p>Arrow function là cách viết ngắn gọn của hàm trong JavaScript (ES6+), thường dùng trong các tình huống đơn giản, đặc biệt khi xử lý callback hoặc function ngắn.</p>
+
+                    <h4>Mục đích:</h4>
+                    <ul>
+                        <li>Viết hàm gọn hơn</li>
+                        <li>Tự động bind this theo ngữ cảnh</li>
+                        <li>Thuận tiện khi xử lý các logic nhỏ, dùng làm callback</li>
+                    </ul>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> tenHam = (thamSo1, thamSo2, ...) => {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Thân hàm</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> giaTri;<br>
+                        };<br>
+                        <br>
+                        <span class="comment">// Nếu chỉ có 1 dòng return, có thể viết ngắn:</span><br>
+                        <span class="keyword">const</span> tenHam = (a, b) => a + b;
+                    </div>
+
+                    <h4>Giải thích:</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Thành phần</th>
+                                    <th>Ý nghĩa</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>const tenHam</strong></td>
+                                    <td>Khai báo hàm với từ khóa const</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>(a, b)</strong></td>
+                                    <td>Danh sách tham số</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>=></strong></td>
+                                    <td>Biểu thị là hàm mũi tên</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{...}</strong></td>
+                                    <td>Thân hàm (nếu nhiều dòng)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>return</strong></td>
+                                    <td>Có thể viết tường minh hoặc ẩn nếu một dòng</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> binhPhuong = x => x * x;<br>
+                        console.log(binhPhuong(6)); <span class="comment">// In ra 36</span><br>
+                        <br>
+                        <span class="keyword">const</span> chao = (ten) => {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">`Xin chào ${ten}!`</span>);<br>
+                        };<br>
+                        chao(<span class="string">"Lan"</span>); <span class="comment">// In: Xin chào Lan!</span>
+                    </div>
+                </section>
+
+                <!-- PHẦN VI: FUNCTION EXPRESSION -->
+                <section id="function-expression" class="section">
+                    <h2><i class="fas fa-code"></i> VI. Function Expression (Hàm biểu thức)</h2>
+
+                    <h3>Định nghĩa:</h3>
+                    <p>Function expression là hàm được gán cho một biến (tức là khai báo gián tiếp), không cần tên hàm.</p>
+
+                    <h4>Mục đích:</h4>
+                    <ul>
+                        <li>Dùng như biến</li>
+                        <li>Truyền vào đối số, hoặc callback</li>
+                        <li>Có thể định nghĩa trong phạm vi nhỏ hơn (scope)</li>
+                    </ul>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> tenBien = <span class="keyword">function</span>(thamSo) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Thân hàm</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> giaTri;<br>
+                        };
+                    </div>
+
+                    <h4>Giải thích:</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Thành phần</th>
+                                    <th>Ý nghĩa</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>function</strong></td>
+                                    <td>Từ khóa</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>tenBien</strong></td>
+                                    <td>Tên biến chứa hàm</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>(thamSo)</strong></td>
+                                    <td>Tham số truyền vào</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>{}</strong></td>
+                                    <td>Thân hàm</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> tinhHieu = <span class="keyword">function</span>(a, b) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> a - b;<br>
+                        };<br>
+                        <br>
+                        console.log(tinhHieu(10, 3)); <span class="comment">// In: 7</span>
+                    </div>
+                </section>
+
+                <!-- PHẦN VII: THAM SỐ MẶC ĐỊNH -->
+                <section id="default-params" class="section">
+                    <h2><i class="fas fa-sliders-h"></i> VII. Tham số mặc định (Default Parameters)</h2>
+
+                    <h3>Định nghĩa:</h3>
+                    <p>Cho phép gán giá trị mặc định cho tham số nếu không truyền đối số khi gọi hàm.</p>
+
+                    <h4>Mục đích:</h4>
+                    <ul>
+                        <li>Tránh lỗi khi thiếu đối số</li>
+                        <li>Viết code linh hoạt hơn</li>
+                    </ul>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> tenHam(thamSo = giaTriMacDinh) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//...</span><br>
+                        }
+                    </div>
+
+                    <h4>Giải thích:</h4>
+                    <p>Nếu đối số bị bỏ qua hoặc undefined, tham số sẽ nhận giá trị mặc định.</p>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> <span class="class-name">sayHello</span>(ten = <span class="string">"bạn"</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Xin chào"</span>, ten);<br>
+                        }<br>
+                        <br>
+                        sayHello(<span class="string">"Minh"</span>); <span class="comment">// In: Xin chào Minh</span><br>
+                        sayHello();       <span class="comment">// In: Xin chào bạn</span>
+                    </div>
+                </section>
+
+                <!-- PHẦN VIII: ĐỆ QUY -->
+                <section id="recursion" class="section">
+                    <h2><i class="fas fa-sync-alt"></i> VIII. Đệ quy (Recursion)</h2>
+
+                    <h3>Định nghĩa:</h3>
+                    <p>Là hàm gọi lại chính nó bên trong để giải quyết một bài toán lặp lại có cấu trúc lồng nhau.</p>
+
+                    <h4>Mục đích:</h4>
+                    <p>Thay cho vòng lặp khi xử lý bài toán phân tách nhỏ (ví dụ: giai thừa, dãy Fibonacci, cấu trúc cây)</p>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> tenHam(dieuKienDung) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (dieuKienDung) <span class="keyword">return</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Gọi lại chính nó</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;tenHam(giaTriMoi);<br>
+                        }
+                    </div>
+
+                    <h4>Giải thích:</h4>
+                    <p>Luôn cần điều kiện dừng để tránh lặp vô hạn</p>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> <span class="class-name">giaiThua</span>(n) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (n === 0) <span class="keyword">return</span> 1;      <span class="comment">// Điều kiện dừng</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> n * giaiThua(n - 1); <span class="comment">// Gọi đệ quy</span><br>
+                        }<br>
+                        <br>
+                        console.log(giaiThua(5)); <span class="comment">// In: 120</span>
+                    </div>
+                </section>
+
+                <!-- PHẦN IX: CALLBACK -->
+                <section id="callback" class="section">
+                    <h2><i class="fas fa-redo"></i> IX. Callback Function</h2>
+
+                    <h3>Định nghĩa:</h3>
+                    <p>Callback là hàm được truyền như một đối số vào một hàm khác, và được gọi lại (callback) bên trong hàm đó.</p>
+
+                    <h4>Mục đích:</h4>
+                    <ul>
+                        <li>Cho phép xử lý linh hoạt (đặc biệt trong bất đồng bộ)</li>
+                        <li>Thường dùng trong forEach, map, filter, xử lý AJAX, API...</li>
+                    </ul>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> xuLy(callback) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;callback(); <span class="comment">// Gọi lại hàm truyền vào</span><br>
+                        }
+                    </div>
+
+                    <h4>Giải thích:</h4>
+                    <p>callback chính là một hàm được truyền như đối số<br>Có thể gọi lại bất cứ lúc nào</p>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> <span class="class-name">xinChao</span>(callback) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Xin chào!"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;callback();<br>
+                        }<br>
+                        <br>
+                        <span class="keyword">function</span> <span class="class-name">loiChaoPhu</span>() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Chúc bạn một ngày vui vẻ!"</span>);<br>
+                        }<br>
+                        <br>
+                        xinChao(loiChaoPhu);<br>
+                        <span class="comment">// In:</span><br>
+                        <span class="comment">// Xin chào!</span><br>
+                        <span class="comment">// Chúc bạn một ngày vui vẻ!</span>
+                    </div>
+                </section>
+
+                <!-- PHẦN X: THAM TRỊ VÀ THAM CHIẾU -->
+                <section id="pass-by-value-reference" class="section">
+                    <h2><i class="fas fa-exchange-alt"></i> X. Tham trị (Pass by Value) & Tham chiếu (Pass by Reference)</h2>
+
+                    <h3>Tham trị (Pass by Value)</h3>
+                    <h4>Định nghĩa:</h4>
+                    <p>Với các kiểu dữ liệu nguyên thuỷ (number, string, boolean, undefined, null, symbol, bigint), khi truyền vào hàm, giá trị được sao chép ra bản sao riêng. Việc thay đổi giá trị trong hàm không ảnh hưởng tới biến ban đầu.</p>
+
+                    <h4>Cú pháp & ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ tham trị</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> <span class="class-name">thayDoi</span>(a) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;a = 100;<br>
+                        }<br>
+                        <br>
+                        <span class="keyword">let</span> x = 5;<br>
+                        thayDoi(x);<br>
+                        console.log(x); <span class="comment">// 5</span>
+                    </div>
+
+                    <h4>Giải thích:</h4>
+                    <p>x = 5 là giá trị nguyên thủy (number)<br>thayDoi(x) truyền giá trị 5 vào tham số a, a là bản sao nên đổi a = 100 không ảnh hưởng x</p>
+
+                    <h3>Tham chiếu (Pass by Reference)</h3>
+                    <h4>Định nghĩa:</h4>
+                    <p>Với object, array, function, giá trị được truyền vào là một tham chiếu tới vùng nhớ. Khi thay đổi nội dung bên trong, thì giá trị gốc cũng bị ảnh hưởng.</p>
+
+                    <h4>Cú pháp & ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ tham chiếu</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> <span class="class-name">capNhat</span>(obj) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;obj.ten = <span class="string">"Lan"</span>;<br>
+                        }<br>
+                        <br>
+                        <span class="keyword">let</span> user = { ten: <span class="string">"Mai"</span> };<br>
+                        capNhat(user);<br>
+                        console.log(user.ten); <span class="comment">// "Lan"</span>
+                    </div>
+
+                    <h4>Giải thích:</h4>
+                    <p>user là một object<br>obj trong hàm capNhat trỏ cùng vùng nhớ với user, nên khi gán obj.ten = "Lan" thì user.ten cũng đổi theo.</p>
+                </section>
+
+                <!-- PHẦN XI: REST PARAMETER -->
+                <section id="rest-parameter" class="section">
+                    <h2><i class="fas fa-ellipsis-h"></i> XI. Rest Parameter (...args)</h2>
+
+                    <h3>Định nghĩa:</h3>
+                    <p>Giúp gom nhiều đối số truyền vào hàm thành một mảng.</p>
+
+                    <h4>Mục đích:</h4>
+                    <ul>
+                        <li>Viết hàm nhận số lượng tham số không cố định.</li>
+                        <li>Linh hoạt xử lý dữ liệu động.</li>
+                    </ul>
+
+                    <h4>Cú pháp & ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> <span class="class-name">tinhTong</span>(...args) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> args.reduce((tong, so) => tong + so, 0);<br>
+                        }<br>
+                        <br>
+                        console.log(tinhTong(1, 2, 3, 4)); <span class="comment">// 10</span>
+                    </div>
+
+                    <h4>Giải thích cú pháp:</h4>
+                    <p>...args gom các đối số thành mảng [1, 2, 3, 4]<br>Dùng .reduce() để cộng dồn</p>
+                </section>
+
+                <!-- PHẦN XII: SPREAD OPERATOR -->
+                <section id="spread-operator" class="section">
+                    <h2><i class="fas fa-expand"></i> XII. Spread Operator (...)</h2>
+
+                    <h3>Định nghĩa:</h3>
+                    <p>Dùng để trải mảng (hoặc object) thành các phần tử riêng lẻ.</p>
+
+                    <h4>Mục đích:</h4>
+                    <ul>
+                        <li>Truyền phần tử mảng vào hàm</li>
+                        <li>Sao chép, gộp mảng/object dễ dàng</li>
+                    </ul>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> <span class="class-name">cong</span>(a, b, c) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> a + b + c;<br>
+                        }<br>
+                        <br>
+                        <span class="keyword">let</span> nums = [1, 2, 3];<br>
+                        console.log(cong(...nums)); <span class="comment">// 6</span>
+                    </div>
+
+                    <h4>Giải thích:</h4>
+                    <p>...nums tương đương cong(1, 2, 3)</p>
+                </section>
+
+                <!-- PHẦN XIII: IIFE -->
+                <section id="iife" class="section">
+                    <h2><i class="fas fa-bolt"></i> XIII. IIFE – Immediately Invoked Function Expression</h2>
+
+                    <h3>Định nghĩa:</h3>
+                    <p>Hàm được định nghĩa và gọi ngay lập tức.</p>
+
+                    <h4>Mục đích:</h4>
+                    <ul>
+                        <li>Tạo phạm vi riêng (scope riêng), tránh xung đột biến</li>
+                        <li>Thường dùng trong module hoặc script tự chạy</li>
+                    </ul>
+
+                    <h4>Cú pháp & ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        (<span class="keyword">function</span> () {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Chạy ngay lập tức"</span>);<br>
+                        })();
+                    </div>
+
+                    <h4>Giải thích:</h4>
+                    <p>() đầu tiên bao hàm định nghĩa<br>() sau gọi hàm đó ngay</p>
+                </section>
+
+                <!-- PHẦN XIV: HOISTING -->
+                <section id="hoisting" class="section">
+                    <h2><i class="fas fa-arrow-up"></i> XIV. Hoisting trong hàm</h2>
+
+                    <h3>Định nghĩa:</h3>
+                    <p>Hoisting là cơ chế đưa khai báo hàm/biến lên đầu phạm vi (scope) trước khi code được thực thi.</p>
+
+                    <h4>So sánh các loại hàm:</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Loại</th>
+                                    <th>Có hoisting?</th>
+                                    <th>Gọi trước khi khai báo?</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>function declaration</strong></td>
+                                    <td>Có</td>
+                                    <td>Được</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>function expression</strong></td>
+                                    <td>Không</td>
+                                    <td>Lỗi</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>arrow function</strong></td>
+                                    <td>Không</td>
+                                    <td>Lỗi</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        sayHello(); <span class="comment">//  OK</span><br>
+                        <br>
+                        <span class="keyword">function</span> <span class="class-name">sayHello</span>() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Hello"</span>);<br>
+                        }<br>
+                        <br>
+                        <span class="comment">// sayHi(); Lỗi</span><br>
+                        <span class="keyword">const</span> sayHi = <span class="keyword">function</span> () {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Hi"</span>);<br>
+                        };
+                    </div>
+
+                    <h4>Giải thích:</h4>
+                    <p>sayHello được hoisting nên gọi trước được<br>sayHi là gán hàm cho biến, biến chỉ được hoisting phần khai báo (undefined), nên lỗi khi gọi trước</p>
+                </section>
+
+                <!-- PHẦN XV: HÀM TRONG HÀM -->
+                <section id="nested-function" class="section">
+                    <h2><i class="fas fa-level-down-alt"></i> XV. Hàm trong hàm (Nested Function)</h2>
+
+                    <h3>Định nghĩa:</h3>
+                    <p>Một hàm có thể được khai báo bên trong một hàm khác.</p>
+
+                    <h4>Mục đích:</h4>
+                    <ul>
+                        <li>Tổ chức code rõ ràng</li>
+                        <li>Tạo phạm vi riêng cho hàm con</li>
+                    </ul>
+
+                    <h4>Cú pháp & ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> <span class="class-name">outer</span>() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">function</span> <span class="class-name">inner</span>() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Bên trong"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;inner();<br>
+                        }<br>
+                        <br>
+                        outer(); <span class="comment">// "Bên trong"</span>
+                    </div>
+
+                    <h4>Giải thích:</h4>
+                    <p>inner() chỉ tồn tại trong outer(), không gọi được từ ngoài</p>
+                </section>
+
+                <!-- PHẦN XVI: CLOSURE -->
+                <section id="closure" class="section">
+                    <h2><i class="fas fa-lock"></i> XVI. Closure – Ghi nhớ phạm vi cũ</h2>
+
+                    <h3>Định nghĩa:</h3>
+                    <p>Closure là hàm con ghi nhớ biến cục bộ của hàm cha dù hàm cha đã kết thúc.</p>
+
+                    <h4>Mục đích:</h4>
+                    <ul>
+                        <li>Lưu trạng thái</li>
+                        <li>Bảo vệ biến nội bộ</li>
+                        <li>Dùng trong tạo hàm động</li>
+                    </ul>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> <span class="class-name">taoBoDem</span>() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">let</span> dem = 0;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <span class="keyword">function</span>() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dem++;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(dem);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                        }<br>
+                        <br>
+                        <span class="keyword">const</span> dem1 = taoBoDem();<br>
+                        dem1(); <span class="comment">// 1</span><br>
+                        dem1(); <span class="comment">// 2</span>
+                    </div>
+
+                    <h4>Giải thích:</h4>
+                    <p>dem không bị mất sau khi taoBoDem() kết thúc<br>Closure giữ lại môi trường dem => đây là cơ chế Closure</p>
+                </section>
+
+                <!-- PHẦN BÀI TẬP -->
+                <section id="exercises" class="section">
+                    <h2><i class="fas fa-dumbbell"></i> BÀI TẬP</h2>
+
+                    <h3>Bài 1: Tính tổng số chia hết cho 3 hoặc 5 nhưng không chia hết cho 15</h3>
+                    <p>Viết hàm tongDacBiet(n) tính tổng các số từ 1 đến n thỏa:</p>
+                    <ul>
+                        <li>Chia hết cho 3 hoặc 5</li>
+                        <li>Nhưng không chia hết cho 15</li>
+                    </ul>
+                    <p><strong>Test case:</strong><br>console.log(tongDacBiet(20)); // 3+5+6+9+10+12+18+20 = 83</p>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm Bài 1</h4>
+                        <div class="input-group">
+                            <label for="bai1Input">Nhập số n:</label>
+                            <input type="number" id="bai1Input" value="20" min="1" max="100">
+                        </div>
+                        <button class="btn" onclick="testBai1()">
+                            <i class="fas fa-play"></i> Tính tổng
+                        </button>
+                        <div class="result" id="bai1Result">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="bai1ResultContent"></div>
+                        </div>
+                    </div>
+
+                    <h3>Bài 2: Phân loại ký tự trong chuỗi</h3>
+                    <p>Viết hàm phanLoai(str) để phân loại:</p>
+                    <ul>
+                        <li>Ký tự chữ cái: a-z, A-Z</li>
+                        <li>Chữ số: 0-9</li>
+                        <li>Ký tự khác: còn lại</li>
+                    </ul>
+                    <p>Trả về object đếm số lượng từng loại.</p>
+                    <p><strong>Test case:</strong><br>console.log(phanLoai("abcXYZ123!@#")); // { chuCai: 6, chuSo: 3, kyTuKhac: 3 }</p>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm Bài 2</h4>
+                        <div class="input-group">
+                            <label for="bai2Input">Nhập chuỗi:</label>
+                            <input type="text" id="bai2Input" value="abcXYZ123!@#">
+                        </div>
+                        <button class="btn" onclick="testBai2()">
+                            <i class="fas fa-play"></i> Phân loại
+                        </button>
+                        <div class="result" id="bai2Result">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="bai2ResultContent"></div>
+                        </div>
+                    </div>
+
+                    <h3>Bài 3: Quản lý sinh viên</h3>
+                    <p>Viết chương trình JS để quản lý danh sách sinh viên. Mỗi sinh viên gồm các thông tin:</p>
+                    <ul>
+                        <li>id – mã sinh viên (chuỗi)</li>
+                        <li>name – họ tên</li>
+                        <li>gender – giới tính</li>
+                        <li>score – điểm số (0–10)</li>
+                    </ul>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Dữ liệu mẫu</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> students = [<br>
+                        &nbsp;&nbsp;{ id: <span class="string">"SV001"</span>, name: <span class="string">"Nguyễn Văn A"</span>, gender: <span class="string">"Nam"</span>, score: 8.5 },<br>
+                        &nbsp;&nbsp;{ id: <span class="string">"SV002"</span>, name: <span class="string">"Trần Thị B"</span>, gender: <span class="string">"Nữ"</span>, score: 6.7 },<br>
+                        &nbsp;&nbsp;{ id: <span class="string">"SV003"</span>, name: <span class="string">"Lê Văn C"</span>, gender: <span class="string">"Nam"</span>, score: 4.8 }<br>
+                        ];
+                    </div>
+
+                    <p><strong>Chức năng: (yêu cầu viết hàm)</strong></p>
+                    <ul>
+                        <li>Hiển thị danh sách sinh viên (gồm loại học lực: Giỏi, Khá, TB, Yếu)</li>
+                        <li>Thêm sinh viên mới từ bàn phím</li>
+                        <li>Tìm sinh viên theo tên (gợi ý: includes)</li>
+                        <li>Xóa sinh viên theo mã</li>
+                        <li>Menu chức năng sử dụng vòng lặp</li>
+                    </ul>
+                    <p>Áp dụng hàm, mảng, object, câu điều kiện, toán tử, vòng lặp</p>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm Bài 3 - Quản lý sinh viên</h4>
+                        
+                        <div class="student-card">
+                            <h5>Danh sách sinh viên hiện tại:</h5>
+                            <div id="studentListDisplay"></div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="studentId">Mã SV:</label>
+                            <input type="text" id="studentId" placeholder="VD: SV004">
+                        </div>
+                        <div class="input-group">
+                            <label for="studentName">Họ tên:</label>
+                            <input type="text" id="studentName" placeholder="VD: Nguyễn Văn D">
+                        </div>
+                        <div class="input-group">
+                            <label for="studentGender">Giới tính:</label>
+                            <select id="studentGender">
+                                <option value="Nam">Nam</option>
+                                <option value="Nữ">Nữ</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="studentScore">Điểm số:</label>
+                            <input type="number" id="studentScore" min="0" max="10" step="0.1" value="5.0">
+                        </div>
+                        <div class="input-group">
+                            <label for="searchName">Tìm theo tên:</label>
+                            <input type="text" id="searchName" placeholder="Nhập tên cần tìm">
+                        </div>
+                        <div class="input-group">
+                            <label for="deleteId">Xóa theo mã:</label>
+                            <input type="text" id="deleteId" placeholder="Nhập mã SV cần xóa">
+                        </div>
+
+                        <button class="btn" onclick="hienThiDanhSach()">
+                            <i class="fas fa-list"></i> Hiển thị danh sách
+                        </button>
+                        <button class="btn" onclick="themSinhVien()">
+                            <i class="fas fa-plus"></i> Thêm sinh viên
+                        </button>
+                        <button class="btn" onclick="timSinhVien()">
+                            <i class="fas fa-search"></i> Tìm sinh viên
+                        </button>
+                        <button class="btn" onclick="xoaSinhVien()">
+                            <i class="fas fa-trash"></i> Xóa sinh viên
+                        </button>
+
+                        <div class="result" id="bai3Result">
+                            <strong>Kết quả:</strong>
+                            <div class="result-content" id="bai3ResultContent"></div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <footer>
+            <p>Bài 7: Hàm (Function) &copy; GV: Nguyễn Đình Mạnh</p>
+        </footer>
+    </div>
+
+    <script>
+        // Xử lý điều hướng
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    navLinks.forEach(item => item.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+
+                    this.classList.add('active');
+
+                    const targetId = this.getAttribute('href').substring(1);
+                    document.getElementById(targetId).classList.add('active');
+                });
+            });
+
+            // Hiển thị danh sách sinh viên ban đầu
+            hienThiDanhSach();
+        });
+
+        // Hàm copy code
+        function copyCode(button) {
+            const codeBlock = button.parentElement.parentElement;
+            const text = codeBlock.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Đã copy!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        // Bài 1: Tính tổng đặc biệt
+        function tongDacBiet(n) {
+            let sum = 0;
+            let chiTiet = [];
+            for (let i = 1; i <= n; i++) {
+                if ((i % 3 === 0 || i % 5 === 0) && i % 15 !== 0) {
+                    sum += i;
+                    chiTiet.push(i);
+                }
+            }
+            return { sum, chiTiet };
+        }
+
+        function testBai1() {
+            const n = parseInt(document.getElementById('bai1Input').value) || 20;
+            const result = document.getElementById('bai1Result');
+            const output = document.getElementById('bai1ResultContent');
+            
+            result.classList.add('active');
+            
+            const { sum, chiTiet } = tongDacBiet(n);
+            output.textContent = `Các số thỏa mãn: ${chiTiet.join(' + ')}\nTổng = ${sum}`;
+        }
+
+        // Bài 2: Phân loại ký tự
+        function phanLoai(str) {
+            let chuCai = 0, chuSo = 0, kyTuKhac = 0;
+            
+            for (let char of str) {
+                if ((char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z')) {
+                    chuCai++;
+                } else if (char >= '0' && char <= '9') {
+                    chuSo++;
+                } else {
+                    kyTuKhac++;
+                }
+            }
+            
+            return { chuCai, chuSo, kyTuKhac };
+        }
+
+        function testBai2() {
+            const str = document.getElementById('bai2Input').value || 'abcXYZ123!@#';
+            const result = document.getElementById('bai2Result');
+            const output = document.getElementById('bai2ResultContent');
+            
+            result.classList.add('active');
+            
+            const thongKe = phanLoai(str);
+            output.textContent = JSON.stringify(thongKe, null, 2);
+        }
+
+        // Bài 3: Quản lý sinh viên
+        let students = [
+            { id: "SV001", name: "Nguyễn Văn A", gender: "Nam", score: 8.5 },
+            { id: "SV002", name: "Trần Thị B", gender: "Nữ", score: 6.7 },
+            { id: "SV003", name: "Lê Văn C", gender: "Nam", score: 4.8 }
+        ];
+
+        function xepLoai(diem) {
+            if (diem >= 8.5) return "Giỏi";
+            if (diem >= 6.5) return "Khá";
+            if (diem >= 5.0) return "TB";
+            return "Yếu";
+        }
+
+        function hienThiDanhSach() {
+            const display = document.getElementById('studentListDisplay');
+            let html = '<ul>';
+            students.forEach(sv => {
+                html += `<li><strong>${sv.id}</strong> - ${sv.name} (${sv.gender}) - Điểm: ${sv.score} - Học lực: ${xepLoai(sv.score)}</li>`;
+            });
+            html += '</ul>';
+            display.innerHTML = html;
+            
+            // Hiển thị chi tiết trong kết quả
+            const result = document.getElementById('bai3Result');
+            const output = document.getElementById('bai3ResultContent');
+            result.classList.add('active');
+            
+            let outputText = "=== DANH SÁCH SINH VIÊN ===\n\n";
+            students.forEach(sv => {
+                outputText += `${sv.id} | ${sv.name} | ${sv.gender} | ${sv.score} điểm | Học lực: ${xepLoai(sv.score)}\n`;
+            });
+            output.textContent = outputText;
+        }
+
+        function themSinhVien() {
+            const id = document.getElementById('studentId').value;
+            const name = document.getElementById('studentName').value;
+            const gender = document.getElementById('studentGender').value;
+            const score = parseFloat(document.getElementById('studentScore').value);
+
+            if (!id || !name) {
+                alert('Vui lòng nhập đầy đủ thông tin!');
+                return;
+            }
+
+            const svMoi = { id, name, gender, score };
+            students.push(svMoi);
+            
+            hienThiDanhSach();
+            
+            const output = document.getElementById('bai3ResultContent');
+            output.textContent = `Đã thêm sinh viên: ${id} - ${name}`;
+        }
+
+        function timSinhVien() {
+            const searchName = document.getElementById('searchName').value.toLowerCase();
+            const result = document.getElementById('bai3Result');
+            const output = document.getElementById('bai3ResultContent');
+            
+            result.classList.add('active');
+            
+            const ketQua = students.filter(sv => 
+                sv.name.toLowerCase().includes(searchName)
+            );
+            
+            if (ketQua.length > 0) {
+                let outputText = `=== KẾT QUẢ TÌM KIẾM "${searchName}" ===\n\n`;
+                ketQua.forEach(sv => {
+                    outputText += `${sv.id} | ${sv.name} | ${sv.gender} | ${sv.score} điểm\n`;
+                });
+                output.textContent = outputText;
+            } else {
+                output.textContent = `Không tìm thấy sinh viên nào có tên chứa "${searchName}"`;
+            }
+        }
+
+        function xoaSinhVien() {
+            const deleteId = document.getElementById('deleteId').value;
+            const result = document.getElementById('bai3Result');
+            const output = document.getElementById('bai3ResultContent');
+            
+            result.classList.add('active');
+            
+            const index = students.findIndex(sv => sv.id === deleteId);
+            
+            if (index !== -1) {
+                const svXoa = students[index];
+                students.splice(index, 1);
+                output.textContent = `Đã xóa sinh viên: ${svXoa.id} - ${svXoa.name}`;
+                hienThiDanhSach();
+            } else {
+                output.textContent = `Không tìm thấy sinh viên có mã "${deleteId}"`;
+            }
+        }
+    </script>
+</body>
+
+</html>

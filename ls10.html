@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> SỰ KIỆN & TƯƠNG TÁC </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+      <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --info: #17a2b8;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+
+        body {
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 80vh;
+        }
+
+        .sidebar {
+            height: 85vh;
+            overflow: scroll;
+            background: var(--light);
+            padding: 20px;
+            border-right: 3px solid var(--secondary);
+        }
+
+        .sidebar ul {
+            padding: 0;
+        }
+
+        .nav-list {
+            list-style: none;
+            position: sticky;
+            top: 20px;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--secondary);
+            color: white;
+            transform: translateX(5px);
+            border-color: var(--secondary);
+        }
+
+        .nav-link1 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .main-content {
+            padding: 30px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: var(--accent);
+            margin: 25px 0 15px;
+            padding-left: 15px;
+            border-left: 4px solid var(--accent);
+        }
+
+        h4 {
+            color: var(--info);
+            margin: 20px 0 10px;
+        }
+
+        h5 {
+            color: var(--dark);
+            margin: 15px 0 8px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul,
+        ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            line-height: 1.4;
+            border: 2px solid #444;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn {
+            background: #555;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .keyword {
+            color: #569cd6;
+        }
+
+        .string {
+            color: #ce9178;
+        }
+
+        .comment {
+            color: #6a9955;
+        }
+
+        .number {
+            color: #b5cea8;
+        }
+
+        .class-name {
+            color: #4ec9b0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: var(--secondary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid var(--info);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .interactive-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #e9ecef;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 5px;
+        }
+
+        .btn-run {
+            background: var(--success);
+        }
+
+        .btn-warning {
+            background: var(--warning);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background: white;
+            border-left: 4px solid var(--warning);
+            display: none;
+        }
+
+        .result.active {
+            display: block;
+        }
+
+        .result-content {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border: 1px solid #e9ecef;
+            white-space: pre-wrap;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+        }
+ @media (max-width: 1400px) {
+      .sidebar {
+            height: 78vh;
+      }
+ }
+        @media (max-width: 768px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-right: none;
+                border-bottom: 3px solid var(--secondary);
+            }
+        }
+
+        .visual-array {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .array-item {
+            width: 60px;
+            height: 60px;
+            background: var(--secondary);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 5px;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .array-index {
+            position: absolute;
+            top: -25px;
+            font-size: 12px;
+            color: var(--dark);
+        }
+
+        .array-value {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .algorithm-steps {
+            background: #f0f7ff;
+            border-left: 4px solid #4dabf7;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .algorithm-steps ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .algorithm-steps li {
+            margin-bottom: 5px;
+        }
+
+        .method-demo {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+
+
+        .demo .wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .demo .array {
+            display: flex;
+        }
+
+        .demo .item {
+            width: 100px;
+            padding: 15px;
+            margin: 5px;
+            background: white;
+            color: black;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: 0.4s;
+        }
+
+        .demo .active {
+            background: #ffcc00;
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .demo .arrow {
+            position: absolute;
+            top: -35px;
+            font-size: 28px;
+            transition: 0.4s;
+        }
+
+        .demo .index {
+            margin-top: 30px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-mouse-pointer"></i> BÀI 10: SỰ KIỆN & TƯƠNG TÁC </h1>
+        </header>
+
+        <div class="content-wrapper">
+            <nav class="sidebar">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#click-event" class="nav-link active"><i class="fas fa-mouse"></i> Sự kiện click</a></li>
+                    <li class="nav-item"><a href="#input-event" class="nav-link"><i class="fas fa-keyboard"></i> Sự kiện input</a></li>
+                    <li class="nav-item"><a href="#submit-event" class="nav-link"><i class="fas fa-paper-plane"></i>  Sự kiện submit</a></li>
+                    <li class="nav-item"><a href="#validation" class="nav-link"><i class="fas fa-check-circle"></i>  Kiểm tra hợp lệ form</a></li>
+                    <li class="nav-item"><a href="#chuyen-trang" class="nav-link"><i class="fas fa-external-link-alt"></i> Chuyển trang detail</a></li>
+                </ul>
+            </nav>
+
+            <main class="main-content">
+                <!-- PHẦN 1: SỰ KIỆN CLICK -->
+                <section id="click-event" class="section active">
+                    <h2><i class="fas fa-mouse"></i> 1. SỰ KIỆN CLICK</h2>
+
+                    <h3>Định nghĩa:</h3>
+                    <p>Kích hoạt khi người dùng nhấn chuột vào một phần tử HTML (thường là nút).</p>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        element.addEventListener(<span class="string">"click"</span>, <span class="keyword">function</span>(event) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// xử lý khi click</span><br>
+                        });
+                    </div>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>HTML</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;<span class="keyword">button</span> <span class="string">id="btn"</span>&gt;Nhấn tôi&lt;/<span class="keyword">button</span>&gt;<br>
+                        &lt;<span class="keyword">p</span> <span class="string">id="info"</span>&gt;&lt;/<span class="keyword">p</span>&gt;
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>JS</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">document</span>.getElementById(<span class="string">"btn"</span>).addEventListener(<span class="string">"click"</span>, <span class="keyword">function</span>() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">document</span>.getElementById(<span class="string">"info"</span>).innerText = <span class="string">"Bạn vừa click!"</span>;<br>
+                        });
+                    </div>
+
+                    <p><strong>Kết quả:</strong> Khi click nút, dòng "Bạn vừa click!" sẽ hiển thị.</p>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm sự kiện click</h4>
+                        <button class="btn" id="demoClickBtn"><i class="fas fa-mouse"></i> Nhấn tôi</button>
+                        <p id="demoClickInfo"></p>
+                    </div>
+                </section>
+
+                <!-- PHẦN 2: SỰ KIỆN INPUT -->
+                <section id="input-event" class="section">
+                    <h2><i class="fas fa-keyboard"></i> 2. SỰ KIỆN INPUT</h2>
+
+                    <h3>Định nghĩa:</h3>
+                    <p>Xảy ra khi người dùng nhập dữ liệu vào &lt;input&gt;, &lt;textarea&gt;,...</p>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        inputElement.addEventListener(<span class="string">"input"</span>, <span class="keyword">function</span>(e) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">let</span> value = e.target.value;<br>
+                        });
+                    </div>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>HTML</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;<span class="keyword">input</span> <span class="string">type="text" id="txtName"</span> placeholder=<span class="string">"Nhập tên"</span>&gt;<br>
+                        &lt;<span class="keyword">p</span> <span class="string">id="preview"</span>&gt;&lt;/<span class="keyword">p</span>&gt;
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>JS</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">document</span>.getElementById(<span class="string">"txtName"</span>).addEventListener(<span class="string">"input"</span>, <span class="keyword">function</span>(e) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">document</span>.getElementById(<span class="string">"preview"</span>).innerText = <span class="string">"Tên: "</span> + e.target.value;<br>
+                        });
+                    </div>
+
+                    <p><strong>Kết quả:</strong> Gõ tới đâu, kết quả hiển thị tới đó.</p>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm sự kiện input</h4>
+                        <div class="input-group">
+                            <label for="demoInput">Nhập tên:</label>
+                            <input type="text" id="demoInput" placeholder="Nhập tên">
+                        </div>
+                        <p id="demoPreview"></p>
+                    </div>
+                </section>
+
+                <!-- PHẦN 3: SỰ KIỆN SUBMIT -->
+                <section id="submit-event" class="section">
+                    <h2><i class="fas fa-paper-plane"></i> 3. SỰ KIỆN SUBMIT VÀ VALIDATE FORM</h2>
+
+                    <h3>Định nghĩa:</h3>
+                    <p>Sự kiện submit xảy ra khi gửi form (bấm nút submit).</p>
+
+                    <h4>Cú pháp:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cú pháp</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        formElement.addEventListener(<span class="string">"submit"</span>, <span class="keyword">function</span>(e) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;e.preventDefault(); <span class="comment">// Ngăn reload</span><br>
+                        });
+                    </div>
+                </section>
+
+                <!-- PHẦN 4: KIỂM TRA HỢP LỆ FORM -->
+                <section id="validation" class="section">                    
+                <!-- PHẦN: KHÔNG ĐƯỢC ĐỂ TRỐNG -->
+                <div >
+                    <h2><i class="fas fa-exclamation-triangle"></i> KHÔNG ĐƯỢC ĐỂ TRỐNG (REQUIRED FIELD VALIDATION)</h2>
+
+                    <h3>Mục đích:</h3>
+                    <p>Đảm bảo người dùng không để trống ô input.</p>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>HTML</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;<span class="keyword">input</span> <span class="string">type="text" id="username"</span> placeholder=<span class="string">"Nhập tên"</span>&gt;
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>JS</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> name = <span class="keyword">document</span>.getElementById(<span class="string">"username"</span>).value.trim();<br>
+                        <br>
+                        <span class="keyword">if</span> (name === <span class="string">""</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;alert(<span class="string">"Tên không được để trống"</span>);<br>
+                        }
+                    </div>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Giải thích:</h4>
+                        <p>.value lấy giá trị người dùng nhập.<br>
+                        .trim() loại bỏ khoảng trắng ở đầu/cuối (vd: " " cũng bị coi là rỗng).<br>
+                        Nếu rỗng → báo lỗi.</p>
+                    </div>
+                </div>
+
+                <!-- PHẦN: KIỂM TRA ĐỘ DÀI -->
+                <div >
+                    <h2><i class="fas fa-ruler"></i> KIỂM TRA ĐỘ DÀI CHUỖI (LENGTH VALIDATION)</h2>
+
+                    <h3>Mục đích:</h3>
+                    <p>Xác định xem người dùng có nhập đủ độ dài tối thiểu hay tối đa không.</p>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>HTML</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;<span class="keyword">input</span> <span class="string">type="text" id="username"</span>&gt;
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>JS</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> name = <span class="keyword">document</span>.getElementById(<span class="string">"username"</span>).value.trim();<br>
+                        <br>
+                        <span class="keyword">if</span> (name.length < 5) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;alert(<span class="string">"Tên phải có ít nhất 5 ký tự"</span>);<br>
+                        }
+                    </div>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Giải thích:</h4>
+                        <p>name.length là số lượng ký tự trong chuỗi.<br>
+                        So sánh length để kiểm tra độ dài.</p>
+                    </div>
+                </div>
+
+                <!-- PHẦN: KIỂM TRA EMAIL -->
+                <div>
+                    <h2><i class="fas fa-envelope"></i> KIỂM TRA EMAIL ĐÚNG ĐỊNH DẠNG (EMAIL FORMAT VALIDATION)</h2>
+
+                    <h3>Mục đích:</h3>
+                    <p>Xác minh rằng email nhập đúng chuẩn (@, .com, v.v.).<br>
+                    Sử dụng regex để check.</p>
+                </div>
+
+                <!-- PHẦN: REGEX LÀ GÌ? -->
+                <div >
+                    <h2><i class="fas fa-code"></i> REGEX LÀ GÌ?</h2>
+
+                    <h3>Định nghĩa:</h3>
+                    <p>Regex (viết tắt của Regular Expression) là biểu thức chính quy – một chuỗi ký tự đặc biệt dùng để kiểm tra, tìm kiếm hoặc thay thế chuỗi khác theo một khuôn mẫu (pattern).</p>
+
+                    <h4>Regex dùng để làm gì?</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Công dụng thực tế</th>
+                                    <th>Ví dụ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Kiểm tra định dạng email</td>
+                                    <td>email@gmail.com</td>
+                                </tr>
+                                <tr>
+                                    <td>Kiểm tra số điện thoại</td>
+                                    <td>0987654321</td>
+                                </tr>
+                                <tr>
+                                    <td>Kiểm tra mật khẩu mạnh</td>
+                                    <td>Abc@1234</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- PHẦN: CÚ PHÁP REGEX -->
+                <div >
+                    <h2><i class="fas fa-table"></i> CÚ PHÁP CƠ BẢN CỦA REGEX</h2>
+
+                    <div class="table-container">
+                        <table class="regex-table">
+                            <thead>
+                                <tr>
+                                    <th>Ký hiệu</th>
+                                    <th>Ý nghĩa</th>
+                                    <th>Ví dụ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>.</strong></td>
+                                    <td>bất kỳ ký tự nào (trừ xuống dòng)</td>
+                                    <td>a.c khớp abc, axc</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>\d</strong></td>
+                                    <td>chữ số (0–9)</td>
+                                    <td>\d\d khớp 12</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>\w</strong></td>
+                                    <td>chữ, số, gạch dưới</td>
+                                    <td>\w+ khớp abc123</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>\s</strong></td>
+                                    <td>khoảng trắng</td>
+                                    <td>a\sb khớp a b</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>^</strong></td>
+                                    <td>bắt đầu chuỗi</td>
+                                    <td>^Hello khớp Hello world</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>$</strong></td>
+                                    <td>kết thúc chuỗi</td>
+                                    <td>world$ khớp hello world</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>[abc]</strong></td>
+                                    <td>1 trong các ký tự a, b, c</td>
+                                    <td>[aeiou] khớp nguyên âm</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>[^abc]</strong></td>
+                                    <td>KHÔNG phải a, b, c</td>
+                                    <td>[^0-9] không phải số</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>a{3}</strong></td>
+                                    <td>a lặp đúng 3 lần</td>
+                                    <td>a{3} khớp aaa</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>a+</strong></td>
+                                    <td>a lặp ≥1 lần</td>
+                                    <td>a+ khớp a, aaa</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>a*</strong></td>
+                                    <td>a lặp 0 hoặc nhiều lần</td>
+                                    <td>a* khớp ``, a, aa</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>(abc)</strong></td>
+                                    <td>nhóm</td>
+                                    <td>(ab)+ khớp ab, abab</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>|</strong></td>
+                                    <td>hoặc</td>
+                                    <td>a|b khớp a hoặc b</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Kiểm tra Email</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;<br>
+                        <span class="comment">// ^ bắt đầu</span><br>
+                        <span class="comment">// [\w-\.]+ là phần tên trước @ (chữ + số + dấu - .)</span><br>
+                        <span class="comment">// @ là bắt buộc</span><br>
+                        <span class="comment">// ([\w-]+\.)+ là tên miền (vd: gmail.)</span><br>
+                        <span class="comment">// [\w-]{2,4} là đuôi (com, net,...)</span><br>
+                        <span class="comment">// $ kết thúc</span>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Số điện thoại Việt Nam</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        regex = /^0\d{9}$/<br>
+                        <span class="comment">// ^0 bắt đầu bằng số 0</span><br>
+                        <span class="comment">// \d{9}: theo sau là 9 số</span><br>
+                        <span class="comment">// $ kết thúc</span>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Mật khẩu mạnh</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/<br>
+                        <span class="comment">// (?=.*[a-z]): ít nhất 1 chữ thường</span><br>
+                        <span class="comment">// (?=.*[A-Z]): ít nhất 1 chữ hoa</span><br>
+                        <span class="comment">// (?=.*\d): ít nhất 1 số</span><br>
+                        <span class="comment">// (?=.*[@$!%*?&]): ít nhất 1 ký tự đặc biệt</span><br>
+                        <span class="comment">// .{8,}: ít nhất 8 ký tự</span>
+                    </div>
+
+                    <h4>Kiểm tra Regex trong JS:</h4>
+                    <p>Sử dụng hàm: pattern.test(stringTest)</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;<span class="keyword">input</span> <span class="string">type="email" id="email"</span>&gt;<br>
+                        <br>
+                        <span class="keyword">let</span> email = <span class="keyword">document</span>.getElementById(<span class="string">"email"</span>).value.trim();<br>
+                        <br>
+                        <span class="keyword">let</span> regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;<br>
+                        <br>
+                        <span class="keyword">if</span> (!regex.test(email)) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;alert(<span class="string">"Email không hợp lệ"</span>);<br>
+                        }
+                    </div>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Giải thích:</h4>
+                        <p>regex là biểu thức chính quy để kiểm tra định dạng email.<br>
+                        test() kiểm tra xem chuỗi có khớp không.</p>
+                    </div>
+                </div>
+
+                <!-- PHẦN: MẬT KHẨU MẠNH -->
+                <div >
+                    <h2><i class="fas fa-lock"></i> MẬT KHẨU PHẢI ĐỦ MẠNH (STRONG PASSWORD VALIDATION)</h2>
+
+                    <h3>Mục đích:</h3>
+                    <p>Đảm bảo mật khẩu đủ an toàn: ít nhất 8 ký tự, gồm chữ hoa, chữ thường, số, ký tự đặc biệt.</p>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>HTML</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;<span class="keyword">input</span> <span class="string">type="password" id="password"</span>&gt;
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>JS</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> password = <span class="keyword">document</span>.getElementById(<span class="string">"password"</span>).value;<br>
+                        <br>
+                        <span class="keyword">let</span> strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;<br>
+                        <br>
+                        <span class="keyword">if</span> (!strongRegex.test(password)) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;alert(<span class="string">"Mật khẩu yếu! Phải có ít nhất 8 ký tự, bao gồm chữ hoa, thường, số, ký tự đặc biệt."</span>);<br>
+                        }
+                    </div>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Giải thích:</h4>
+                        <p>(?=.*[a-z]): ít nhất 1 chữ thường<br>
+                        (?=.*[A-Z]): ít nhất 1 chữ hoa<br>
+                        (?=.*\d): ít nhất 1 số<br>
+                        (?=.*[@$!%*?&]): ít nhất 1 ký tự đặc biệt<br>
+                        .{8,}: ít nhất 8 ký tự</p>
+                    </div>
+                </div>
+
+                <!-- PHẦN: SO KHỚP MẬT KHẨU -->
+                <div >
+                    <h2><i class="fas fa-check-double"></i> SO KHỚP MẬT KHẨU (CONFIRM PASSWORD)</h2>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>HTML</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;<span class="keyword">input</span> <span class="string">type="password" id="password"</span>&gt;<br>
+                        &lt;<span class="keyword">input</span> <span class="string">type="password" id="confirmPassword"</span>&gt;
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>JS</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> pass1 = <span class="keyword">document</span>.getElementById(<span class="string">"password"</span>).value;<br>
+                        <span class="keyword">let</span> pass2 = <span class="keyword">document</span>.getElementById(<span class="string">"confirmPassword"</span>).value;<br>
+                        <br>
+                        <span class="keyword">if</span> (pass1 !== pass2) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;alert(<span class="string">"Mật khẩu không khớp"</span>);<br>
+                        }
+                    </div>
+                </div>
+
+                <!-- PHẦN: KIỂM TRA SỐ ĐIỆN THOẠI -->
+                <div>
+                    <h2><i class="fas fa-phone"></i> KIỂM TRA SỐ ĐIỆN THOẠI</h2>
+
+                    <h4>Ví dụ (Việt Nam – 10 số, bắt đầu bằng 0):</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>HTML</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;<span class="keyword">input</span> <span class="string">type="text" id="phone"</span>&gt;
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>JS</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> phone = <span class="keyword">document</span>.getElementById(<span class="string">"phone"</span>).value.trim();<br>
+                        <span class="keyword">let</span> regexPhone = /^(0[0-9]{9})$/;<br>
+                        <br>
+                        <span class="keyword">if</span> (!regexPhone.test(phone)) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;alert(<span class="string">"Số điện thoại không hợp lệ"</span>);<br>
+                        }
+                    </div>
+                </div>
+
+                <!-- PHẦN: KIỂM TRA TUỔI -->
+                <div>
+                    <h2><i class="fas fa-calendar"></i> KIỂM TRA TUỔI HỢP LỆ (SỐ VÀ GIỚI HẠN)</h2>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>HTML</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;<span class="keyword">input</span> <span class="string">type="text" id="age"</span>&gt;
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>JS</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> age = <span class="keyword">parseInt</span>(<span class="keyword">document</span>.getElementById(<span class="string">"age"</span>).value);<br>
+                        <br>
+                        <span class="keyword">if</span> (<span class="keyword">isNaN</span>(age) || age < 18 || age > 60) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;alert(<span class="string">"Tuổi phải từ 18 đến 60"</span>);<br>
+                        }
+                    </div>
+                </div>
+
+                <!-- PHẦN: KIỂM TRA FILE UPLOAD -->
+                <div>
+                    <h2><i class="fas fa-file"></i> KIỂM TRA FILE UPLOAD (CHỈ CHO PHÉP ẢNH, PDF, GIỚI HẠN DUNG LƯỢNG)</h2>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>HTML</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;<span class="keyword">input</span> <span class="string">type="file" id="file"</span>&gt;
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>JS</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">if</span> (file) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">let</span> allowed = [<span class="string">"image/jpeg"</span>, <span class="string">"image/png"</span>, <span class="string">"application/pdf"</span>];<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (!allowed.includes(file.type)) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alert(<span class="string">"Chỉ cho phép ảnh JPG, PNG hoặc PDF"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (file.size > 2 * 1024 * 1024) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alert(<span class="string">"File không được vượt quá 2MB"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+                </div>
+
+                <!-- PHẦN: VÍ DỤ ĐẦY ĐỦ -->
+                <div>
+                    <h2><i class="fas fa-clipboard-list"></i> VÍ DỤ ĐẦY ĐỦ: FORM ĐĂNG KÝ</h2>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>HTML</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;<span class="keyword">h3</span>&gt;Form Đăng Ký&lt;/<span class="keyword">h3</span>&gt;<br>
+                        &lt;<span class="keyword">form</span> <span class="string">id="registerForm"</span>&gt;<br>
+                        &nbsp;&nbsp;&lt;<span class="keyword">input</span> <span class="string">type="text" id="username"</span> placeholder=<span class="string">"Tên đăng nhập"</span>&gt;&lt;<span class="keyword">br</span>&gt;<br>
+                        &nbsp;&nbsp;&lt;<span class="keyword">input</span> <span class="string">type="email" id="email"</span> placeholder=<span class="string">"Email"</span>&gt;&lt;<span class="keyword">br</span>&gt;<br>
+                        &nbsp;&nbsp;&lt;<span class="keyword">input</span> <span class="string">type="password" id="password"</span> placeholder=<span class="string">"Mật khẩu"</span>&gt;&lt;<span class="keyword">br</span>&gt;<br>
+                        &nbsp;&nbsp;&lt;<span class="keyword">button</span> <span class="string">type="submit"</span>&gt;Đăng ký&lt;/<span class="keyword">button</span>&gt;<br>
+                        &lt;/<span class="keyword">form</span>&gt;<br>
+                        &lt;<span class="keyword">p</span> <span class="string">id="error"</span> style=<span class="string">"color:red;"</span>&gt;&lt;/<span class="keyword">p</span>&gt;
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>JS</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">document</span>.getElementById(<span class="string">"registerForm"</span>).addEventListener(<span class="string">"submit"</span>, <span class="keyword">function</span>(e) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;e.preventDefault(); <span class="comment">// chặn reload</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">let</span> username = <span class="keyword">document</span>.getElementById(<span class="string">"username"</span>).value.trim();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">let</span> email = <span class="keyword">document</span>.getElementById(<span class="string">"email"</span>).value.trim();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">let</span> password = <span class="keyword">document</span>.getElementById(<span class="string">"password"</span>).value.trim();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">let</span> error = <span class="string">""</span>;<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Kiểm tra tên đăng nhập</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (username === <span class="string">""</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error += <span class="string">"Tên đăng nhập không được để trống.&lt;br&gt;"</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">else if</span> (username.length < 3) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error += <span class="string">"Tên đăng nhập phải có ít nhất 3 ký tự.&lt;br&gt;"</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Kiểm tra email</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">const</span> emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (!email.match(emailPattern)) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error += <span class="string">"Email không hợp lệ.&lt;br&gt;"</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Kiểm tra mật khẩu</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (password.length < 6) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error += <span class="string">"Mật khẩu phải có ít nhất 6 ký tự.&lt;br&gt;"</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Hiển thị lỗi hoặc thành công</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (error !== <span class="string">""</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">document</span>.getElementById(<span class="string">"error"</span>).innerHTML = error;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">else</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">document</span>.getElementById(<span class="string">"error"</span>).style.color = <span class="string">"green"</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">document</span>.getElementById(<span class="string">"error"</span>).innerHTML = <span class="string">"Đăng ký thành công!"</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// có thể gửi dữ liệu lên server tại đây</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        });
+                    </div>
+
+                    <p><strong>Kết quả:</strong><br>
+                    Khi người dùng bấm "Đăng ký":<br>
+                    Nếu thiếu thông tin → hiện lỗi ngay dưới form<br>
+                    Nếu đúng → hiện "Đăng ký thành công!"</p>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm Form Đăng Ký</h4>
+                        
+                        <form id="demoRegisterForm">
+                            <div class="input-group">
+                                <label for="demoUsername">Tên đăng nhập:</label>
+                                <input type="text" id="demoUsername" placeholder="Nhập tên đăng nhập">
+                            </div>
+                            <div class="input-group">
+                                <label for="demoEmail">Email:</label>
+                                <input type="email" id="demoEmail" placeholder="Nhập email">
+                            </div>
+                            <div class="input-group">
+                                <label for="demoPassword">Mật khẩu:</label>
+                                <input type="password" id="demoPassword" placeholder="Nhập mật khẩu">
+                            </div>
+                            <button type="submit" class="btn"><i class="fas fa-paper-plane"></i> Đăng ký</button>
+                        </form>
+                        <p id="demoError" style="color:red; margin-top:15px;"></p>
+                    </div>
+                </section>
+
+                </section>
+
+                <!-- PHẦN 9: CHUYỂN TRANG DETAIL -->
+                <section id="chuyen-trang" class="section">
+                    <h2><i class="fas fa-external-link-alt"></i> 9. CHUYỂN TRANG DETAIL</h2>
+
+                    <h3>Cách đơn giản nhất: Sử dụng thẻ &lt;a&gt; trong HTML</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>HTML</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;<span class="keyword">a</span> <span class="string">href="detail.html"</span>&gt;Xem chi tiết&lt;/<span class="keyword">a</span>&gt;
+                    </div>
+                    <p>Cách này chuyển sang trang detail.html ngay khi người dùng click.</p>
+
+                    <h4>Truyền dữ liệu qua URL (dạng query string)</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>HTML</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;<span class="keyword">a</span> <span class="string">href="detail.html?id=123"</span>&gt;Xem chi tiết SP 123&lt;/<span class="keyword">a</span>&gt;
+                    </div>
+
+                    <p>Ở trang detail.html, bạn lấy dữ liệu bằng JavaScript:</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>JS (trang detail.html)</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;<span class="keyword">script</span>&gt;<br>
+                        &nbsp;&nbsp;<span class="comment">// Lấy tham số "id" trên URL</span><br>
+                        &nbsp;&nbsp;<span class="keyword">const</span> urlParams = <span class="keyword">new</span> <span class="class-name">URLSearchParams</span>(<span class="keyword">window</span>.location.search);<br>
+                        &nbsp;&nbsp;<span class="keyword">const</span> id = urlParams.get(<span class="string">'id'</span>);<br>
+                        &nbsp;&nbsp;console.log(<span class="string">"ID sản phẩm:"</span>, id);<br>
+                        &lt;/<span class="keyword">script</span>&gt;
+                    </div>
+
+                    <h4>Dùng JavaScript để điều hướng (redirect)</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>HTML</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;<span class="keyword">button</span> <span class="string">onclick="goToDetail(123)"</span>&gt;Xem chi tiết&lt;/<span class="keyword">button</span>&gt;
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>JS</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;<span class="keyword">script</span>&gt;<br>
+                        &nbsp;&nbsp;<span class="keyword">function</span> <span class="class-name">goToDetail</span>(id) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Chuyển trang và truyền id lên URL</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">window</span>.location.href = <span class="string">'detail.html?id='</span> + id;<br>
+                        &nbsp;&nbsp;}<br>
+                        &lt;/<span class="keyword">script</span>&gt;
+                    </div>
+
+                    <h4>Nếu dùng danh sách động (JS sinh ra các item):</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>HTML</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;<span class="keyword">div</span> <span class="string">id="products"</span>&gt;&lt;/<span class="keyword">div</span>&gt;
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>JS</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> products = [<br>
+                        &nbsp;&nbsp;{ id: 1, name: <span class="string">"Áo thun"</span> },<br>
+                        &nbsp;&nbsp;{ id: 2, name: <span class="string">"Giày thể thao"</span> }<br>
+                        ];<br>
+                        <br>
+                        <span class="keyword">let</span> container = <span class="keyword">document</span>.getElementById(<span class="string">"products"</span>);<br>
+                        <br>
+                        products.forEach(p => {<br>
+                        &nbsp;&nbsp;<span class="keyword">let</span> item = <span class="keyword">document</span>.createElement(<span class="string">"div"</span>);<br>
+                        &nbsp;&nbsp;item.innerHTML = <span class="string">`&lt;a href="detail.html?id=${p.id}"&gt;${p.name}&lt;/a&gt;`</span>;<br>
+                        &nbsp;&nbsp;container.appendChild(item);<br>
+                        });
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm chuyển trang detail</h4>
+                        <div id="demoProducts"></div>
+                        <p class="note"><i class="fas fa-info-circle"></i> Các liên kết sẽ chuyển đến trang detail.html với ID tương ứng. Trong môi trường demo, bạn có thể xem URL thay đổi.</p>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <footer>
+            <p>Bài 10: Sự kiện & Tương tác &copy; GV: Nguyễn Đình Mạnh</p>
+        </footer>
+    </div>
+
+    <script>
+        // Xử lý điều hướng
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    navLinks.forEach(item => item.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+
+                    this.classList.add('active');
+
+                    const targetId = this.getAttribute('href').substring(1);
+                    document.getElementById(targetId).classList.add('active');
+                });
+            });
+
+            // Khởi tạo các demo
+            initClickDemo();
+            initInputDemo();
+            initFormDemo();
+            initProductsDemo();
+        });
+
+        // Hàm copy code
+        function copyCode(button) {
+            const codeBlock = button.parentElement.parentElement;
+            const text = codeBlock.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Đã copy!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        // Demo sự kiện click
+        function initClickDemo() {
+            const btn = document.getElementById('demoClickBtn');
+            const info = document.getElementById('demoClickInfo');
+            
+            if (btn && info) {
+                btn.addEventListener('click', function() {
+                    info.innerText = 'Bạn vừa click!';
+                    info.style.color = 'var(--success)';
+                });
+            }
+        }
+
+        // Demo sự kiện input
+        function initInputDemo() {
+            const input = document.getElementById('demoInput');
+            const preview = document.getElementById('demoPreview');
+            
+            if (input && preview) {
+                input.addEventListener('input', function(e) {
+                    preview.innerHTML = `<strong>Tên:</strong> ${e.target.value || '(chưa nhập)'}`;
+                });
+            }
+        }
+
+        // Demo form đăng ký
+        function initFormDemo() {
+            const form = document.getElementById('demoRegisterForm');
+            const errorDiv = document.getElementById('demoError');
+            
+            if (form && errorDiv) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const username = document.getElementById('demoUsername').value.trim();
+                    const email = document.getElementById('demoEmail').value.trim();
+                    const password = document.getElementById('demoPassword').value.trim();
+                    let error = '';
+
+                    // Kiểm tra tên đăng nhập
+                    if (username === '') {
+                        error += 'Tên đăng nhập không được để trống.<br>';
+                    } else if (username.length < 3) {
+                        error += 'Tên đăng nhập phải có ít nhất 3 ký tự.<br>';
+                    }
+
+                    // Kiểm tra email
+                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailPattern.test(email)) {
+                        error += 'Email không hợp lệ.<br>';
+                    }
+
+                    // Kiểm tra mật khẩu
+                    if (password.length < 6) {
+                        error += 'Mật khẩu phải có ít nhất 6 ký tự.<br>';
+                    }
+
+                    // Hiển thị lỗi hoặc thành công
+                    if (error !== '') {
+                        errorDiv.style.color = 'red';
+                        errorDiv.innerHTML = error;
+                    } else {
+                        errorDiv.style.color = 'green';
+                        errorDiv.innerHTML = 'Đăng ký thành công!';
+                    }
+                });
+            }
+        }
+
+        // Demo sản phẩm
+        function initProductsDemo() {
+            const container = document.getElementById('demoProducts');
+            
+            if (container) {
+                let products = [
+                    { id: 1, name: "Áo thun" },
+                    { id: 2, name: "Giày thể thao" },
+                    { id: 3, name: "Quần jean" }
+                ];
+
+                products.forEach(p => {
+                    let item = document.createElement('div');
+                    item.className = 'product-item';
+                    item.innerHTML = `<span>${p.name}</span> <a href="#" onclick="goToDetail(${p.id}); return false;"><i class="fas fa-external-link-alt"></i> Xem chi tiết</a>`;
+                    container.appendChild(item);
+                });
+            }
+        }
+
+        // Hàm điều hướng
+        function goToDetail(id) {
+            alert(`Chuyển đến trang detail.html?id=${id} (Demo: Không thực sự chuyển trang)`);
+            // Trong thực tế: window.location.href = 'detail.html?id=' + id;
+        }
+    </script>
+</body>
+
+</html>

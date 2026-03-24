@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lưu Đồ Thuật Toán Vòng Lặp For</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+        
+        .flowchart-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 40px;
+        }
+        
+        /* Các phần tử của lưu đồ */
+        .flowchart-element {
+            border: 2px solid #3498db;
+            padding: 15px 25px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+            position: relative;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            min-width: 200px;
+            max-width: 400px;
+        }
+        
+        /* Hình dạng khác nhau cho các loại phần tử */
+        .terminator {
+            border-radius: 50px;
+            background-color: #2ecc71;
+            border-color: #27ae60;
+            color: white;
+        }
+        
+        .process {
+            border-radius: 8px;
+            background-color: #ecf0f1;
+            border-color: #bdc3c7;
+        }
+        
+        .decision {
+            border-radius: 0;
+            width: 150px;
+            height: 150px;
+            transform: rotate(45deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f1c40f;
+            border-color: #f39c12;
+            margin: 40px auto;
+        }
+        
+        .decision-content {
+            transform: rotate(-45deg);
+            color: #2c3e50;
+            font-weight: bold;
+        }
+        
+        /* Đường kết nối */
+        .connector {
+            width: 4px;
+            background-color: #3498db;
+            margin: 0 auto;
+        }
+        
+        .horizontal-connector {
+            height: 4px;
+            width: 100px;
+            margin: 0 auto;
+        }
+        
+        .arrow-down, .arrow-right {
+            position: relative;
+        }
+        
+        .arrow-down::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -10px;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid #3498db;
+        }
+        
+        .arrow-right::after {
+            content: '';
+            position: absolute;
+            right: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 10px solid #3498db;
+        }
+        
+        /* Layout cho phần điều kiện */
+        .decision-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            position: relative;
+        }
+        
+        .branch-container {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            margin-top: 20px;
+            position: relative;
+        }
+        
+        .true-branch, .false-branch {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 45%;
+        }
+        
+        .branch-label {
+            background-color: #3498db;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 10px 0;
+            text-align: center;
+        }
+        
+        .code-block {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            margin: 30px 0;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .code-block h3 {
+            margin-top: 0;
+            color: #f1c40f;
+            border-bottom: 1px solid #34495e;
+            padding-bottom: 10px;
+        }
+        
+        .code-line {
+            margin: 5px 0;
+            padding-left: 20px;
+        }
+        
+        .comment {
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .keyword {
+            color: #3498db;
+            font-weight: bold;
+        }
+        
+        .loop-counter {
+            display: inline-block;
+            background-color: #e74c3c;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 24px;
+            margin: 0 5px;
+            font-weight: bold;
+        }
+        
+        .explanation {
+            background-color: white;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin-top: 40px;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 800px;
+        }
+        
+        .explanation h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            width: 100%;
+            padding-top: 20px;
+            border-top: 1px solid #ecf0f1;
+        }
+        
+        @media (max-width: 768px) {
+            .branch-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .true-branch, .false-branch {
+                width: 100%;
+                margin-bottom: 30px;
+            }
+            
+            .decision {
+                width: 120px;
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Lưu Đồ Thuật Toán Vòng Lặp For</h1>
+            <p class="subtitle">Mô phỏng cấu trúc vòng lặp for bằng sơ đồ khối</p>
+        </header>
+        
+        <div class="code-block">
+            <h3>Cú pháp vòng lặp for</h3>
+            <div class="code-line"><span class="keyword">for</span>(<span class="keyword">init</span>; <span class="keyword">condition</span>; <span class="keyword">increment</span>) {</div>
+            <div class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// conditional code</span></div>
+            <div class="code-line">}</div>
+        </div>
+        
+        <div class="flowchart-container">
+            <!-- Bắt đầu -->
+            <div class="flowchart-element terminator">Bắt đầu</div>
+            <div class="connector arrow-down" style="height: 50px;"></div>
+            
+            <!-- Khởi tạo -->
+            <div class="flowchart-element process">Init<br><small>Khởi tạo biến đếm</small></div>
+            <div class="connector arrow-down" style="height: 50px;"></div>
+            
+            <!-- Điều kiện -->
+            <div class="decision-section">
+                <div class="flowchart-element decision">
+                    <div class="decision-content">
+                        Condition?<br>
+                        <small>Điều kiện</small>
+                    </div>
+                </div>
+                
+                <div class="branch-container">
+                    <!-- Nhánh ĐÚNG -->
+                    <div class="true-branch">
+                        <div class="branch-label">ĐÚNG</div>
+                        <div class="horizontal-connector arrow-right" style="height: 4px; width: 100px;"></div>
+                        
+                        <!-- Khối code -->
+                        <div class="flowchart-element process">
+                            Code Block<br>
+                            <small>Thực thi mã khi điều kiện đúng</small>
+                        </div>
+                        
+                        <div class="connector arrow-down" style="height: 50px;"></div>
+                        
+                        <!-- Tăng biến đếm -->
+                        <div class="flowchart-element process">
+                            Increment<br>
+                            <small>Tăng/giảm biến đếm</small>
+                        </div>
+                        
+                        <div class="connector arrow-down" style="height: 50px;"></div>
+                        
+                        <!-- Quay lại điều kiện -->
+                        <div style="text-align: center; font-weight: bold; color: #e74c3c; margin-top: 10px;">
+                            ← Quay lại kiểm tra điều kiện
+                        </div>
+                    </div>
+                    
+                    <!-- Nhánh SAI -->
+                    <div class="false-branch">
+                        <div class="branch-label">SAI</div>
+                        <div class="horizontal-connector arrow-right" style="height: 4px; width: 100px;"></div>
+                        
+                        <!-- Kết thúc -->
+                        <div class="flowchart-element terminator">Kết thúc</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="explanation">
+            <h3>Giải thích lưu đồ vòng lặp for</h3>
+            <p>Lưu đồ trên minh họa cách hoạt động của vòng lặp <strong>for</strong> trong lập trình:</p>
+            <ol>
+                <li><strong>Bắt đầu</strong>: Điểm khởi đầu của vòng lặp.</li>
+                <li><strong>Init</strong>: Khởi tạo biến đếm (thường là gán giá trị ban đầu).</li>
+                <li><strong>Condition</strong>: Kiểm tra điều kiện. Nếu đúng, tiếp tục thực thi; nếu sai, thoát khỏi vòng lặp.</li>
+                <li><strong>Code Block</strong>: Thực thi các lệnh bên trong vòng lặp khi điều kiện đúng.</li>
+                <li><strong>Increment</strong>: Cập nhật biến đếm (tăng hoặc giảm giá trị).</li>
+                <li>Quay lại bước kiểm tra điều kiện cho đến khi điều kiện trả về sai.</li>
+                <li><strong>Kết thúc</strong>: Thoát khỏi vòng lặp và tiếp tục chương trình.</li>
+            </ol>
+            <p>Ví dụ: Vòng lặp for in ra các số từ 1 đến 5:</p>
+            <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin-top: 10px; font-family: monospace;">
+                for(let i = 1; i <= 5; i++) {<br>
+                &nbsp;&nbsp;console.log(i);<br>
+                }
+            </div>
+        </div>
+        
+        <footer>
+            <p>Mô phỏng lưu đồ thuật toán vòng lặp for bằng HTML & CSS</p>
+            <p>Dựa trên cấu trúc: for(init; condition; increment) { conditional code; }</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Thêm hiệu ứng cho các phần tử khi cuộn trang
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.flowchart-element, .code-block, .explanation');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            elements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(el);
+            });
+            
+            // Hiệu ứng đếm số cho phần tử loop counter (nếu có)
+            const loopCounters = document.querySelectorAll('.loop-counter');
+            loopCounters.forEach(counter => {
+                let target = parseInt(counter.textContent);
+                let current = 0;
+                let increment = target > 0 ? 1 : -1;
+                
+                const updateCounter = () => {
+                    if (current !== target) {
+                        current += increment;
+                        counter.textContent = current;
+                        setTimeout(updateCounter, 100);
+                    }
+                };
+                
+                // Chỉ kích hoạt khi phần tử xuất hiện trên màn hình
+                const counterObserver = new IntersectionObserver((entries) => {
+                    if (entries[0].isIntersecting) {
+                        updateCounter();
+                        counterObserver.unobserve(counter);
+                    }
+                });
+                
+                counterObserver.observe(counter);
+            });
+        });
+    </script>
+</body>
+</html>

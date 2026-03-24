@@ -1,0 +1,1994 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIÁO TRÌNH CHI TIẾT: CALL API TỪ CƠ BẢN ĐẾN NÂNG CAO</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --info: #17a2b8;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+
+        body {
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 80vh;
+        }
+
+        .sidebar {
+            height: 85vh;
+            overflow: scroll;
+            background: var(--light);
+            padding: 20px;
+            border-right: 3px solid var(--secondary);
+        }
+
+        .sidebar ul {
+            padding: 0;
+        }
+
+        .nav-list {
+            list-style: none;
+            position: sticky;
+            top: 20px;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--secondary);
+            color: white;
+            transform: translateX(5px);
+            border-color: var(--secondary);
+        }
+
+        .nav-link1 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .main-content {
+            padding: 30px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: var(--accent);
+            margin: 25px 0 15px;
+            padding-left: 15px;
+            border-left: 4px solid var(--accent);
+        }
+
+        h4 {
+            color: var(--info);
+            margin: 20px 0 10px;
+        }
+
+        h5 {
+            color: var(--dark);
+            margin: 15px 0 8px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul,
+        ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            line-height: 1.4;
+            border: 2px solid #444;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn {
+            background: #555;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .keyword {
+            color: #569cd6;
+        }
+
+        .string {
+            color: #ce9178;
+        }
+
+        .comment {
+            color: #6a9955;
+        }
+
+        .number {
+            color: #b5cea8;
+        }
+
+        .class-name {
+            color: #4ec9b0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: var(--secondary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid var(--info);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .interactive-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #e9ecef;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 5px;
+        }
+
+        .btn-run {
+            background: var(--success);
+        }
+
+        .btn-warning {
+            background: var(--warning);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background: white;
+            border-left: 4px solid var(--warning);
+            display: none;
+        }
+
+        .result.active {
+            display: block;
+        }
+
+        .result-content {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border: 1px solid #e9ecef;
+            white-space: pre-wrap;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 1400px) {
+            .sidebar {
+                height: 78vh;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-right: none;
+                border-bottom: 3px solid var(--secondary);
+            }
+        }
+
+        .visual-array {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .array-item {
+            width: 60px;
+            height: 60px;
+            background: var(--secondary);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 5px;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .array-index {
+            position: absolute;
+            top: -25px;
+            font-size: 12px;
+            color: var(--dark);
+        }
+
+        .array-value {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .algorithm-steps {
+            background: #f0f7ff;
+            border-left: 4px solid #4dabf7;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .algorithm-steps ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .algorithm-steps li {
+            margin-bottom: 5px;
+        }
+
+        .method-demo {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+
+
+        .demo .wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .demo .array {
+            display: flex;
+        }
+
+        .demo .item {
+            width: 100px;
+            padding: 15px;
+            margin: 5px;
+            background: white;
+            color: black;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: 0.4s;
+        }
+
+        .demo .active {
+            background: #ffcc00;
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .demo .arrow {
+            position: absolute;
+            top: -35px;
+            font-size: 28px;
+            transition: 0.4s;
+        }
+
+        .demo .index {
+            margin-top: 30px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-cloud-upload-alt"></i> CALL API </h1>
+        </header>
+
+        <div class="content-wrapper">
+            <nav class="sidebar">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="#part1" class="nav-link active">
+                            <i class="fas fa-book-open"></i>  Định Nghĩa Call Api
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="#part2" class="nav-link">
+                            <i class="fas fa-cogs"></i>  Cách Thức Hoạt Động
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="#part3" class="nav-link">
+                            <i class="fas fa-code"></i>  Các Phương Thức Phổ Biến
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="#part5" class="nav-link">
+                            <i class="fas fa-link"></i> Call Api Axios
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="#postman" class="nav-link">
+                            <i class="fas fa-paper-plane"></i> Hướng Dẫn Postman
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
+
+            <main class="main-content">
+                <!-- PHẦN 1: ĐỊNH NGHĨA CALL API -->
+                <section id="part1" class="section active">
+                    <h2><i class="fas fa-book-open"></i> PHẦN 1: ĐỊNH NGHĨA CALL API</h2>
+
+                    <h3>1.1. API là gì? - Giải thích từ cơ bản đến nâng cao</h3>
+
+                    <h4>Khái niệm cơ bản</h4>
+                    <p>API (Application Programming Interface) là một tập hợp các định nghĩa và giao thức cho phép các
+                        ứng dụng phần mềm giao tiếp với nhau. Nó hoạt động như một "người trung gian" giúp các ứng dụng
+                        trao đổi dữ liệu và chức năng một cách an toàn và có kiểm soát.</p>
+
+                    <h4>Ví dụ thực tế (Analogies)</h4>
+
+                    <h5>Ví dụ 1: Nhà hàng (RESTAURANT)</h5>
+                    <ul>
+                        <li>Thực khách (Client): Bạn (ứng dụng frontend)</li>
+                        <li>Nhà bếp (Server): Nơi chế biến món ăn (backend, database)</li>
+                        <li>Người phục vụ (API): Người nhận order và mang món ra</li>
+                        <li>Thực đơn (API Documentation): Danh sách các món có thể gọi</li>
+                    </ul>
+
+                    <p><strong>Quy trình:</strong></p>
+                    <ul>
+                        <li>Bạn xem thực đơn (đọc tài liệu API)</li>
+                        <li>Bạn gọi người phục vụ (gửi request)</li>
+                        <li>Người phục vụ ghi order và chuyển xuống bếp (xử lý request)</li>
+                        <li>Đầu bếp nấu món ăn (server xử lý logic)</li>
+                        <li>Người phục vụ mang món ra cho bạn (gửi response)</li>
+                    </ul>
+
+                    <h5>Ví dụ 2: Ngân hàng (BANK)</h5>
+                    <ul>
+                        <li>Bạn không thể tự ý mở két sắt của ngân hàng để lấy tiền</li>
+                        <li>Bạn phải đến quầy giao dịch (API), điền phiếu yêu cầu (request), xuất trình CMND
+                            (authentication)</li>
+                        <li>Giao dịch viên kiểm tra và đưa tiền cho bạn (response)</li>
+                    </ul>
+
+
+                    <h3>1.2. Call API là gì? - Định nghĩa chính xác</h3>
+                    <p>Call API (Gọi API) là hành động mà một ứng dụng (client) thực hiện để gửi một yêu cầu (HTTP
+                        request) đến một máy chủ (server) thông qua một URL cụ thể, nhằm yêu cầu server thực hiện một
+                        tác vụ và trả về kết quả.</p>
+
+                    <h4>Ví dụ code minh họa (JavaScript - Fetch API):</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>JavaScript - Fetch API</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// ĐÂY LÀ MỘT CALL API</span><br>
+                        fetch(<span class="string">'https://jsonplaceholder.typicode.com/users/1'</span>)<br>
+                        &nbsp;&nbsp;.then(response =&gt; response.json())<br>
+                        &nbsp;&nbsp;.then(data =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">'Dữ liệu nhận được:'</span>, data);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// { id: 1, name: 'Leanne Graham', email:
+                            'Sincere@april.biz', ... }</span><br>
+                        &nbsp;&nbsp;})<br>
+                        &nbsp;&nbsp;.catch(error =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.error(<span class="string">'Lỗi khi gọi API:'</span>,
+                        error);<br>
+                        &nbsp;&nbsp;});
+                    </div>
+
+                    <h3>1.3. Các thành phần của một Call API</h3>
+                    <p>Một cuộc gọi API đầy đủ bao gồm 5 thành phần chính:</p>
+
+                    <h4>1.3.1. Endpoint (Điểm cuối)</h4>
+                    <p>Là URL cụ thể mà client gửi request đến.</p>
+                    <p><strong>Cấu trúc:</strong> protocol://domain:port/path?query=value</p>
+                    <p><strong>Ví dụ:</strong> https://api.example.com:443/v1/users?page=2</p>
+                    <ul>
+                        <li>https:// : Giao thức</li>
+                        <li>api.example.com : Domain</li>
+                        <li>:443 : Port (thường 80 cho HTTP, 443 cho HTTPS)</li>
+                        <li>/v1/users : Path (đường dẫn)</li>
+                        <li>?page=2 : Query parameters</li>
+                    </ul>
+
+                    <h4>1.3.2. Method (Phương thức HTTP)</h4>
+                    <p>Hành động muốn thực hiện trên server:</p>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Method</th>
+                                    <th>Mục đích</th>
+                                    <th>CRUD tương ứng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>GET</td>
+                                    <td>Lấy dữ liệu</td>
+                                    <td>READ</td>
+                                </tr>
+                                <tr>
+                                    <td>POST</td>
+                                    <td>Tạo mới dữ liệu</td>
+                                    <td>CREATE</td>
+                                </tr>
+                                <tr>
+                                    <td>PUT</td>
+                                    <td>Cập nhật toàn bộ</td>
+                                    <td>UPDATE (thay thế)</td>
+                                </tr>
+                                <tr>
+                                    <td>PATCH</td>
+                                    <td>Cập nhật một phần</td>
+                                    <td>UPDATE (chỉnh sửa)</td>
+                                </tr>
+                                <tr>
+                                    <td>DELETE</td>
+                                    <td>Xóa dữ liệu</td>
+                                    <td>DELETE</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>1.3.3. Headers (Tiêu đề)</h4>
+                    <p>Headers chứa metadata về request/response. Định dạng key-value.</p>
+                    <p><strong>Headers thường gặp:</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Headers</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        {<br>
+                        &nbsp;&nbsp;<span class="string">"Content-Type"</span>: <span
+                            class="string">"application/json"</span>, <span class="comment">// Định dạng dữ liệu gửi
+                            lên</span><br>
+                        &nbsp;&nbsp;<span class="string">"Accept"</span>: <span
+                            class="string">"application/json"</span>, <span class="comment">// Định dạng dữ liệu muốn
+                            nhận về</span><br>
+                        &nbsp;&nbsp;<span class="string">"Authorization"</span>: <span class="string">"Bearer
+                            eyJhbGciOiJIUzI1..."</span>, <span class="comment">// Token xác thực</span><br>
+                        &nbsp;&nbsp;<span class="string">"User-Agent"</span>: <span class="string">"MyApp/1.0"</span>,
+                        <span class="comment">// Thông tin client</span><br>
+                        &nbsp;&nbsp;<span class="string">"Cache-Control"</span>: <span class="string">"no-cache"</span>
+                        <span class="comment">// Kiểm soát cache</span><br>
+                        }
+                    </div>
+
+                    <h4>1.3.4. Body (Nội dung - Request Body)</h4>
+                    <p>Dữ liệu gửi lên server (thường dùng với POST, PUT, PATCH).</p>
+                    <p>Định dạng phổ biến: JSON, form-data, x-www-form-urlencoded</p>
+                    <p><strong>Ví dụ JSON:</strong></p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>JSON</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        {<br>
+                        &nbsp;&nbsp;<span class="string">"name"</span>: <span class="string">"Nguyễn Văn A"</span>,<br>
+                        &nbsp;&nbsp;<span class="string">"email"</span>: <span
+                            class="string">"a.nguyen@example.com"</span>,<br>
+                        &nbsp;&nbsp;<span class="string">"age"</span>: <span class="number">25</span>,<br>
+                        &nbsp;&nbsp;<span class="string">"address"</span>: {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"city"</span>: <span class="string">"Hà
+                            Nội"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"district"</span>: <span class="string">"Cầu
+                            Giấy"</span><br>
+                        &nbsp;&nbsp;}<br>
+                        }
+                    </div>
+
+                    <h4>1.3.5. Authentication (Xác thực)</h4>
+                    <p>Các phương thức xác thực phổ biến:</p>
+                    <ul>
+                        <li><strong>API Key:</strong> X-API-Key: abc123def456</li>
+                        <li><strong>Basic Auth:</strong> Authorization: Basic base64(username:password)</li>
+                        <li><strong>Bearer Token (JWT):</strong> Authorization: Bearer eyJhbGciOiJIUzI1NiIs...</li>
+                        <li><strong>OAuth 2.0:</strong> Phức tạp hơn, dùng cho các ứng dụng lớn (Google, Facebook login)
+                        </li>
+                    </ul>
+
+                    <h3>1.4. Phân loại API</h3>
+
+                    <h4>Theo kiến trúc</h4>
+                    <ul>
+                        <li><strong>REST API (Representational State Transfer)</strong>
+                            <ul>
+                                <li>Phổ biến nhất hiện nay</li>
+                                <li>Sử dụng HTTP methods chuẩn</li>
+                                <li>Stateless (không lưu trạng thái)</li>
+                                <li>Trả về JSON/XML</li>
+                            </ul>
+                        </li>
+                        <li><strong>SOAP API (Simple Object Access Protocol)</strong>
+                            <ul>
+                                <li>Giao thức chặt chẽ, dùng XML</li>
+                                <li>Bảo mật cao hơn (WS-Security)</li>
+                                <li>Thường dùng trong ngân hàng, thanh toán</li>
+                            </ul>
+                        </li>
+                        <li><strong>GraphQL API</strong>
+                            <ul>
+                                <li>Do Facebook phát triển</li>
+                                <li>Client tự chọn fields muốn lấy</li>
+                                <li>Giảm over-fetching/under-fetching</li>
+                            </ul>
+                        </li>
+                        <li><strong>WebSocket API</strong>
+                            <ul>
+                                <li>Kết nối hai chiều, realtime</li>
+                                <li>Dùng trong chat, game, stock market</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h4>Theo phạm vi sử dụng</h4>
+                    <ul>
+                        <li><strong>Public API (Open API):</strong> Mở cho tất cả mọi người (Google Maps, Facebook)</li>
+                        <li><strong>Private API (Internal API):</strong> Chỉ dùng nội bộ công ty</li>
+                        <li><strong>Partner API:</strong> Chia sẻ với đối tác cụ thể</li>
+                        <li><strong>Composite API:</strong> Kết hợp nhiều API trong một lần gọi</li>
+                    </ul>
+
+                    <h3>1.5. Thuật ngữ quan trọng</h3>
+
+                    <h4>1.5.1. REST (Representational State Transfer)</h4>
+                    <p>Là một kiến trúc, không phải giao thức. RESTful API tuân theo 6 nguyên tắc:</p>
+                    <ol>
+                        <li><strong>Client-Server:</strong> Tách biệt giao diện và dữ liệu</li>
+                        <li><strong>Stateless:</strong> Mỗi request độc lập, không phụ thuộc request trước</li>
+                        <li><strong>Cacheable:</strong> Response có thể được cache</li>
+                        <li><strong>Uniform Interface:</strong> Giao diện đồng nhất</li>
+                        <li><strong>Layered System:</strong> Hệ thống phân tầng</li>
+                        <li><strong>Code on Demand (tùy chọn):</strong> Server có thể gửi code về client</li>
+                    </ol>
+
+                    <h4>1.5.2. JSON (JavaScript Object Notation)</h4>
+                    <p>Định dạng dữ liệu nhẹ, dễ đọc, dễ parse.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>JSON</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        {<br>
+                        &nbsp;&nbsp;<span class="string">"users"</span>: [<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"id"</span>: <span
+                            class="number">1</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"name"</span>: <span
+                            class="string">"John Doe"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"email"</span>: <span
+                            class="string">"john@example.com"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"isActive"</span>: <span
+                            class="keyword">true</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"id"</span>: <span
+                            class="number">2</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"name"</span>: <span
+                            class="string">"Jane Smith"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"email"</span>: <span
+                            class="string">"jane@example.com"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"isActive"</span>: <span
+                            class="keyword">false</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;],<br>
+                        &nbsp;&nbsp;<span class="string">"total"</span>: <span class="number">2</span>,<br>
+                        &nbsp;&nbsp;<span class="string">"page"</span>: <span class="number">1</span><br>
+                        }
+                    </div>
+
+                    <h4>1.5.3. XML (eXtensible Markup Language)</h4>
+                    <p>Định dạng cũ hơn, verbose hơn JSON.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>XML</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;users&gt;<br>
+                        &nbsp;&nbsp;&lt;user id=<span class="string">"1"</span>&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;John Doe&lt;/name&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;email&gt;john@example.com&lt;/email&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;isActive&gt;true&lt;/isActive&gt;<br>
+                        &nbsp;&nbsp;&lt;/user&gt;<br>
+                        &nbsp;&nbsp;&lt;user id=<span class="string">"2"</span>&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;Jane Smith&lt;/name&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;email&gt;jane@example.com&lt;/email&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;isActive&gt;false&lt;/isActive&gt;<br>
+                        &nbsp;&nbsp;&lt;/user&gt;<br>
+                        &nbsp;&nbsp;&lt;total&gt;2&lt;/total&gt;<br>
+                        &nbsp;&nbsp;&lt;page&gt;1&lt;/page&gt;<br>
+                        &lt;/users&gt;
+                    </div>
+
+                    <h4>1.5.4. SDK (Software Development Kit)</h4>
+                    <p>Bộ công cụ phát triển phần mềm, bao gồm:</p>
+                    <ul>
+                        <li>Thư viện code (library)</li>
+                        <li>Tài liệu (documentation)</li>
+                        <li>Code mẫu (sample code)</li>
+                        <li>Công cụ debug</li>
+                    </ul>
+                    <p>Ví dụ: Firebase SDK, Facebook SDK, Stripe SDK</p>
+
+                    <h4>1.5.5. Các thuật ngữ khác</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Thuật ngữ</th>
+                                    <th>Ý nghĩa</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Endpoint</td>
+                                    <td>Địa chỉ cụ thể của API</td>
+                                </tr>
+                                <tr>
+                                    <td>Payload</td>
+                                    <td>Dữ liệu trong request/response</td>
+                                </tr>
+                                <tr>
+                                    <td>Rate Limit</td>
+                                    <td>Giới hạn số lần gọi API trong khoảng thời gian</td>
+                                </tr>
+                                <tr>
+                                    <td>Pagination</td>
+                                    <td>Phân trang dữ liệu (page, limit, offset)</td>
+                                </tr>
+                                <tr>
+                                    <td>Idempotent</td>
+                                    <td>Gọi nhiều lần cho kết quả giống nhau (GET, PUT, DELETE)</td>
+                                </tr>
+                                <tr>
+                                    <td>CORS</td>
+                                    <td>Cơ chế bảo mật của trình duyệt</td>
+                                </tr>
+                                <tr>
+                                    <td>Webhook</td>
+                                    <td>API ngược - server gọi về client khi có sự kiện</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- PHẦN 2: CÁCH THỨC HOẠT ĐỘNG CỦA CALL API -->
+                <section id="part2" class="section">
+                    <h2><i class="fas fa-cogs"></i> PHẦN 2: CÁCH THỨC HOẠT ĐỘNG CỦA CALL API</h2>
+
+                    <h3>2.1. Mô hình Client-Server</h3>
+
+                    <h4>Định nghĩa</h4>
+                    <p>Mô hình Client-Server là kiến trúc mạng phân tán, trong đó:</p>
+                    <ul>
+                        <li><strong>Client:</strong> Thiết bị/ứng dụng yêu cầu dịch vụ (gửi request)</li>
+                        <li><strong>Server:</strong> Máy tính cung cấp dịch vụ (xử lý và trả response)</li>
+                    </ul>
+
+                    <h4>Đặc điểm chi tiết</h4>
+                    <p><strong>Client có thể là:</strong></p>
+                    <ul>
+                        <li>Web browser (Chrome, Firefox)</li>
+                        <li>Mobile app (iOS, Android)</li>
+                        <li>Desktop app (Electron, .NET)</li>
+                        <li>IoT device (smart watch, smart TV)</li>
+                        <li>Another server (trong microservices)</li>
+                    </ul>
+
+                    <p><strong>Server bao gồm:</strong></p>
+                    <ul>
+                        <li>Web server (Nginx, Apache) - nhận request</li>
+                        <li>Application server (Node.js, Python Django, Java Spring) - xử lý logic</li>
+                        <li>Database server (MySQL, MongoDB) - lưu trữ dữ liệu</li>
+                    </ul>
+
+                    <h4>Sơ đồ luồng hoạt động</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Sơ đồ Client-Server</span>
+                        </div>
+                        [Client Browser]<br>
+                        |<br>
+                        | 1. HTTP Request (GET /api/users)<br>
+                        V<br>
+                        [Web Server (Nginx)]<br>
+                        |<br>
+                        | 2. Forward request<br>
+                        V<br>
+                        [Application Server (Node.js)]<br>
+                        |<br>
+                        | 3. Query database<br>
+                        V<br>
+                        [Database (PostgreSQL)]<br>
+                        |<br>
+                        | 4. Return data<br>
+                        V<br>
+                        [Application Server]<br>
+                        |<br>
+                        | 5. Format JSON response<br>
+                        V<br>
+                        [Web Server]<br>
+                        |<br>
+                        | 6. HTTP Response (200 OK + JSON)<br>
+                        V<br>
+                        [Client Browser]<br>
+                        |<br>
+                        | 7. Render UI<br>
+                        V<br>
+                        [User sees data]
+                    </div>
+
+                    <h3>2.2. Quy trình 5 bước của một Call API</h3>
+
+                    <h4>Bước 1: Xác định nhu cầu</h4>
+                    <p>Client cần thực hiện một tác vụ:</p>
+                    <ul>
+                        <li>Hiển thị danh sách sản phẩm</li>
+                        <li>Đăng nhập user</li>
+                        <li>Cập nhật thông tin profile</li>
+                        <li>Thanh toán đơn hàng</li>
+                    </ul>
+
+                    <h4>Bước 2: Cấu hình Request</h4>
+                    <p>Lập trình viên (hoặc framework) xây dựng HTTP request</p>
+
+                    <h4>Bước 3: Gửi Request</h4>
+                    <p>Quá trình diễn ra trong mạng:</p>
+                    <ul>
+                        <li><strong>DNS Resolution:</strong> Chuyển domain api.example.com thành IP (VD: 104.18.22.111)
+                        </li>
+                        <li><strong>TCP Handshake:</strong> Thiết lập kết nối 3 bước (SYN, SYN-ACK, ACK)</li>
+                        <li><strong>TLS Handshake (nếu HTTPS):</strong> Thiết lập mã hóa SSL/TLS</li>
+                        <li><strong>Gửi dữ liệu:</strong> HTTP request được chia thành các gói tin TCP/IP</li>
+                        <li><strong>Routing:</strong> Các gói tin đi qua nhiều router, switch đến server</li>
+                    </ul>
+
+                    <h4>Bước 4: Xử lý Request tại Server</h4>
+                    <p>Server nhận request và xử lý theo quy trình</p>
+
+                    <h4>Bước 5: Nhận và xử lý Response</h4>
+                    <p>Client nhận response và xử lý:</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Xử lý Response</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        fetch(<span class="string">"https://jsonplaceholder.typicode.com/users"</span>)<br>
+                        &nbsp;&nbsp;.then(response =&gt; response.json())<br>
+                        &nbsp;&nbsp;.then(data =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(data);<br>
+                        &nbsp;&nbsp;})<br>
+                        &nbsp;&nbsp;.catch(error =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Error:"</span>, error);<br>
+                        &nbsp;&nbsp;});
+                    </div>
+
+                    <h3>2.3. HTTP Protocol - Giao thức vận chuyển</h3>
+
+                    <h4>HTTP là gì?</h4>
+                    <p>HTTP (Hypertext Transfer Protocol) là giao thức truyền tải siêu văn bản, hoạt động dựa trên mô
+                        hình request-response giữa client và server.</p>
+
+                    <h4>Đặc điểm</h4>
+                    <ul>
+                        <li>Port mặc định: 80 (HTTP), 443 (HTTPS)</li>
+                        <li>Stateless: Mỗi request độc lập</li>
+                        <li>Text-based: Con người có thể đọc được (khác với binary protocol)</li>
+                        <li>Extensible: Có thể thêm headers tùy chỉnh</li>
+                    </ul>
+
+                    <h3>2.4. Status Codes - Mã trạng thái HTTP chi tiết</h3>
+
+                    <h4>2xx: Thành công</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Tên</th>
+                                    <th>Ý nghĩa</th>
+                                    <th>Ví dụ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="status-code-success">200</span></td>
+                                    <td>OK</td>
+                                    <td>Thành công, có response body</td>
+                                    <td>GET thành công</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="status-code-success">201</span></td>
+                                    <td>Created</td>
+                                    <td>Tạo mới thành công</td>
+                                    <td>POST tạo user</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="status-code-success">202</span></td>
+                                    <td>Accepted</td>
+                                    <td>Đã chấp nhận nhưng chưa xử lý xong</td>
+                                    <td>Xử lý bất đồng bộ</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="status-code-success">204</span></td>
+                                    <td>No Content</td>
+                                    <td>Thành công, không có body</td>
+                                    <td>DELETE thành công</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>3xx: Chuyển hướng</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Tên</th>
+                                    <th>Ý nghĩa</th>
+                                    <th>Ví dụ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="status-code-redirect">301</span></td>
+                                    <td>Moved Permanently</td>
+                                    <td>Chuyển hướng vĩnh viễn</td>
+                                    <td>Thay đổi domain</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="status-code-redirect">302</span></td>
+                                    <td>Found</td>
+                                    <td>Chuyển hướng tạm thời</td>
+                                    <td>Redirect sau login</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="status-code-redirect">304</span></td>
+                                    <td>Not Modified</td>
+                                    <td>Dùng cache</td>
+                                    <td>Kiểm tra ETag</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>4xx: Lỗi từ Client</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Tên</th>
+                                    <th>Ý nghĩa</th>
+                                    <th>Nguyên nhân</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="status-code-error">400</span></td>
+                                    <td>Bad Request</td>
+                                    <td>Request không hợp lệ</td>
+                                    <td>Thiếu field, sai format</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="status-code-error">401</span></td>
+                                    <td>Unauthorized</td>
+                                    <td>Chưa xác thực</td>
+                                    <td>Thiếu token, token hết hạn</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="status-code-error">403</span></td>
+                                    <td>Forbidden</td>
+                                    <td>Không có quyền</td>
+                                    <td>Đã login nhưng không đủ quyền</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="status-code-error">404</span></td>
+                                    <td>Not Found</td>
+                                    <td>Không tìm thấy resource</td>
+                                    <td>URL sai, ID không tồn tại</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="status-code-error">405</span></td>
+                                    <td>Method Not Allowed</td>
+                                    <td>Sai phương thức</td>
+                                    <td>Dùng POST thay vì GET</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="status-code-error">409</span></td>
+                                    <td>Conflict</td>
+                                    <td>Xung đột dữ liệu</td>
+                                    <td>Email đã tồn tại</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="status-code-error">422</span></td>
+                                    <td>Unprocessable Entity</td>
+                                    <td>Dữ liệu không hợp lệ</td>
+                                    <td>Validation lỗi</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="status-code-error">429</span></td>
+                                    <td>Too Many Requests</td>
+                                    <td>Vượt quá rate limit</td>
+                                    <td>Gọi API quá nhiều</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>5xx: Lỗi từ Server</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Tên</th>
+                                    <th>Ý nghĩa</th>
+                                    <th>Nguyên nhân</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="status-code-server">500</span></td>
+                                    <td>Internal Server Error</td>
+                                    <td>Lỗi server</td>
+                                    <td>Exception không xử lý</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="status-code-server">502</span></td>
+                                    <td>Bad Gateway</td>
+                                    <td>Lỗi gateway</td>
+                                    <td>Proxy nhận response lỗi</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="status-code-server">503</span></td>
+                                    <td>Service Unavailable</td>
+                                    <td>Quá tải/bảo trì</td>
+                                    <td>Server đang quá tải</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="status-code-server">504</span></td>
+                                    <td>Gateway Timeout</td>
+                                    <td>Timeout</td>
+                                    <td>Request quá lâu</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- PHẦN 3: CÁC PHƯƠNG THỨC CALL API PHỔ BIẾN -->
+                <section id="part3" class="section">
+                    <h2><i class="fas fa-code"></i> PHẦN 3: CÁC PHƯƠNG THỨC CALL API PHỔ BIẾN</h2>
+
+                    <h3>3.1. GET - Lấy dữ liệu</h3>
+                    <h4>Đặc điểm</h4>
+                    <ul>
+                        <li><strong>Mục đích:</strong> Lấy dữ liệu từ server</li>
+                        <li><strong>Idempotent:</strong> Gọi 1 lần hay 100 lần đều cho kết quả giống nhau</li>
+                        <li><strong>Cacheable:</strong> Có thể cache được</li>
+                        <li>Không có body (hoặc không nên có)</li>
+                        <li>Dữ liệu gửi qua: URL parameters, query string</li>
+                    </ul>
+
+                    <h4>Cú pháp</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>GET Request</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// Lấy tất cả users</span><br>
+                        fetch(<span class="string">'https://api.example.com/users'</span>)<br><br>
+                        <span class="comment">// Lấy user cụ thể theo ID</span><br>
+                        fetch(<span class="string">'https://api.example.com/users/123'</span>)<br><br>
+                        <span class="comment">// Lọc, phân trang, sắp xếp</span><br>
+                        fetch(<span
+                            class="string">'https://api.example.com/users?page=2&limit=10&sort=name&order=asc&role=admin'</span>)
+                    </div>
+
+                    <h4>Ví dụ chi tiết</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>GET Example</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        fetch(<span class="string">"https://jsonplaceholder.typicode.com/users"</span>)<br>
+                        &nbsp;&nbsp;.then(response =&gt; response.json())<br>
+                        &nbsp;&nbsp;.then(data =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(data);<br>
+                        &nbsp;&nbsp;})<br>
+                        &nbsp;&nbsp;.catch(error =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Error:"</span>, error);<br>
+                        &nbsp;&nbsp;});
+                    </div>
+
+                    <h3>3.2. POST - Tạo mới</h3>
+                    <h4>Đặc điểm</h4>
+                    <ul>
+                        <li><strong>Mục đích:</strong> Tạo resource mới trên server</li>
+                        <li><strong>Không idempotent:</strong> Gọi nhiều lần tạo nhiều bản ghi</li>
+                        <li><strong>Không cache được</strong> (thường không cache)</li>
+                        <li>Có body chứa dữ liệu cần tạo</li>
+                        <li>Response thường là: 201 Created + dữ liệu vừa tạo</li>
+                    </ul>
+
+                    <h4>Cú pháp</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>POST Request</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        fetch(<span class="string">'https://api.example.com/users'</span>, {<br>
+                        &nbsp;&nbsp;method: <span class="string">'POST'</span>,<br>
+                        &nbsp;&nbsp;body: JSON.stringify({<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;name: <span class="string">'Nguyễn Văn A'</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;email: <span class="string">'a@example.com'</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;password: <span class="string">'secret123'</span><br>
+                        &nbsp;&nbsp;})<br>
+                        })
+                    </div>
+
+                    <h3>3.3. PUT - Cập nhật toàn bộ</h3>
+                    <h4>Đặc điểm</h4>
+                    <ul>
+                        <li><strong>Mục đích:</strong> Thay thế hoàn toàn một resource</li>
+                        <li><strong>Idempotent:</strong> Gọi nhiều lần cho kết quả giống nhau</li>
+                        <li>Yêu cầu gửi đầy đủ fields (nếu thiếu sẽ bị xóa/mặc định)</li>
+                        <li>Thường dùng với ID cụ thể: PUT /users/123</li>
+                    </ul>
+
+                    <h4>Ví dụ</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>PUT Example</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// Cập nhật toàn bộ user</span><br>
+                        <span class="keyword">const</span> updateUser = <span class="keyword">async</span> (userId,
+                        userData) =&gt; {<br>
+                        &nbsp;&nbsp;<span class="keyword">const</span> response = <span class="keyword">await</span>
+                        fetch(<span class="string">`https://api.example.com/users/<span
+                                class="keyword">${userId}</span>`</span>, {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;method: <span class="string">'PUT'</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;body: JSON.stringify({<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name: userData.name,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;email: userData.email,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;phone: userData.phone,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;address: userData.address<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Thiếu field nào sẽ bị set về
+                            null/default</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;})<br>
+                        &nbsp;&nbsp;});<br>
+                        &nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;<span class="keyword">return</span> response.json();<br>
+                        };
+                    </div>
+
+                    <h3>3.4. PATCH - Cập nhật một phần</h3>
+                    <h4>Đặc điểm</h4>
+                    <ul>
+                        <li><strong>Mục đích:</strong> Cập nhật một hoặc vài fields của resource</li>
+                        <li><strong>Idempotent:</strong> Có thể idempotent tùy cách implement</li>
+                        <li>Chỉ gửi fields cần thay đổi</li>
+                        <li>Tiết kiệm băng thông hơn PUT</li>
+                    </ul>
+
+                    <h4>Ví dụ</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>PATCH Example</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// Chỉ cập nhật email</span><br>
+                        <span class="keyword">const</span> updateEmail = <span class="keyword">async</span> (userId,
+                        newEmail) =&gt; {<br>
+                        &nbsp;&nbsp;<span class="keyword">const</span> response = <span class="keyword">await</span>
+                        fetch(<span class="string">`https://api.example.com/users/<span
+                                class="keyword">${userId}</span>`</span>, {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;method: <span class="string">'PATCH'</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;body: JSON.stringify({<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;email: newEmail <span class="comment">// Chỉ gửi field cần
+                            update</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;})<br>
+                        &nbsp;&nbsp;});<br>
+                        &nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;<span class="keyword">return</span> response.json();<br>
+                        };
+                    </div>
+
+                    <h3>3.5. DELETE - Xóa dữ liệu</h3>
+                    <h4>Đặc điểm</h4>
+                    <ul>
+                        <li><strong>Mục đích:</strong> Xóa resource khỏi server</li>
+                        <li><strong>Idempotent:</strong> Xóa lần đầu thành công, lần sau trả về 404</li>
+                        <li>Response thường là: 204 No Content (không có body)</li>
+                    </ul>
+
+                    <h4>Ví dụ</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>DELETE Example</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> deleteUser = <span class="keyword">async</span> (userId)
+                        =&gt; {<br>
+                        &nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">const</span> response = <span
+                            class="keyword">await</span> fetch(<span class="string">`https://api.example.com/users/<span
+                                class="keyword">${userId}</span>`</span>, {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;method: <span class="string">'DELETE'</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;headers: {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">'Authorization'</span>:
+                        <span class="string">`Bearer <span class="keyword">${token}</span>`</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (response.status === <span
+                            class="number">204</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> { success: <span
+                            class="keyword">true</span>, message: <span class="string">'Xóa thành công'</span> };<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">else if</span> (response.status === <span
+                            class="number">404</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> { success: <span
+                            class="keyword">false</span>, message: <span class="string">'User không tồn tại'</span>
+                        };<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">else</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">const</span> data = <span
+                            class="keyword">await</span> response.json();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> { success: <span
+                            class="keyword">false</span>, message: data.message };<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;} <span class="keyword">catch</span> (error) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> { success: <span
+                            class="keyword">false</span>, message: error.message };<br>
+                        &nbsp;&nbsp;}<br>
+                        };
+                    </div>
+
+                    <h3>3.7. OPTIONS - Kiểm tra phương thức</h3>
+                    <h4>Đặc điểm</h4>
+                    <ul>
+                        <li><strong>Mục đích:</strong> Hỏi server cho phép những methods nào</li>
+                        <li>Thường dùng cho CORS (trình duyệt tự động gọi)</li>
+                        <li>Response: Trả về header Allow: GET, POST, PUT, DELETE</li>
+                    </ul>
+
+                    <h4>Ví dụ</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>OPTIONS Example</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// Kiểm tra API cho phép những methods nào</span><br>
+                        <span class="keyword">const</span> checkAllowedMethods = <span class="keyword">async</span> ()
+                        =&gt; {<br>
+                        &nbsp;&nbsp;<span class="keyword">const</span> response = <span class="keyword">await</span>
+                        fetch(<span class="string">'https://api.example.com/users'</span>, {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;method: <span class="string">'OPTIONS'</span><br>
+                        &nbsp;&nbsp;});<br>
+                        &nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;<span class="keyword">const</span> allowedMethods = response.headers.get(<span
+                            class="string">'Allow'</span>);<br>
+                        &nbsp;&nbsp;console.log(<span class="string">'Allowed methods:'</span>, allowedMethods);<br>
+                        &nbsp;&nbsp;<span class="comment">// "GET, POST, PUT, DELETE, HEAD, OPTIONS"</span><br>
+                        };
+                    </div>
+                </section>
+
+                <!-- PHẦN 5: CALL API AXIOS -->
+                <section id="part5" class="section">
+                    <h2><i class="fas fa-link"></i> PHẦN 5: CALL API AXIOS</h2>
+
+                    <h3>I. Axios là gì?</h3>
+                    <p>Axios là một thư viện JavaScript phổ biến, mạnh mẽ và dễ sử dụng, dùng để thực hiện các HTTP
+                        request từ:</p>
+                    <ul>
+                        <li><strong>Trình duyệt:</strong> Sử dụng XMLHttpRequest phía sau.</li>
+                        <li><strong>Môi trường Node.js:</strong> Sử dụng module http tích hợp sẵn.</li>
+                    </ul>
+                    <p>Nó cung cấp một API thân thiện, dựa trên Promise, giúp việc giao tiếp với các API trở nên đơn
+                        giản và hiệu quả hơn so với việc sử dụng fetch() thông thường.</p>
+
+                    <h3>Vì sao dùng Axios thay vì Fetch?</h3>
+                    <p>Mặc dù fetch() là một API có sẵn trong hầu hết các trình duyệt hiện đại, Axios cung cấp nhiều
+                        tiện ích và giải pháp cho các vấn đề thường gặp, giúp code gọn gàng và dễ quản lý hơn.</p>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tiêu chí</th>
+                                    <th>Fetch API</th>
+                                    <th>Axios</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Xử lý JSON</td>
+                                    <td>❌ Phải gọi phương thức .json() trên response.</td>
+                                    <td>✅ Tự động parse JSON. Dữ liệu có sẵn trong response.data.</td>
+                                </tr>
+                                <tr>
+                                    <td>Xử lý lỗi HTTP</td>
+                                    <td>❌ Chỉ reject promise khi có lỗi mạng. Lỗi HTTP (4xx, 5xx) vẫn được coi là thành
+                                        công (resolve).</td>
+                                    <td>✅ Tự động reject promise cho các mã lỗi HTTP, dễ dàng bắt lỗi trong .catch()
+                                        hoặc try/catch.</td>
+                                </tr>
+                                <tr>
+                                    <td>Timeout</td>
+                                    <td>❌ Không có cơ chế timeout tích hợp. Phải tự dùng AbortController.</td>
+                                    <td>✅ Hỗ trợ timeout dễ dàng qua cấu hình timeout.</td>
+                                </tr>
+                                <tr>
+                                    <td>Interceptor</td>
+                                    <td>❌ Không hỗ trợ.</td>
+                                    <td>✅ Có interceptor cho phép can thiệp vào request và response trước khi chúng được
+                                        xử lý bởi .then() hoặc .catch() (rất hữu ích để thêm token, log lỗi toàn
+                                        cục,...).</td>
+                                </tr>
+                                <tr>
+                                    <td>Tạo instance</td>
+                                    <td>❌ Không hỗ trợ.</td>
+                                    <td>✅ Cho phép tạo instance với cấu hình riêng (baseURL, headers mặc định,...) để
+                                        tái sử dụng.</td>
+                                </tr>
+                                <tr>
+                                    <td>Cú pháp</td>
+                                    <td>Tương đối dài dòng hơn.</td>
+                                    <td>Ngắn gọn, rõ ràng hơn.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>II. CÀI ĐẶT AXIOS</h3>
+
+                    <h4>Dùng CDN (trong file HTML thuần)</h4>
+                    <p>Thêm thẻ &lt;script&gt; vào phần &lt;head&gt; hoặc cuối &lt;body&gt; của file HTML.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>HTML với CDN</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;!DOCTYPE html&gt;<br>
+                        &lt;html&gt;<br>
+                        &lt;head&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;Học Axios&lt;/title&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">&lt;!-- Thêm Axios từ CDN --&gt;</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;script src=<span
+                            class="string">"https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"</span>&gt;&lt;/script&gt;<br>
+                        &lt;/head&gt;<br>
+                        &lt;body&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;script&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Giờ bạn có thể sử dụng
+                            axios ở đây</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;axios.get(<span
+                            class="string">'https://api.example.com/data'</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.then(response =&gt;
+                        console.log(response.data));<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;/script&gt;<br>
+                        &lt;/body&gt;<br>
+                        &lt;/html&gt;
+                    </div>
+
+                    <h3>III. CẤU TRÚC REQUEST TRONG AXIOS</h3>
+                    <p>Khi bạn thực hiện một request với Axios, nó trả về một Promise. Khi Promise này được giải quyết
+                        (resolved), bạn sẽ nhận được một response object với cấu trúc đầy đủ thông tin.</p>
+
+                    <h4>Cấu trúc của Response Object:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Response Object</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        {<br>
+                        &nbsp;&nbsp;<span class="comment">// `data`: Phản hồi từ server đã được parse tự động (quan
+                            trọng nhất)</span><br>
+                        &nbsp;&nbsp;data: {},<br>
+                        &nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;<span class="comment">// `status`: Mã trạng thái HTTP (ví dụ: 200, 201, 404,
+                            500)</span><br>
+                        &nbsp;&nbsp;status: 200,<br>
+                        &nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;<span class="comment">// `statusText`: Thông điệp trạng thái HTTP (ví dụ: "OK",
+                            "Created")</span><br>
+                        &nbsp;&nbsp;statusText: <span class="string">'OK'</span>,<br>
+                        &nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;<span class="comment">// `headers`: Các headers mà server gửi về</span><br>
+                        &nbsp;&nbsp;headers: {},<br>
+                        &nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;<span class="comment">// `config`: Cấu hình gốc của request mà bạn đã
+                            dùng</span><br>
+                        &nbsp;&nbsp;config: {},<br>
+                        &nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;<span class="comment">// `request`: Đối tượng request gốc (dùng trong môi trường
+                            Node.js hoặc XMLHttpRequest)</span><br>
+                        &nbsp;&nbsp;request: {}<br>
+                        }
+                    </div>
+                    <p>👉 Điều quan trọng nhất cần nhớ: Dữ liệu thực tế mà bạn cần luôn nằm trong thuộc tính
+                        response.data.</p>
+
+                    <h3>IV. CÁC METHOD HTTP TRONG AXIOS</h3>
+
+                    <h4>1 GET – Lấy dữ liệu</h4>
+                    <p><strong>Mục đích:</strong> Yêu cầu server gửi về một tài nguyên (danh sách, chi tiết).</p>
+                    <p><strong>Đặc điểm:</strong> Không gửi kèm dữ liệu trong body.</p>
+                    <p><strong>Ví dụ:</strong> Lấy danh sách tất cả người dùng.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Axios GET</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        axios.get(<span class="string">'https://jsonplaceholder.typicode.com/users'</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.then(response =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Xử lý khi thành
+                            công</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">'Dữ liệu nhận
+                            được:'</span>, response.data);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;})<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.catch(error =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Xử lý khi thất bại (lỗi
+                            mạng, lỗi server 4xx/5xx)</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.error(<span class="string">'Có lỗi xảy
+                            ra:'</span>, error.message);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;});
+                    </div>
+
+                    <h4>2 POST – Tạo dữ liệu mới</h4>
+                    <p><strong>Mục đích:</strong> Gửi dữ liệu mới lên server để tạo một tài nguyên.</p>
+                    <p><strong>Đặc điểm:</strong> Dữ liệu cần tạo được gửi trong body (thường là object).</p>
+                    <p><strong>Ví dụ:</strong> Thêm một người dùng mới.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Axios POST</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> newUser = {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;name: <span class="string">'Nguyễn Văn A'</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;email: <span class="string">'nguyenvana@example.com'</span><br>
+                        };<br>
+                        <br>
+                        axios.post(<span class="string">'https://jsonplaceholder.typicode.com/users'</span>,
+                        newUser)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.then(response =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Server thường trả về dữ
+                            liệu của bản ghi vừa tạo (kèm ID mới)</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">'Tạo thành
+                            công:'</span>, response.data);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;})<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.catch(error =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.error(<span class="string">'Lỗi khi
+                            tạo:'</span>, error.message);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;});
+                    </div>
+
+                    <h4>3 PUT – Cập nhật toàn bộ</h4>
+                    <p><strong>Mục đích:</strong> Thay thế hoàn toàn một tài nguyên đã tồn tại bằng dữ liệu mới gửi lên.
+                    </p>
+                    <p><strong>Đặc điểm:</strong> Cần gửi toàn bộ các trường của tài nguyên đó.</p>
+                    <p><strong>Ví dụ:</strong> Cập nhật toàn bộ thông tin của người dùng có ID là 1.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Axios PUT</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> updatedUser = {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;name: <span class="string">'Trần Thị B (Đã sửa)'</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;email: <span class="string">'tranthib@example.com'</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Giả sử user gốc còn có trường phone, nếu không
+                            gửi lên, nó có thể bị mất</span><br>
+                        };<br>
+                        <br>
+                        axios.put(<span class="string">'https://jsonplaceholder.typicode.com/users/1'</span>,
+                        updatedUser)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.then(response =&gt; console.log(<span class="string">'Cập nhật PUT
+                            thành công:'</span>, response.data))<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.catch(error =&gt; console.error(<span class="string">'Lỗi PUT:'</span>,
+                        error));
+                    </div>
+
+                    <h4>4 PATCH – Cập nhật một phần</h4>
+                    <p><strong>Mục đích:</strong> Chỉ cập nhật một vài trường cụ thể của tài nguyên.</p>
+                    <p><strong>Đặc điểm:</strong> Chỉ gửi những trường cần thay đổi.</p>
+                    <p><strong>Ví dụ:</strong> Chỉ cập nhật tên của người dùng có ID là 1.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Axios PATCH</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> partialUpdate = {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;name: <span class="string">'Chỉ cập nhật tên này thôi'</span><br>
+                        };<br>
+                        <br>
+                        axios.patch(<span class="string">'https://jsonplaceholder.typicode.com/users/1'</span>,
+                        partialUpdate)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.then(response =&gt; console.log(<span class="string">'Cập nhật PATCH
+                            thành công:'</span>, response.data))<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.catch(error =&gt; console.error(<span class="string">'Lỗi
+                            PATCH:'</span>, error));
+                    </div>
+
+                    <h4>5 DELETE – Xóa</h4>
+                    <p><strong>Mục đích:</strong> Yêu cầu server xóa một tài nguyên.</p>
+                    <p><strong>Đặc điểm:</strong> Thường không có body.</p>
+                    <p><strong>Ví dụ:</strong> Xóa người dùng có ID là 1.</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Axios DELETE</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        axios.delete(<span class="string">'https://jsonplaceholder.typicode.com/users/1'</span>)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.then(response =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Thành công, thường
+                            response.data có thể là rỗng hoặc thông báo</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">'Xóa thành
+                            công. Status:'</span>, response.status);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;})<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.catch(error =&gt; console.error(<span class="string">'Lỗi khi
+                            xóa:'</span>, error));
+                    </div>
+
+                    <h3>V. ASYNC/AWAIT VỚI AXIOS</h3>
+                    <p>async/await là cú pháp hiện đại trong JavaScript giúp bạn làm việc với Promise một cách dễ dàng
+                        hơn, làm cho code trông giống như đồng bộ (synchronous) và dễ đọc, dễ hiểu hơn so với việc sử
+                        dụng .then() và .catch().</p>
+                    <ul>
+                        <li><strong>async</strong> được đặt trước một hàm để báo hiệu rằng hàm đó sẽ luôn trả về một
+                            Promise.</li>
+                        <li><strong>await</strong> được đặt trước một Promise (ví dụ: axios.get()) và nó sẽ tạm dừng
+                            việc thực thi hàm async cho đến khi Promise đó được "giải quyết" (resolved hoặc rejected).
+                            Sau đó, nó trả về kết quả của Promise đó.</li>
+                    </ul>
+
+                    <h4>Ví dụ chuẩn với try...catch (cách được khuyến nghị):</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Axios với Async/Await</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// Định nghĩa một hàm async</span><br>
+                        <span class="keyword">async</span> <span class="keyword">function</span> fetchUserData() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 'await' sẽ đợi
+                            axios.get hoàn thành và gán response cho biến</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">const</span> response =
+                        <span class="keyword">await</span> axios.get(<span
+                            class="string">'https://jsonplaceholder.typicode.com/users/1'</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Code ở đây chỉ chạy sau
+                            khi request thành công</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">'Dữ liệu người
+                            dùng:'</span>, response.data);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span> (error) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Nếu có bất kỳ lỗi nào
+                            trong khối try (kể cả lỗi mạng, lỗi HTTP), nó sẽ được bắt ở đây</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.error(<span class="string">'Đã xảy ra
+                            lỗi khi gọi API:'</span>, error.message);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }<br>
+                        <br>
+                        <span class="comment">// Gọi hàm</span><br>
+                        fetchUserData();
+                    </div>
+
+                    <h3>VI. GỬI QUERY PARAMS</h3>
+                    <p>Query parameters (thường gọi là params) là cách để thêm các thông số vào URL nhằm mục đích lọc,
+                        phân trang, tìm kiếm hoặc sắp xếp dữ liệu.</p>
+                    <p><strong>Ví dụ URL có params:</strong>
+                        https://api.example.com/users?<strong>page=2</strong>&<strong>limit=10</strong>&<strong>search=john</strong>
+                    </p>
+                    <p>Với Axios, thay vì tự tay ghép chuỗi, bạn có thể sử dụng tùy chọn params trong cấu hình. Axios sẽ
+                        tự động encode và thêm chúng vào URL.</p>
+
+                    <h4>Ví dụ:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Axios với Query Params</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">async</span> <span class="keyword">function</span>
+                        getPaginatedUsers(pageNumber, pageLimit) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">const</span> response =
+                        <span class="keyword">await</span> axios.get(<span
+                            class="string">'https://jsonplaceholder.typicode.com/users'</span>, {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;params: {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                            class="comment">// Key: Tên param, Value: Giá trị</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;page:
+                        pageNumber, <span class="comment">// Ví dụ: 2</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;limit:
+                        pageLimit, <span class="comment">// Ví dụ: 5</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sort:
+                        <span class="string">'name'</span> <span class="comment">// Sắp xếp theo tên</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">'Dữ liệu
+                            trang:'</span>, response.data);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span> (error) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.error(<span class="string">'Lỗi lấy dữ
+                            liệu phân trang:'</span>, error);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }<br>
+                        <br>
+                        getPaginatedUsers(2, 5);<br>
+                        <span class="comment">// URL được gọi sẽ là:
+                            https://jsonplaceholder.typicode.com/users?page=2&limit=5&sort=name</span>
+                    </div>
+
+                    <h3>VIII. TẠO AXIOS INSTANCE</h3>
+                    <p>Khi bạn gọi nhiều API đến cùng một server (ví dụ: https://api.example.com), việc lặp lại baseURL
+                        và các cấu hình chung (như timeout, headers mặc định) là không hiệu quả. Axios Instance cho phép
+                        bạn tạo ra một bản sao của Axios với các cấu hình mặc định, sau đó tái sử dụng nó.</p>
+
+                    <h4>Lợi ích:</h4>
+                    <ul>
+                        <li><strong>Tái sử dụng cấu hình:</strong> Chỉ cần set baseURL, timeout, headers mặc định một
+                            lần.</li>
+                        <li><strong>Tổ chức code tốt hơn:</strong> Có thể tạo các instance khác nhau cho các phần khác
+                            nhau của ứng dụng (ví dụ: instance cho API công khai, instance cho API cần xác thực).</li>
+                        <li><strong>Dễ dàng thay đổi cấu hình toàn cục.</strong></li>
+                    </ul>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Axios Instance</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> api = axios.create({<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;baseURL: <span
+                            class="string">"https://jsonplaceholder.typicode.com"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;timeout: <span class="number">5000</span><br>
+                        });<br>
+                        <br>
+                        api.get(<span class="string">"/users"</span>);
+                    </div>
+                </section>
+
+                <!-- PHẦN HƯỚNG DẪN SỬ DỤNG POSTMAN CHI TIẾT -->
+                <section id="postman" class="section">
+                    <h2><i class="fas fa-paper-plane"></i> HƯỚNG DẪN SỬ DỤNG POSTMAN CHI TIẾT</h2>
+
+                    <h3>1. CÀI ĐẶT POSTMAN</h3>
+
+                    <h4>Bước 1: Tải Postman</h4>
+                    <p>Truy cập: <a href="https://www.postman.com/downloads/"
+                            target="_blank">https://www.postman.com/downloads/</a></p>
+                    <p>Chọn phiên bản phù hợp (Windows, macOS, Linux)</p>
+
+                    <h4>Bước 2: Cài đặt</h4>
+                    <ul>
+                        <li><strong>Windows:</strong> Chạy file .exe vừa tải, nhấn Next đến khi hoàn tất</li>
+                        <li><strong>macOS:</strong> Kéo file .dmg vào thư mục Applications</li>
+                        <li><strong>Linux:</strong> Làm theo hướng dẫn trên trang chủ</li>
+                    </ul>
+
+                    <h4>Bước 3: Đăng ký/Đăng nhập</h4>
+                    <ul>
+                        <li>Mở Postman</li>
+                        <li>Chọn "Create Account" hoặc "Sign In" (có thể bỏ qua nếu chọn "Skip and go to app")</li>
+                    </ul>
+
+                    <h3>2. GIAO DIỆN POSTMAN</h3>
+                    <img style="width: 100%;" src="./img/postmain.png" alt="">
+
+                    <h3>3. CÁC THAO TÁC CƠ BẢN</h3>
+
+                    <h4>3.1. Gửi GET Request (Lấy dữ liệu)</h4>
+                    <p><strong>Ví dụ:</strong> Lấy danh sách users</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>GET Request trong Postman</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// Bước 1: Tạo request mới</span><br>
+                        Click tab "+" (New Tab)<br>
+                        <br>
+                        <span class="comment">// Bước 2: Chọn method</span><br>
+                        Method: GET<br>
+                        <br>
+                        <span class="comment">// Bước 3: Nhập URL</span><br>
+                        URL: https://jsonplaceholder.typicode.com/users<br>
+                        <br>
+                        <span class="comment">// Bước 4: Nhấn Send</span><br>
+                        Click nút "Send" màu xanh<br>
+                        <br>
+                        <span class="comment">// Bước 5: Xem kết quả</span><br>
+                        - Status: 200 OK<br>
+                        - Thời gian: 235ms<br>
+                        - Dữ liệu JSON hiển thị ở phần dưới
+                    </div>
+
+                    <h4>3.2. Gửi POST Request (Thêm dữ liệu)</h4>
+                    <p><strong>Ví dụ:</strong> Tạo user mới</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>POST Request trong Postman</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// Bước 1: Tạo request mới</span><br>
+                        Click tab "+"<br>
+                        <br>
+                        <span class="comment">// Bước 2: Chọn method</span><br>
+                        Method: POST<br>
+                        <br>
+                        <span class="comment">// Bước 3: Nhập URL</span><br>
+                        URL: https://jsonplaceholder.typicode.com/users<br>
+                        <br>
+                        <span class="comment">// Bước 4: Thêm Headers</span><br>
+                        Click tab "Headers"<br>
+                        Thêm:<br>
+                        &nbsp;&nbsp;Key: Content-Type<br>
+                        &nbsp;&nbsp;Value: application/json<br>
+                        <br>
+                        <span class="comment">// Bước 5: Thêm Body</span><br>
+                        Click tab "Body"<br>
+                        Chọn "raw"<br>
+                        Chọn "JSON" từ dropdown<br>
+                        Nhập:<br>
+                        {<br>
+                        &nbsp;&nbsp;<span class="string">"name"</span>: <span class="string">"Nguyễn Văn A"</span>,<br>
+                        &nbsp;&nbsp;<span class="string">"email"</span>: <span
+                            class="string">"a@example.com"</span>,<br>
+                        &nbsp;&nbsp;<span class="string">"phone"</span>: <span class="string">"0123456789"</span><br>
+                        }<br>
+                        <br>
+                        <span class="comment">// Bước 6: Gửi request</span><br>
+                        Click "Send"<br>
+                        <br>
+                        <span class="comment">// Kết quả: Status 201 Created</span>
+                    </div>
+
+                    <h4>3.3. Gửi PUT Request (Cập nhật toàn bộ)</h4>
+                    <p><strong>Ví dụ:</strong> Sửa thông tin user</p>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>PUT Request trong Postman</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        Method: PUT<br>
+                        URL: https://jsonplaceholder.typicode.com/users/1<br>
+                        Headers: Content-Type: application/json<br>
+                        Body:<br>
+                        {<br>
+                        &nbsp;&nbsp;<span class="string">"name"</span>: <span class="string">"Tên mới"</span>,<br>
+                        &nbsp;&nbsp;<span class="string">"email"</span>: <span
+                            class="string">"newemail@example.com"</span>,<br>
+                        &nbsp;&nbsp;<span class="string">"phone"</span>: <span class="string">"0987654321"</span><br>
+                        }<br>
+                        <span class="comment">// Click Send</span>
+                    </div>
+
+                    <h4>3.4. Gửi PATCH Request (Cập nhật một phần)</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>PATCH Request trong Postman</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        Method: PATCH<br>
+                        URL: https://jsonplaceholder.typicode.com/users/1<br>
+                        Headers: Content-Type: application/json<br>
+                        Body:<br>
+                        {<br>
+                        &nbsp;&nbsp;<span class="string">"email"</span>: <span
+                            class="string">"emailmoi@example.com"</span> <span class="comment">// Chỉ sửa
+                            email</span><br>
+                        }<br>
+                        <span class="comment">// Click Send</span>
+                    </div>
+
+                    <h4>3.5. Gửi DELETE Request (Xóa dữ liệu)</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>DELETE Request trong Postman</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        Method: DELETE<br>
+                        URL: https://jsonplaceholder.typicode.com/users/1<br>
+                        <span class="comment">// Click Send</span><br>
+                        <span class="comment">// Kết quả: Status 200 hoặc 204</span>
+                    </div>
+
+                    <h3>4. LÀM VIỆC VỚI PARAMETERS</h3>
+
+                    <h4>Thêm Query Parameters</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Query Parameters trong Postman</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// URL gốc</span><br>
+                        https://jsonplaceholder.typicode.com/users<br>
+                        <br>
+                        <span class="comment">// Thêm params bằng tay</span><br>
+                        Click tab "Params"<br>
+                        Thêm lần lượt:<br>
+                        &nbsp;&nbsp;Key: page | Value: 2<br>
+                        &nbsp;&nbsp;Key: limit | Value: 10<br>
+                        &nbsp;&nbsp;Key: sort | Value: name<br>
+                        <br>
+                        <span class="comment">// URL tự động thành:</span><br>
+                        https://jsonplaceholder.typicode.com/users?page=2&limit=10&sort=name
+                    </div>
+
+                    <h4>Thêm Path Parameters</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Path Parameters trong Postman</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// Dùng biến {{id}} trong URL</span><br>
+                        URL: https://jsonplaceholder.typicode.com/users/{{id}}<br>
+                        <br>
+                        <span class="comment">// Click tab "Params"</span><br>
+                        Thêm:<br>
+                        &nbsp;&nbsp;Key: id | Value: 1
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <footer>
+            <p>Giáo trình chi tiết: CALL API từ cơ bản đến nâng cao &copy; 2024</p>
+        </footer>
+    </div>
+
+    <script>
+        // Xử lý điều hướng
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    // Xóa class active từ tất cả các link và section
+                    navLinks.forEach(item => item.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+
+                    // Thêm class active cho link được click
+                    this.classList.add('active');
+
+                    // Hiển thị section tương ứng
+                    const targetId = this.getAttribute('href').substring(1);
+                    document.getElementById(targetId).classList.add('active');
+                });
+            });
+        });
+
+        // Hàm copy code
+        function copyCode(button) {
+            const codeBlock = button.parentElement.parentElement;
+            const text = codeBlock.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Đã copy!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+
+</html>

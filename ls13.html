@@ -1,0 +1,1793 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BUỔI 6: BẤT ĐỒNG BỘ TRONG JAVASCRIPT</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --info: #17a2b8;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --async-purple: #9b59b6;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 80vh;
+        }
+
+        .sidebar {
+            background: var(--light);
+            padding: 20px;
+            border-right: 3px solid var(--secondary);
+        }
+
+        .nav-list {
+            list-style: none;
+            position: sticky;
+            top: 20px;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--secondary);
+            color: white;
+            transform: translateX(5px);
+            border-color: var(--secondary);
+        }
+
+        .main-content {
+            padding: 30px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: var(--accent);
+            margin: 25px 0 15px;
+            padding-left: 15px;
+            border-left: 4px solid var(--accent);
+        }
+
+        h4 {
+            color: var(--info);
+            margin: 20px 0 10px;
+        }
+
+        h5 {
+            color: var(--dark);
+            margin: 15px 0 8px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul,
+        ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            line-height: 1.4;
+            border: 2px solid #444;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn {
+            background: #555;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .keyword {
+            color: #569cd6;
+        }
+
+        .string {
+            color: #ce9178;
+        }
+
+        .comment {
+            color: #6a9955;
+        }
+
+        .number {
+            color: #b5cea8;
+        }
+
+        .class-name {
+            color: #4ec9b0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: var(--secondary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid var(--info);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .interactive-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #e9ecef;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 5px;
+        }
+
+        .btn-run {
+            background: var(--success);
+            color: white;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background: white;
+            border-left: 4px solid var(--warning);
+            display: none;
+        }
+
+        .result.active {
+            display: block;
+        }
+
+        .result-content {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border: 1px solid #e9ecef;
+            white-space: pre-wrap;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-right: none;
+                border-bottom: 3px solid var(--secondary);
+            }
+        }
+
+        .flowchart {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .flowchart img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .event-loop-demo {
+            background: #1e1e1e;
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: monospace;
+            margin: 20px 0;
+        }
+
+        .stack-trace {
+            color: #0f0;
+        }
+
+        .comparison-table table {
+            width: 100%;
+        }
+
+        .comparison-table td {
+            vertical-align: top;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-clock"></i> BUỔI 6: BẤT ĐỒNG BỘ TRONG JAVASCRIPT</h1>
+        </header>
+
+        <div class="content-wrapper">
+            <nav class="sidebar">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#part1" class="nav-link active"><i class="fas fa-info-circle"></i> PHẦN 1: GIỚI THIỆU</a></li>
+                    <li class="nav-item"><a href="#part2" class="nav-link"><i class="fas fa-redo-alt"></i> PHẦN 2: CƠ CHẾ (EVENT LOOP)</a></li>
+                    <li class="nav-item"><a href="#part3" class="nav-link"><i class="fas fa-phone-alt"></i> PHẦN 3: CALLBACKS</a></li>
+                    <li class="nav-item"><a href="#part4" class="nav-link"><i class="fas fa-handshake"></i> PHẦN 4: PROMISES</a></li>
+                    <li class="nav-item"><a href="#part5" class="nav-link"><i class="fas fa-sync-alt"></i> PHẦN 5: ASYNC/AWAIT</a></li>
+                </ul>
+            </nav>
+
+            <main class="main-content">
+                <!-- PHẦN 1: GIỚI THIỆU VỀ ĐỒNG BỘ VÀ BẤT ĐỒNG BỘ -->
+                <section id="part1" class="section active">
+                    <h2><i class="fas fa-info-circle"></i> PHẦN 1: GIỚI THIỆU VỀ ĐỒNG BỘ VÀ BẤT ĐỒNG BỘ</h2>
+
+                    <h3>1.1. JavaScript là đơn luồng (Single-threaded)</h3>
+                    <p><strong>Định nghĩa :</strong> JavaScript là ngôn ngữ đơn luồng, nghĩa là nó chỉ có một Call Stack duy nhất để thực thi code. Điều này có nghĩa là tại một thời điểm, JavaScript chỉ có thể làm một việc duy nhất.</p>
+                    
+                    <h4>Tưởng tượng:</h4>
+                    <ul>
+                        <li>Giống như một nhân viên ngân hàng chỉ phục vụ một khách hàng tại một thời điểm.</li>
+                        <li>Hoặc như một ống hút, chỉ có thể uống một ngụm nước mỗi lần.</li>
+                    </ul>
+
+                    <h4>Minh họa bằng code:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> task1() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Bắt đầu công việc 1"</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Giả sử công việc 1 mất 3 giây</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">let</span> start = Date.now();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">while</span> (Date.now() - start &lt; 3000) {} <span class="comment">// Vòng lặp chặn</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Kết thúc công việc 1"</span>);<br>
+                        }<br>
+                        <br>
+                        <span class="keyword">function</span> task2() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Thực hiện công việc 2"</span>);<br>
+                        }<br>
+                        <br>
+                        task1();<br>
+                        task2();<br>
+                        <br>
+                        <span class="comment">// Output:</span><br>
+                        <span class="comment">// "Bắt đầu công việc 1"</span><br>
+                        <span class="comment">// (3 giây sau)</span><br>
+                        <span class="comment">// "Kết thúc công việc 1"</span><br>
+                        <span class="comment">// "Thực hiện công việc 2"</span><br>
+                        <span class="comment">// => task2 phải chờ task1 hoàn thành dù không liên quan</span>
+                    </div>
+
+                    <h4>Ưu điểm của đơn luồng:</h4>
+                    <p>Đơn giản, dễ hiểu, không gặp vấn đề đồng bộ dữ liệu phức tạp như đa luồng (race condition, deadlock).</p>
+
+                    <h4>Nhược điểm:</h4>
+                    <p>Nếu có tác vụ nặng, toàn bộ chương trình bị "đóng băng".</p>
+
+                    <h3>1.2. Bài toán của xử lý đồng bộ (Blocking)</h3>
+                    <p><strong>Định nghĩa Blocking:</strong> Blocking xảy ra khi một tác vụ tốn thời gian chặn không cho các tác vụ khác thực thi cho đến khi nó hoàn thành.</p>
+
+                    <h4>Ví dụ thực tế trong lập trình web:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>html + javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;button id=<span class="string">"myButton"</span>&gt;Click me!&lt;/button&gt;<br>
+                        &lt;div id=<span class="string">"status"</span>&gt;&lt;/div&gt;<br>
+                        <br>
+                        &lt;script&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;document.getElementById(<span class="string">'myButton'</span>).addEventListener(<span class="string">'click'</span>, <span class="keyword">function</span>() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Mô phỏng tác vụ nặng (lấy dữ liệu lớn, xử lý ảnh, v.v.)</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.getElementById(<span class="string">'status'</span>).innerText = <span class="string">'Đang xử lý...'</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Vòng lặp chặn trong 5 giây</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">let</span> start = Date.now();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">while</span> (Date.now() - start &lt; 5000) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Không làm gì, chỉ chờ</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.getElementById(<span class="string">'status'</span>).innerText = <span class="string">'Hoàn thành!'</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">'Trình duyệt đã sẵn sàng'</span>);<br>
+                        &lt;/script&gt;
+                    </div>
+
+                    <h4>Hậu quả khi user click:</h4>
+                    <ul>
+                        <li>Nút bị "đơ", không thể click lại</li>
+                        <li>Không thể scroll trang</li>
+                        <li>Các animation dừng lại</li>
+                        <li>Trải nghiệm người dùng cực kỳ tệ</li>
+                    </ul>
+
+                    <h4>Các tác vụ blocking phổ biến:</h4>
+                    <ul>
+                        <li>Đọc/ghi file lớn</li>
+                        <li>Gửi request đến server</li>
+                        <li>Xử lý dữ liệu phức tạp (hàng triệu bản ghi)</li>
+                        <li>Mã hóa/giải mã dữ liệu</li>
+                    </ul>
+
+                    <h3>1.3. Khái niệm bất đồng bộ (Non-blocking)</h3>
+                    <p><strong>Định nghĩa:</strong> Bất đồng bộ là kỹ thuật cho phép chương trình bắt đầu một tác vụ tốn thời gian, không chờ nó hoàn thành mà tiếp tục chạy các tác vụ khác. Khi tác vụ kia hoàn thành, chúng ta sẽ được thông báo và xử lý kết quả.</p>
+
+                    <h4>Ví dụ trực quan:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// Mô phỏng gọi món ở nhà hàng</span><br>
+                        console.log(<span class="string">"Bước 1: Ngồi vào bàn"</span>);<br>
+                        console.log(<span class="string">"Bước 2: Gọi món (đồ ăn mất 10 phút)"</span>);<br>
+                        <br>
+                        <span class="comment">// setTimeout mô phỏng việc nấu ăn</span><br>
+                        setTimeout(() =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Bước 4: Đồ ăn được mang ra"</span>);<br>
+                        }, 10000); <span class="comment">// 10 giây</span><br>
+                        <br>
+                        console.log(<span class="string">"Bước 3: Nói chuyện với bạn bè trong lúc chờ"</span>);<br>
+                        <span class="comment">// Output:</span><br>
+                        <span class="comment">// Bước 1, Bước 2, Bước 3 (ngay lập tức)</span><br>
+                        <span class="comment">// Bước 4 (sau 10 giây)</span>
+                    </div>
+
+                    <h4>Lợi ích:</h4>
+                    <ul>
+                        <li>Ứng dụng luôn phản hồi nhanh</li>
+                        <li>Tận dụng thời gian chờ để làm việc khác</li>
+                        <li>Cải thiện trải nghiệm người dùng</li>
+                    </ul>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Demo đồng bộ vs bất đồng bộ</h4>
+                        <button class="btn btn-run" onclick="demoBlocking()">Chạy đồng bộ (Blocking)</button>
+                        <button class="btn btn-run" onclick="demoNonBlocking()">Chạy bất đồng bộ (Non-blocking)</button>
+                        <div class="result" id="demoAsyncResult">
+                            <div class="result-content" id="demoAsyncContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN 2: CƠ CHẾ HOẠT ĐỘNG BẤT ĐỒNG BỘ (EVENT LOOP) -->
+                <section id="part2" class="section">
+                    <h2><i class="fas fa-redo-alt"></i> PHẦN 2: CƠ CHẾ HOẠT ĐỘNG BẤT ĐỒNG BỘ (EVENT LOOP)</h2>
+
+                    <h3>2.1. Call Stack</h3>
+                    <p><strong>Định nghĩa chi tiết:</strong> Call Stack là một cấu trúc dữ liệu dạng ngăn xếp (LIFO - Last In First Out), dùng để theo dõi vị trí thực thi của chương trình.</p>
+
+                    <h4>Cách hoạt động:</h4>
+                    <ul>
+                        <li>Khi một hàm được gọi, nó được đẩy (push) vào đỉnh stack</li>
+                        <li>Khi hàm kết thúc (return), nó được lấy ra (pop) khỏi stack</li>
+                        <li>JavaScript chỉ thực thi hàm đang ở đỉnh stack</li>
+                    </ul>
+
+                    <h4>Minh họa chi tiết bằng diagram:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> multiply(a, b) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> a * b;<br>
+                        }<br>
+                        <br>
+                        <span class="keyword">function</span> square(n) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> multiply(n, n);<br>
+                        }<br>
+                        <br>
+                        <span class="keyword">function</span> printSquare(n) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">const</span> result = square(n);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(result);<br>
+                        }<br>
+                        <br>
+                        printSquare(5);
+                    </div>
+
+                    <h4>Quá trình Call Stack thay đổi:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>text</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        Bước 1: [printSquare(5)]                    <span class="comment">// Gọi printSquare</span><br>
+                        Bước 2: [printSquare(5), square(5)]         <span class="comment">// Trong printSquare, gọi square</span><br>
+                        Bước 3: [printSquare(5), square(5), multiply(5,5)] <span class="comment">// Trong square, gọi multiply</span><br>
+                        Bước 4: [printSquare(5), square(5)]         <span class="comment">// multiply kết thúc, pop</span><br>
+                        Bước 5: [printSquare(5)]                     <span class="comment">// square kết thúc, pop</span><br>
+                        Bước 6: []                                    <span class="comment">// printSquare kết thúc, pop</span>
+                    </div>
+
+                    <h4>Lỗi Stack Overflow:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> infiniteRecursion() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;infiniteRecursion(); <span class="comment">// Gọi chính nó vô hạn</span><br>
+                        }<br>
+                        <br>
+                        infiniteRecursion();<br>
+                        <span class="comment">// Lỗi: RangeError: Maximum call stack size exceeded</span>
+                    </div>
+
+                    <h3>2.2. Web APIs & Callback Queue (Task Queue)</h3>
+                    
+                    <h4>Web APIs là gì?</h4>
+                    <p>Web APIs là các API do trình duyệt cung cấp, không phải của JavaScript engine. Bao gồm:</p>
+                    <ul>
+                        <li>setTimeout, setInterval</li>
+                        <li>fetch (gọi HTTP)</li>
+                        <li>DOM events (click, scroll, keypress)</li>
+                        <li>localStorage, sessionStorage</li>
+                        <li>Geolocation API, Canvas API, v.v.</li>
+                    </ul>
+
+                    <h4>Cách hoạt động:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        console.log(<span class="string">'Bắt đầu'</span>);<br>
+                        <br>
+                        <span class="comment">// setTimeout được chuyển cho Web APIs xử lý</span><br>
+                        setTimeout(() =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">'Timeout hoàn thành'</span>);<br>
+                        }, 2000);<br>
+                        <br>
+                        console.log(<span class="string">'Kết thúc'</span>);<br>
+                        <br>
+                        <span class="comment">// Phân tích:</span><br>
+                        <span class="comment">// 1. Call Stack: chạy console.log('Bắt đầu')</span><br>
+                        <span class="comment">// 2. Gặp setTimeout, chuyển cho Web APIs (hẹn giờ 2s)</span><br>
+                        <span class="comment">// 3. Call Stack: chạy console.log('Kết thúc')</span><br>
+                        <span class="comment">// 4. Web APIs đếm ngược 2s</span><br>
+                        <span class="comment">// 5. Sau 2s, callback được đưa vào Callback Queue</span><br>
+                        <span class="comment">// 6. Khi Call Stack rỗng, Event Loop đưa callback vào Call Stack</span><br>
+                        <span class="comment">// 7. Thực thi callback, in 'Timeout hoàn thành'</span>
+                    </div>
+
+                    <h4>Callback Queue (Task Queue)</h4>
+                    <ul>
+                        <li>Là hàng đợi FIFO (First In First Out)</li>
+                        <li>Chứa các callback đã sẵn sàng để được thực thi</li>
+                        <li>Còn gọi là MacroTask Queue</li>
+                    </ul>
+
+                    <h3>2.3. Microtask Queue (Job Queue)</h3>
+                    
+                    <h4>Đặc điểm quan trọng:</h4>
+                    <ul>
+                        <li>Dành riêng cho Promises (.then(), .catch(), .finally())</li>
+                        <li>Có độ ưu tiên CAO HƠN Callback Queue</li>
+                        <li>Event loop sẽ xử lý toàn bộ Microtask Queue trước khi xử lý một macro task</li>
+                    </ul>
+
+                    <h4>Ví dụ so sánh độ ưu tiên:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        console.log(<span class="string">'1'</span>); <span class="comment">// Call Stack</span><br>
+                        <br>
+                        setTimeout(() =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">'2'</span>); <span class="comment">// Macro Task</span><br>
+                        }, 0);<br>
+                        <br>
+                        Promise.resolve().then(() =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">'3'</span>); <span class="comment">// Microtask</span><br>
+                        });<br>
+                        <br>
+                        console.log(<span class="string">'4'</span>); <span class="comment">// Call Stack</span><br>
+                        <br>
+                        <span class="comment">// Output: 1, 4, 3, 2</span><br>
+                        <span class="comment">// Giải thích:</span><br>
+                        <span class="comment">// - 1 và 4 chạy đồng bộ</span><br>
+                        <span class="comment">// - Promise.then vào Microtask Queue (ưu tiên)</span><br>
+                        <span class="comment">// - setTimeout vào Macro Task Queue</span><br>
+                        <span class="comment">// - Xử lý hết Microtask (3) trước khi xử lý Macro task (2)</span>
+                    </div>
+
+                    <h4>Microtask có thể tạo microtask khác:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        Promise.resolve().then(() =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">'Microtask 1'</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;Promise.resolve().then(() =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">'Microtask 2'</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                        }).then(() =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">'Microtask 3'</span>);<br>
+                        });<br>
+                        <br>
+                        <span class="comment">// Output: Microtask 1, Microtask 2, Microtask 3</span><br>
+                        <span class="comment">// Giải thích: Xử lý hết tất cả microtask trong queue trước khi chuyển sang macro task</span>
+                    </div>
+
+                    <h3>2.4. Vai trò của Event Loop</h3>
+                    
+                    <h4>Event Loop là gì?</h4>
+                    <p>Event Loop là một vòng lặp vô hạn, hoạt động như một điều phối viên, liên tục kiểm tra:</p>
+                    <ul>
+                        <li>Call Stack có trống không?</li>
+                        <li>Microtask Queue có task không?</li>
+                        <li>Macro Task Queue có task không?</li>
+                    </ul>
+
+                    <h4>Thuật toán chi tiết:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>text</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">while</span> (true) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 1. Kiểm tra Call Stack</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (callStack.isEmpty()) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 2. Xử lý Microtask Queue (ưu tiên cao nhất)</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">while</span> (microTaskQueue.isNotEmpty()) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;task = microTaskQueue.dequeue();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;callStack.push(task);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;execute(task);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;callStack.pop();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 3. Xử lý một Macro Task (chỉ một task duy nhất)</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (macroTaskQueue.isNotEmpty()) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;task = macroTaskQueue.dequeue();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;callStack.push(task);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;execute(task);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;callStack.pop();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// 4. Render UI (nếu cần và đủ thời gian)</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;renderUI();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }
+                    </div>
+
+                    <h4>Bài tập phân tích chi tiết:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        console.log(<span class="string">'Start'</span>);<br>
+                        <br>
+                        setTimeout(() =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">'Timeout 1'</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;Promise.resolve().then(() =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">'Promise 1'</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                        }, 0);<br>
+                        <br>
+                        Promise.resolve().then(() =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">'Promise 2'</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;setTimeout(() =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">'Timeout 2'</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}, 0);<br>
+                        });<br>
+                        <br>
+                        console.log(<span class="string">'End'</span>);<br>
+                        <br>
+                        <span class="comment">// Hãy phân tích từng bước:</span><br>
+                        <span class="comment">/*</span><br>
+                        <span class="comment">Bước 1: Chạy đồng bộ</span><br>
+                        <span class="comment">- console.log('Start') → in 'Start'</span><br>
+                        <span class="comment">- setTimeout(0) → gửi callback1 vào Macro Task Queue</span><br>
+                        <span class="comment">- Promise.resolve().then(...) → gửi callback Promise2 vào Microtask Queue</span><br>
+                        <span class="comment">- console.log('End') → in 'End'</span><br>
+                        <span class="comment"></span><br>
+                        <span class="comment">Bước 2: Call Stack rỗng, xử lý Microtask Queue</span><br>
+                        <span class="comment">- Lấy callback Promise2: in 'Promise 2'</span><br>
+                        <span class="comment">- Trong callback, gặp setTimeout → gửi callback Timeout2 vào Macro Task Queue</span><br>
+                        <span class="comment"></span><br>
+                        <span class="comment">Bước 3: Microtask Queue rỗng, xử lý Macro Task Queue</span><br>
+                        <span class="comment">- Lấy callback Timeout1: in 'Timeout 1'</span><br>
+                        <span class="comment">- Trong callback, gặp Promise.resolve().then(...) → gửi callback Promise1 vào Microtask Queue</span><br>
+                        <span class="comment"></span><br>
+                        <span class="comment">Bước 4: Kiểm tra lại Microtask Queue</span><br>
+                        <span class="comment">- Lấy callback Promise1: in 'Promise 1'</span><br>
+                        <span class="comment"></span><br>
+                        <span class="comment">Bước 5: Microtask Queue rỗng, xử lý Macro Task tiếp theo</span><br>
+                        <span class="comment">- Lấy callback Timeout2: in 'Timeout 2'</span><br>
+                        <span class="comment"></span><br>
+                        <span class="comment">Output: Start, End, Promise 2, Timeout 1, Promise 1, Timeout 2</span><br>
+                        <span class="comment">*/</span>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Demo Event Loop</h4>
+                        <button class="btn btn-run" onclick="demoEventLoop()">Chạy ví dụ Event Loop</button>
+                        <div class="result" id="eventLoopResult">
+                            <div class="result-content" id="eventLoopContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN 3: XỬ LÝ BẤT ĐỒNG BỘ THỜI KỲ ĐẦU - CALLBACKS -->
+                <section id="part3" class="section">
+                    <h2><i class="fas fa-phone-alt"></i> PHẦN 3: XỬ LÝ BẤT ĐỒNG BỘ THỜI KỲ ĐẦU - CALLBACKS</h2>
+
+                    <h3>3.1. Định nghĩa Callback function</h3>
+                    
+                    <h4>Callback là gì?</h4>
+                    <p>Callback là một hàm được truyền như tham số vào hàm khác và sẽ được gọi lại sau đó.</p>
+
+                    <h4>Phân loại callback:</h4>
+                    
+                    <h5>Callback đồng bộ (Synchronous Callback):</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> greet(name, callback) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(`Xin chào ${name}`);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;callback(); <span class="comment">// Gọi ngay lập tức</span><br>
+                        }<br>
+                        <br>
+                        <span class="keyword">function</span> sayGoodbye() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">'Tạm biệt!'</span>);<br>
+                        }<br>
+                        <br>
+                        greet(<span class="string">'John'</span>, sayGoodbye);<br>
+                        <span class="comment">// Output:</span><br>
+                        <span class="comment">// Xin chào John</span><br>
+                        <span class="comment">// Tạm biệt!</span>
+                    </div>
+
+                    <h5>Callback bất đồng bộ (Asynchronous Callback):</h5>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> fetchData(callback) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Mô phỏng gọi API mất 2 giây</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;setTimeout(() =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">const</span> data = { id: 1, name: <span class="string">'John Doe'</span> };<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;callback(data);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}, 2000);<br>
+                        }<br>
+                        <br>
+                        <span class="keyword">function</span> processData(data) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">'Dữ liệu nhận được:'</span>, data);<br>
+                        }<br>
+                        <br>
+                        console.log(<span class="string">'Bắt đầu lấy dữ liệu...'</span>);<br>
+                        fetchData(processData);<br>
+                        console.log(<span class="string">'Câu lệnh này chạy ngay, không đợi dữ liệu'</span>);<br>
+                        <br>
+                        <span class="comment">// Output:</span><br>
+                        <span class="comment">// Bắt đầu lấy dữ liệu...</span><br>
+                        <span class="comment">// Câu lệnh này chạy ngay, không đợi dữ liệu</span><br>
+                        <span class="comment">// (2 giây sau)</span><br>
+                        <span class="comment">// Dữ liệu nhận được: { id: 1, name: 'John Doe' }</span>
+                    </div>
+
+                    <h3>3.2. Ví dụ với setTimeout và sự kiện</h3>
+                    
+                    <h4>setTimeout chi tiết:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// Cú pháp: setTimeout(callback, delay, param1, param2, ...)</span><br>
+                        <br>
+                        <span class="keyword">function</span> showMessage(name, age) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(`Xin chào ${name}, bạn ${age} tuổi`);<br>
+                        }<br>
+                        <br>
+                        <span class="comment">// Lên lịch chạy sau 3 giây</span><br>
+                        <span class="keyword">const</span> timeoutId = setTimeout(showMessage, 3000, <span class="string">'Alice'</span>, 25);<br>
+                        <br>
+                        <span class="comment">// Hủy timeout nếu cần</span><br>
+                        <span class="comment">// clearTimeout(timeoutId);</span><br>
+                        <br>
+                        console.log(<span class="string">'Đã lên lịch hiển thị thông báo'</span>);
+                    </div>
+
+                    <h4>setInterval:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">let</span> count = 0;<br>
+                        <span class="keyword">const</span> intervalId = setInterval(() =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;count++;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(`Lần thứ ${count}`);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (count === 5) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clearInterval(intervalId);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">'Kết thúc đếm'</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }, 1000);
+                    </div>
+
+                    <h4>Sự kiện (Events):</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>html + javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        &lt;button id=<span class="string">"clickMe"</span>&gt;Click me!&lt;/button&gt;<br>
+                        &lt;input type=<span class="string">"text"</span> id=<span class="string">"textInput"</span> placeholder=<span class="string">"Gõ gì đó..."</span>&gt;<br>
+                        <br>
+                        &lt;script&gt;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Callback cho sự kiện click</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;document.getElementById(<span class="string">'clickMe'</span>).addEventListener(<span class="string">'click'</span>, <span class="keyword">function</span>(event) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">'Button đã được click!'</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">'Event object:'</span>, event);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">this</span>.style.backgroundColor = <span class="string">'red'</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Callback cho sự kiện keyup</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;document.getElementById(<span class="string">'textInput'</span>).addEventListener(<span class="string">'keyup'</span>, <span class="keyword">function</span>(event) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">'Giá trị hiện tại:'</span>, <span class="keyword">this</span>.value);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">'Key code:'</span>, event.keyCode);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                        &lt;/script&gt;
+                    </div>
+
+                    <h3>3.3. Hạn chế: Callback Hell (Pyramid of Doom)</h3>
+                    
+                    <h4>Ví dụ thực tế: Xây dựng hệ thống đặt vé máy bay</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// Giả sử các hàm API</span><br>
+                        <span class="keyword">function</span> getUser(userId, callback) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;setTimeout(() =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;callback(<span class="keyword">null</span>, { id: userId, name: <span class="string">'John'</span>, membership: <span class="string">'gold'</span> });<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}, 1000);<br>
+                        }<br>
+                        <br>
+                        <span class="keyword">function</span> getFlights(user, callback) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;setTimeout(() =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;callback(<span class="keyword">null</span>, [<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="string">'FL001'</span>, from: <span class="string">'Hanoi'</span>, to: <span class="string">'Saigon'</span>, price: 200 },<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: <span class="string">'FL002'</span>, from: <span class="string">'Hanoi'</span>, to: <span class="string">'Danang'</span>, price: 150 }<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}, 1000);<br>
+                        }<br>
+                        <br>
+                        <span class="keyword">function</span> checkPromotion(membership, flight, callback) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;setTimeout(() =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">const</span> discount = membership === <span class="string">'gold'</span> ? 0.2 : 0;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;callback(<span class="keyword">null</span>, { ...flight, discount, finalPrice: flight.price * (1 - discount) });<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}, 500);<br>
+                        }<br>
+                        <br>
+                        <span class="keyword">function</span> bookTicket(flight, callback) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;setTimeout(() =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;callback(<span class="keyword">null</span>, { bookingId: <span class="string">'BK123'</span>, flight, status: <span class="string">'confirmed'</span> });<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}, 1000);<br>
+                        }<br>
+                        <br>
+                        <span class="keyword">function</span> processPayment(booking, callback) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;setTimeout(() =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;callback(<span class="keyword">null</span>, { ...booking, paymentStatus: <span class="string">'paid'</span> });<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}, 1000);<br>
+                        }<br>
+                        <br>
+                        <span class="keyword">function</span> sendConfirmation(booking, callback) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;setTimeout(() =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;callback(<span class="keyword">null</span>, { ...booking, emailSent: <span class="keyword">true</span> });<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}, 500);<br>
+                        }<br>
+                        <br>
+                        <span class="comment">// CALLBACK HELL - 6 cấp độ lồng nhau!</span><br>
+                        <span class="keyword">function</span> bookFlightForUser(userId) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;getUser(userId, (err, user) =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (err) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.error(<span class="string">'Lỗi lấy user'</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;getFlights(user, (err, flights) =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (err) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.error(<span class="string">'Lỗi lấy chuyến bay'</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Chọn chuyến bay đầu tiên</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;checkPromotion(user.membership, flights[0], (err, flightWithDiscount) =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (err) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.error(<span class="string">'Lỗi kiểm tra khuyến mãi'</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bookTicket(flightWithDiscount, (err, booking) =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (err) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.error(<span class="string">'Lỗi đặt vé'</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;processPayment(booking, (err, paidBooking) =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (err) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.error(<span class="string">'Lỗi thanh toán'</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sendConfirmation(paidBooking, (err, finalBooking) =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (err) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.error(<span class="string">'Lỗi gửi email'</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span>;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">'Đặt vé thành công:'</span>, finalBooking);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                        }<br>
+                        <br>
+                        bookFlightForUser(1);
+                    </div>
+
+                    <h4>Vấn đề của Callback Hell:</h4>
+                    <ul>
+                        <li>Khó đọc: Code hình tam giác ngược</li>
+                        <li>Khó bảo trì: Thêm bước mới rất phức tạp</li>
+                        <li>Khó xử lý lỗi: Phải kiểm tra lỗi ở mọi cấp độ</li>
+                        <li>Khó tái sử dụng: Logic bị gắn chặt vào cấu trúc</li>
+                        <li>Khó debug: Không biết lỗi xảy ra ở đâu</li>
+                    </ul>
+                </section>
+
+                <!-- PHẦN 4: PROMISES -->
+                <section id="part4" class="section">
+                    <h2><i class="fas fa-handshake"></i> PHẦN 4: PROMISES</h2>
+
+                    <h3>4.1. Định nghĩa Promise</h3>
+                    
+                    <h4>Promise là gì?</h4>
+                    <p>Promise là một object đại diện cho một giá trị chưa tồn tại tại thời điểm hiện tại nhưng sẽ có trong tương lai.</p>
+
+                    <h4>So sánh với thực tế:</h4>
+                    <p>Giống như hóa đơn đặt hàng: Bạn đặt hàng (tạo promise), bạn chưa có hàng ngay (pending), sau đó hoặc nhận được hàng (fulfilled) hoặc được báo hết hàng (rejected).</p>
+
+                    <h3>4.2. Các trạng thái của Promise</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>text</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        [Pending] <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;|<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;|--> [Fulfilled] (Resolved) - Thành công, có kết quả<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;|<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;|--> [Rejected] - Thất bại, có lý do
+                    </div>
+
+                    <h4>Quy tắc bất biến:</h4>
+                    <ul>
+                        <li>Pending -> Fulfilled: Một chiều, không quay lại</li>
+                        <li>Pending -> Rejected: Một chiều, không quay lại</li>
+                        <li>Không thể từ Fulfilled -> Rejected hay ngược lại</li>
+                    </ul>
+
+                    <h3>4.3. Tạo Promise</h3>
+                    
+                    <h4>Cú pháp cơ bản:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> promise = <span class="keyword">new</span> <span class="class-name">Promise</span>((resolve, reject) =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Thực hiện tác vụ bất đồng bộ</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (<span class="comment">/* thành công */</span>) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resolve(giá_trị); <span class="comment">// Chuyển sang trạng thái fulfilled</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">else</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reject(lỗi); <span class="comment">// Chuyển sang trạng thái rejected</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        });
+                    </div>
+
+                    <h4>Ví dụ chi tiết:</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> downloadFile(url) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <span class="keyword">new</span> <span class="class-name">Promise</span>((resolve, reject) =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(`Bắt đầu tải file từ ${url}...`);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setTimeout(() =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">const</span> success = Math.random() > 0.3; <span class="comment">// 70% thành công</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (success) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">const</span> file = {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name: url.split('/').pop(),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;size: Math.floor(Math.random() * 1000) + 'KB',<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;content: 'Nội dung file...'<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resolve(file); <span class="comment">// Thành công</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">else</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reject(<span class="keyword">new</span> <span class="class-name">Error</span>(`Không thể tải file từ ${url}`)); <span class="comment">// Thất bại</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, 2000);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                        }<br>
+                        <br>
+                        <span class="keyword">const</span> downloadPromise = downloadFile('https://example.com/image.jpg');<br>
+                        console.log(downloadPromise); <span class="comment">// Promise {<pending>}</span>
+                    </div>
+
+                    <h3>4.4. Tiêu thụ Promise: .then(), .catch(), .finally()</h3>
+                    
+                    <h4>.then() - Xử lý khi thành công</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        downloadFile('https://example.com/image.jpg')<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.then((file) =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log('Tải file thành công!');<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log('Thông tin file:', file);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> file; <span class="comment">// Có thể return để chain</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;});
+                    </div>
+
+                    <h4>.catch() - Xử lý khi thất bại</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        downloadFile('https://example.com/image.jpg')<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.then((file) =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log('File:', file);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;})<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.catch((error) =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.error('Có lỗi:', error.message);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.error('Thời gian:', <span class="keyword">new</span> <span class="class-name">Date</span>().toLocaleString());<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;});
+                    </div>
+
+                    <h4>.finally() - Luôn chạy dù thành công hay thất bại</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> showLoadingSpinner() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log('🔄 Đang tải...');<br>
+                        }<br>
+                        <br>
+                        <span class="keyword">function</span> hideLoadingSpinner() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log('✅ Hoàn tất!');<br>
+                        }<br>
+                        <br>
+                        showLoadingSpinner();<br>
+                        <br>
+                        downloadFile('https://example.com/image.jpg')<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.then((file) =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log('📁 File:', file.name);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;})<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.catch((error) =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.error('❌', error.message);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;})<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.finally(() =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;hideLoadingSpinner(); <span class="comment">// Luôn chạy</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;});
+                    </div>
+
+                    <h3>4.5. Chaining Promises</h3>
+                    
+                    <h4>Nguyên tắc cốt lõi:</h4>
+                    <p>Mỗi .then() trả về một Promise mới, cho phép chain.</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> getUser(id) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <span class="keyword">new</span> <span class="class-name">Promise</span>((resolve) =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setTimeout(() =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resolve({ id, name: 'John Doe', email: 'john@example.com' });<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, 1000);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                        }<br>
+                        <br>
+                        <span class="keyword">function</span> getPosts(userId) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <span class="keyword">new</span> <span class="class-name">Promise</span>((resolve) =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setTimeout(() =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resolve([<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: 1, title: 'Post 1', userId },<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: 2, title: 'Post 2', userId }<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, 1000);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                        }<br>
+                        <br>
+                        <span class="keyword">function</span> getComments(postId) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <span class="keyword">new</span> <span class="class-name">Promise</span>((resolve) =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setTimeout(() =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resolve([<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: 1, text: 'Great post!', postId },<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ id: 2, text: 'Thanks for sharing', postId }<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, 500);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                        }<br>
+                        <br>
+                        <span class="comment">// CHAINING - Code phẳng, dễ đọc</span><br>
+                        getUser(1)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.then(user =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log('User:', user);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> getPosts(user.id); <span class="comment">// Trả về promise</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;})<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.then(posts =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log('Posts:', posts);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> getComments(posts[0].id); <span class="comment">// Trả về promise</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;})<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.then(comments =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log('Comments:', comments);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log('Hoàn thành!');<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;})<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.catch(error =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.error('Lỗi ở bất kỳ đâu trong chain:', error);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;});
+                    </div>
+
+                    <h4>Các kiểu return trong .then():</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        Promise.resolve(1)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.then(value =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log('Step 1:', value); <span class="comment">// 1</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> value * 2; <span class="comment">// Trả về giá trị thường -> Promise.resolve(2)</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;})<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.then(value =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log('Step 2:', value); <span class="comment">// 2</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> Promise.resolve(value * 3); <span class="comment">// Trả về promise -> promise này resolve 6</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;})<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.then(value =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log('Step 3:', value); <span class="comment">// 6</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> Promise.reject(<span class="keyword">new</span> <span class="class-name">Error</span>('Lỗi cố ý')); <span class="comment">// Trả về promise reject</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;})<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.catch(error =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log('Bắt lỗi:', error.message);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> 10; <span class="comment">// Promise.resolve(10) - recovery</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;})<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.then(value =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log('Step 4:', value); <span class="comment">// 10 (vẫn chạy sau catch)</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;});
+                    </div>
+
+                    <h3>4.6. Các phương thức tĩnh hữu ích</h3>
+                    
+                    <h4>Promise.all() - Chờ tất cả hoàn thành</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> promises = [<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;downloadFile('https://example.com/file1.jpg'),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;downloadFile('https://example.com/file2.jpg'),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;downloadFile('https://example.com/file3.jpg')<br>
+                        ];<br>
+                        <br>
+                        Promise.all(promises)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.then(files =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log('Tất cả files đã tải xong:');<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;files.forEach((file, index) =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(`${index + 1}. ${file.name} (${file.size})`);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;})<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.catch(error =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.error('Một file bị lỗi, dừng tất cả:', error.message);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                        <br>
+                        <span class="comment">// Lưu ý: Promise.all thất bại nhanh (fail-fast)</span><br>
+                        <span class="comment">// Nếu một promise reject, nó reject ngay lập tức</span>
+                    </div>
+
+                    <h4>Promise.race() - Thằng nào nhanh nhất</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> slow = <span class="keyword">new</span> <span class="class-name">Promise</span>(resolve =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;setTimeout(() =&gt; resolve('Chậm'), 3000);<br>
+                        });<br>
+                        <br>
+                        <span class="keyword">const</span> fast = <span class="keyword">new</span> <span class="class-name">Promise</span>(resolve =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;setTimeout(() =&gt; resolve('Nhanh'), 1000);<br>
+                        });<br>
+                        <br>
+                        <span class="keyword">const</span> withTimeout = <span class="keyword">new</span> <span class="class-name">Promise</span>((_, reject) =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;setTimeout(() =&gt; reject(<span class="keyword">new</span> <span class="class-name">Error</span>('Timeout')), 2000);<br>
+                        });<br>
+                        <br>
+                        Promise.race([slow, fast])<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.then(result =&gt; console.log('Winner:', result)); <span class="comment">// 'Nhanh'</span><br>
+                        <br>
+                        Promise.race([slow, withTimeout])<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.then(result =&gt; console.log('Success:', result))<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.catch(error =&gt; console.log('Error:', error.message)); <span class="comment">// 'Error: Timeout'</span>
+                    </div>
+
+                    <h4>Promise.allSettled() - Chờ tất cả, không quan tâm kết quả</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> promises = [<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;Promise.resolve(1),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;Promise.reject(<span class="keyword">new</span> <span class="class-name">Error</span>('Lỗi 2')),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">new</span> <span class="class-name">Promise</span>(resolve =&gt; setTimeout(() =&gt; resolve(3), 1000))<br>
+                        ];<br>
+                        <br>
+                        Promise.allSettled(promises)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.then(results =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;results.forEach((result, index) =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (result.status === 'fulfilled') {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(`Promise ${index + 1}: thành công với giá trị ${result.value}`);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">else</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(`Promise ${index + 1}: thất bại với lỗi ${result.reason.message}`);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                        <br>
+                        <span class="comment">// Output:</span><br>
+                        <span class="comment">// Promise 1: thành công với giá trị 1</span><br>
+                        <span class="comment">// Promise 2: thất bại với lỗi Lỗi 2</span><br>
+                        <span class="comment">// Promise 3: thành công với giá trị 3</span>
+                    </div>
+
+                    <h4>Promise.any() - Thằng thành công đầu tiên</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">const</span> p1 = Promise.reject(<span class="keyword">new</span> <span class="class-name">Error</span>('Lỗi 1'));<br>
+                        <span class="keyword">const</span> p2 = <span class="keyword">new</span> <span class="class-name">Promise</span>(resolve =&gt; setTimeout(() =&gt; resolve('Thành công 2'), 500));<br>
+                        <span class="keyword">const</span> p3 = <span class="keyword">new</span> <span class="class-name">Promise</span>(resolve =&gt; setTimeout(() =&gt; resolve('Thành công 3'), 1000));<br>
+                        <br>
+                        Promise.any([p1, p2, p3])<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.then(result =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log('Thành công đầu tiên:', result); <span class="comment">// 'Thành công 2' sau 500ms</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;})<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;.catch(error =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log('Tất cả đều thất bại:', error.errors);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                        <br>
+                        <span class="comment">// Nếu tất cả đều thất bại</span><br>
+                        Promise.any([<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;Promise.reject(<span class="keyword">new</span> <span class="class-name">Error</span>('Lỗi A')),<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;Promise.reject(<span class="keyword">new</span> <span class="class-name">Error</span>('Lỗi B'))<br>
+                        ]).catch(error =&gt; {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(error <span class="keyword">instanceof</span> AggregateError); <span class="comment">// true</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(error.errors); <span class="comment">// [Error: Lỗi A, Error: Lỗi B]</span><br>
+                        });
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Demo Promise</h4>
+                        <button class="btn btn-run" onclick="demoPromise()">Chạy ví dụ Promise</button>
+                        <div class="result" id="promiseResult">
+                            <div class="result-content" id="promiseContent"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN 5: ASYNC/AWAIT -->
+                <section id="part5" class="section">
+                    <h2><i class="fas fa-sync-alt"></i> PHẦN 5: ASYNC/AWAIT</h2>
+
+                    <h3>5.1. Từ khóa async</h3>
+                    
+                    <h4>Định nghĩa:</h4>
+                    <p>Khi thêm async trước một hàm, hàm đó sẽ luôn trả về một Promise.</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="comment">// Các cách viết tương đương</span><br>
+                        <span class="keyword">async function</span> foo1() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> 42;<br>
+                        }<br>
+                        <span class="comment">// Tương đương với:</span><br>
+                        <span class="keyword">function</span> foo2() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> Promise.resolve(42);<br>
+                        }<br>
+                        <br>
+                        <span class="keyword">async function</span> bar1() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">throw</span> <span class="keyword">new</span> <span class="class-name">Error</span>('Lỗi');<br>
+                        }<br>
+                        <span class="comment">// Tương đương với:</span><br>
+                        <span class="keyword">function</span> bar2() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> Promise.reject(<span class="keyword">new</span> <span class="class-name">Error</span>('Lỗi'));<br>
+                        }<br>
+                        <br>
+                        <span class="comment">// Kiểm tra</span><br>
+                        foo1().then(console.log); <span class="comment">// 42</span><br>
+                        bar1().catch(err =&gt; console.log(err.message)); <span class="comment">// Lỗi</span>
+                    </div>
+
+                    <h3>5.2. Từ khóa await</h3>
+                    
+                    <h4>Định nghĩa:</h4>
+                    <ul>
+                        <li>await chỉ được dùng trong hàm async</li>
+                        <li>Nó tạm dừng execution của hàm async cho đến khi Promise được resolve/reject</li>
+                        <li>Trả về kết quả của Promise (nếu resolve) hoặc throw lỗi (nếu reject)</li>
+                    </ul>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">function</span> delay(ms) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <span class="keyword">new</span> <span class="class-name">Promise</span>(resolve =&gt; setTimeout(resolve, ms));<br>
+                        }<br>
+                        <br>
+                        <span class="keyword">async function</span> demonstrateAwait() {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log('Bắt đầu');<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">await</span> delay(2000); <span class="comment">// Tạm dừng 2 giây</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log('Sau 2 giây');<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">await</span> delay(1000); <span class="comment">// Tạm dừng thêm 1 giây</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log('Sau 3 giây');<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> 'Hoàn thành';<br>
+                        }<br>
+                        <br>
+                        demonstrateAwait().then(result =&gt; console.log(result));
+                    </div>
+
+                    <h4>So sánh Promise chain vs Async/Await:</h4>
+                    
+                    <div class="comparison-table">
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Promise Chain</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">function</span> getUserDataPromise(userId) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <span class="keyword">new</span> <span class="class-name">Promise</span>((resolve, reject) =&gt; {<br>
+                            <br>
+                            <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Giả lập lấy user</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setTimeout(() =&gt; {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">const</span> user = { id: userId, name: <span class="string">"Manh"</span> };<br>
+                            <br>
+                            <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Giả lập lấy posts</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setTimeout(() =&gt; {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">const</span> posts = [<span class="string">"Post 1"</span>, <span class="string">"Post 2"</span>];<br>
+                            <br>
+                            <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resolve({ user, posts });<br>
+                            <br>
+                            <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, 1000);<br>
+                            <br>
+                            <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, 1000);<br>
+                            <br>
+                            <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;})<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;.catch(error =&gt; console.error(error));<br>
+                            }<br>
+                            <br>
+                            <br>
+                            📌 Cách dùng<br>
+                            getUserDataPromise(1)<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;.then(data =&gt; console.log(data));
+                        </div>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Async/Await</span>
+                                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                            </div>
+                            <span class="keyword">async function</span> getUserDataAsync(userId) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                            <br>
+                            <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Chờ lấy user</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">const</span> user = <span class="keyword">await</span> <span class="keyword">new</span> <span class="class-name">Promise</span>((resolve) =&gt; {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setTimeout(() =&gt; {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resolve({ id: userId, name: <span class="string">"Manh"</span> });<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, 1000);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                            <br>
+                            <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Chờ lấy posts</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">const</span> posts = <span class="keyword">await</span> <span class="keyword">new</span> <span class="class-name">Promise</span>((resolve) =&gt; {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;setTimeout(() =&gt; {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resolve([<span class="string">"Post 1"</span>, <span class="string">"Post 2"</span>]);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}, 1000);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                            <br>
+                            <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> { user, posts };<br>
+                            <br>
+                            <br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span> (error) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.error(error);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            }<br>
+                            <br>
+                            <br>
+                            📌 Cách dùng<br>
+                            getUserDataAsync(1)<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;.then(data =&gt; console.log(data));
+                        </div>
+                    </div>
+
+                    <h3>5.3. Xử lý lỗi với try...catch</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <span class="keyword">async function</span> fetchUserData(userId) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span> {<br>
+                        <br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">const</span> user = <span class="keyword">await</span> getUser(userId);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"User:"</span>, user);<br>
+                        <br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> user;<br>
+                        <br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">catch</span> (error) {<br>
+                        <br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.error(<span class="string">"Không thể lấy user:"</span>, error);<br>
+                        <br>
+                        <br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id: userId,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name: <span class="string">"Unknown"</span>,<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;error: <span class="keyword">true</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;};<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }<br>
+                        <br>
+                        <span class="comment">// Gọi thử</span><br>
+                        fetchUserData(1);  <span class="comment">// Thành công</span><br>
+                        fetchUserData(0);  <span class="comment">// Bị lỗi</span>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Demo Async/Await</h4>
+                        <button class="btn btn-run" onclick="demoAsyncAwait()">Chạy ví dụ Async/Await</button>
+                        <div class="result" id="asyncResult">
+                            <div class="result-content" id="asyncContent"></div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <footer>
+            <p>Giáo trình JavaScript - Buổi 6: Bất đồng bộ (Asynchronous) &copy; GV: Nguyễn Đình Mạnh</p>
+        </footer>
+    </div>
+
+    <script>
+        // Xử lý điều hướng
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    navLinks.forEach(item => item.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+
+                    this.classList.add('active');
+
+                    const targetId = this.getAttribute('href').substring(1);
+                    document.getElementById(targetId).classList.add('active');
+                });
+            });
+        });
+
+        // Hàm copy code
+        function copyCode(button) {
+            const codeBlock = button.parentElement.parentElement;
+            const text = codeBlock.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Đã copy!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        // Demo đồng bộ vs bất đồng bộ
+        function demoBlocking() {
+            const result = document.getElementById('demoAsyncResult');
+            const content = document.getElementById('demoAsyncContent');
+            result.classList.add('active');
+            
+            content.textContent = 'Đang chạy đồng bộ... Vui lòng chờ 3 giây';
+            
+            setTimeout(() => {
+                let output = '';
+                output += '=== DEMO ĐỒNG BỘ (BLOCKING) ===\n\n';
+                
+                let startTime = Date.now();
+                
+                // Mô phỏng task1 blocking
+                output += 'Bắt đầu công việc 1\n';
+                let start = Date.now();
+                while (Date.now() - start < 3000) {} // Block 3 giây
+                output += 'Kết thúc công việc 1 (sau 3 giây)\n';
+                output += 'Thực hiện công việc 2\n';
+                
+                let endTime = Date.now();
+                output += `\nTổng thời gian: ${(endTime - startTime) / 1000} giây`;
+                output += '\n\n=> Task 2 phải chờ Task 1 hoàn thành!';
+                
+                content.textContent = output;
+            }, 100);
+        }
+
+        function demoNonBlocking() {
+            const result = document.getElementById('demoAsyncResult');
+            const content = document.getElementById('demoAsyncContent');
+            result.classList.add('active');
+            
+            content.textContent = 'Đang chạy bất đồng bộ...';
+            
+            setTimeout(() => {
+                let output = '';
+                output += '=== DEMO BẤT ĐỒNG BỘ (NON-BLOCKING) ===\n\n';
+                
+                output += 'Bước 1: Ngồi vào bàn\n';
+                output += 'Bước 2: Gọi món (đồ ăn mất 3 giây)\n';
+                output += 'Bước 3: Nói chuyện với bạn bè trong lúc chờ\n';
+                
+                setTimeout(() => {
+                    output += 'Bước 4: Đồ ăn được mang ra (sau 3 giây)\n';
+                    output += '\n=> Các bước 1,2,3 chạy ngay lập tức, không bị chặn!';
+                    content.textContent = output;
+                }, 3000);
+                
+                content.textContent = output;
+            }, 100);
+        }
+
+        // Demo Event Loop
+        function demoEventLoop() {
+            const result = document.getElementById('eventLoopResult');
+            const content = document.getElementById('eventLoopContent');
+            result.classList.add('active');
+            
+            content.textContent = 'Đang phân tích...';
+            
+            setTimeout(() => {
+                let output = '';
+                output += '=== DEMO EVENT LOOP ===\n\n';
+                output += 'Code:\n';
+                output += 'console.log("1");\n';
+                output += 'setTimeout(() => console.log("2"), 0);\n';
+                output += 'Promise.resolve().then(() => console.log("3"));\n';
+                output += 'console.log("4");\n\n';
+                
+                output += 'KẾT QUẢ THỰC TẾ:\n';
+                output += '1\n';
+                output += '4\n';
+                output += '3\n';
+                output += '2\n\n';
+                
+                output += 'GIẢI THÍCH:\n';
+                output += '- 1 và 4 chạy đồng bộ (Call Stack)\n';
+                output += '- Promise.then vào Microtask Queue (ưu tiên cao)\n';
+                output += '- setTimeout vào Macro Task Queue\n';
+                output += '- Xử lý hết Microtask (3) trước khi xử lý Macro task (2)\n';
+                
+                content.textContent = output;
+            }, 100);
+        }
+
+        // Demo Promise
+        function demoPromise() {
+            const result = document.getElementById('promiseResult');
+            const content = document.getElementById('promiseContent');
+            result.classList.add('active');
+            
+            content.textContent = 'Đang tải dữ liệu...';
+            
+            // Mô phỏng Promise
+            function simulateDownload(success = true) {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        if (success) {
+                            resolve({ name: 'image.jpg', size: '250KB' });
+                        } else {
+                            reject(new Error('Lỗi kết nối'));
+                        }
+                    }, 2000);
+                });
+            }
+            
+            simulateDownload(true)
+                .then(file => {
+                    let output = '=== DEMO PROMISE ===\n\n';
+                    output += '✅ Tải file thành công!\n';
+                    output += `📁 Tên file: ${file.name}\n`;
+                    output += `📊 Kích thước: ${file.size}\n\n`;
+                    output += 'Quá trình:\n';
+                    output += '1. Tạo Promise\n';
+                    output += '2. Chờ 2 giây (mô phỏng tải)\n';
+                    output += '3. Resolve với dữ liệu file\n';
+                    output += '4. Xử lý trong .then()';
+                    content.textContent = output;
+                })
+                .catch(error => {
+                    content.textContent = `❌ Lỗi: ${error.message}`;
+                });
+        }
+
+        // Demo Async/Await
+        function demoAsyncAwait() {
+            const result = document.getElementById('asyncResult');
+            const content = document.getElementById('asyncContent');
+            result.classList.add('active');
+            
+            content.textContent = 'Đang chạy async/await...';
+            
+            async function runDemo() {
+                try {
+                    let output = '=== DEMO ASYNC/AWAIT ===\n\n';
+                    
+                    output += 'Bắt đầu chạy hàm async\n';
+                    output += 'await delay(1000) - tạm dừng 1 giây...\n';
+                    
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    
+                    output += '✅ Tiếp tục sau 1 giây\n';
+                    output += 'await delay(1000) - tạm dừng thêm 1 giây...\n';
+                    
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    
+                    output += '✅ Hoàn thành sau 2 giây\n\n';
+                    output += 'Lợi ích của async/await:\n';
+                    output += '- Code tuần tự, dễ đọc\n';
+                    output += '- Xử lý lỗi với try/catch\n';
+                    output += '- Không bị callback hell';
+                    
+                    content.textContent = output;
+                } catch (error) {
+                    content.textContent = `Lỗi: ${error.message}`;
+                }
+            }
+            
+            runDemo();
+        }
+    </script>
+</body>
+
+</html>

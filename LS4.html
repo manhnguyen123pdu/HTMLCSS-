@@ -1,0 +1,2088 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VÒNG LẶP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --info: #17a2b8;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+
+        body {
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 80vh;
+        }
+
+        .sidebar {
+            height: 80vh;
+            overflow: hidden;
+            background: var(--light);
+            padding: 20px;
+            border-right: 3px solid var(--secondary);
+        }
+        .sidebar ul{
+            padding: 0;
+        }
+
+        .nav-list {
+            list-style: none;
+            position: sticky;
+            top: 20px;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--secondary);
+            color: white;
+            transform: translateX(5px);
+            border-color: var(--secondary);
+        }
+
+        .main-content {
+            padding: 30px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: var(--accent);
+            margin: 25px 0 15px;
+            padding-left: 15px;
+            border-left: 4px solid var(--accent);
+        }
+
+        h4 {
+            color: var(--info);
+            margin: 20px 0 10px;
+        }
+
+        h5 {
+            color: var(--dark);
+            margin: 15px 0 8px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul,
+        ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            line-height: 1.4;
+            border: 2px solid #444;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn {
+            background: #555;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .keyword {
+            color: #569cd6;
+        }
+
+        .string {
+            color: #ce9178;
+        }
+
+        .comment {
+            color: #6a9955;
+        }
+
+        .number {
+            color: #b5cea8;
+        }
+
+        .class-name {
+            color: #4ec9b0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: var(--secondary);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid var(--info);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid var(--success);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .interactive-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #e9ecef;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 5px;
+        }
+
+        .btn-run {
+            background: var(--success);
+        }
+
+        .btn-test {
+            background: var(--warning);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            background: white;
+            border-left: 4px solid var(--warning);
+            display: none;
+        }
+
+        .result.active {
+            display: block;
+        }
+
+        .result-content {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border: 1px solid #e9ecef;
+            white-space: pre-wrap;
+        }
+
+        footer {
+            text-align: center;
+            padding:10px 20px;
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-right: none;
+                border-bottom: 3px solid var(--secondary);
+            }
+        }
+
+        .flowchart {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .flowchart img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .definition-box {
+            background: #f0f7ff;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .example-box {
+            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .test-case {
+            background: #e8f4fc;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .syntax-box {
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        .tip-box {
+            background: #fff8e1;
+            border: 1px solid #ffd54f;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-redo-alt"></i> BÀI 3: VÒNG LẶP</h1>
+           
+        </header>
+
+        <div class="content-wrapper">
+            <nav class="sidebar">
+                <ul class="nav-list">
+                    <li class="nav-item"><a href="#intro" class="nav-link active"><i class="fas fa-home"></i> Giới thiệu</a></li>
+                    <li class="nav-item"><a href="#for-loop" class="nav-link"><i class="fas fa-repeat"></i> Vòng lặp for</a></li>
+                    <li class="nav-item"><a href="#while-loop" class="nav-link"><i class="fas fa-sync"></i> Vòng lặp while</a></li>
+                    <li class="nav-item"><a href="#do-while" class="nav-link"><i class="fas fa-history"></i> Vòng lặp do-while</a></li>
+                    <li class="nav-item"><a href="#break-continue" class="nav-link"><i class="fas fa-history"></i> Break & Continue</a></li>
+                    <li class="nav-item"><a href="#demo" class="nav-link"><i class="fas fa-code"></i> Thực hành</a></li>
+                    <!-- <li class="nav-item"><a href="#homework" class="nav-link"><i class="fas fa-book"></i> Bài tập về nhà</a></li> -->
+                    <li class="nav-item"><a href="#practice" class="nav-link"><i class="fas fa-pen-fancy"></i> Bài Tập</a></li>
+                </ul>
+            </nav>
+
+            <main class="main-content">
+                <!-- PHẦN GIỚI THIỆU -->
+                <section id="intro" class="section active">
+                    <h2><i class="fas fa-home"></i> Vòng lặp là gì?</h2>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-lightbulb"></i> Định nghĩa</h4>
+                        <p><span class="highlight">Vòng lặp (loop)</span> là một cấu trúc cho phép thực hiện lặp đi lặp lại một đoạn mã nhiều lần cho đến khi điều kiện lặp không còn đúng.</p>
+                    </div>
+
+                    <h3><i class="fas fa-life-ring"></i> Ví dụ đời thường</h3>
+                    <p>Bạn muốn in dòng <span class="highlight">"Hello"</span> 10 lần:</p>
+                    
+                    <div class="warning-box">
+                        <h5><i class="fas fa-times-circle"></i> Cách không hiệu quả:</h5>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Không dùng vòng lặp</span>
+                            </div>
+                            console.log("Hello");<br>
+                            console.log("Hello");<br>
+                            console.log("Hello");<br>
+                            console.log("Hello");<br>
+                            console.log("Hello");<br>
+                            console.log("Hello");<br>
+                            console.log("Hello");<br>
+                            console.log("Hello");<br>
+                            console.log("Hello");<br>
+                            console.log("Hello");
+                        </div>
+                    </div>
+
+                    <div class="success-box">
+                        <h5><i class="fas fa-check-circle"></i> Cách hiệu quả (dùng vòng lặp):</h5>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>Sử dụng vòng lặp for</span>
+                            </div>
+                            <span class="keyword">for</span> (<span class="keyword">let</span> i = 1; i <= 10; i++) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Hello"</span>);<br>
+                            }
+                        </div>
+                    </div>
+
+                    <h3><i class="fas fa-cogs"></i> Tại sao cần vòng lặp?</h3>
+                    <ul>
+                        <li><span class="highlight">Giảm code trùng lặp</span>: Viết 1 lần, chạy nhiều lần</li>
+                        <li><span class="highlight">Xử lý dữ liệu</span>: Duyệt mảng, danh sách, đối tượng</li>
+                        <li><span class="highlight">Tự động hóa</span>: Thực hiện tác vụ lặp mà không cần can thiệp thủ công</li>
+                        <li><span class="highlight">Tính toán</span>: Xử lý các bài toán có tính chất lặp</li>
+                    </ul>
+
+                    <div class="note-box">
+                        <h4><i class="fas fa-exclamation-circle"></i> Lưu ý quan trọng</h4>
+                        <p>Luôn đảm bảo vòng lặp có <span class="highlight">điều kiện dừng</span>. Vòng lặp vô hạn sẽ làm chương trình treo!</p>
+                    </div>
+                </section>
+
+                <!-- PHẦN VÒNG LẶP FOR -->
+                <section id="for-loop" class="section">
+                    <h2><i class="fas fa-repeat"></i> Vòng lặp for</h2>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Định nghĩa</h4>
+                        <p>Lặp lại một khối lệnh với <span class="highlight">số lần xác định trước</span>, thông qua bộ đếm.</p>
+                    </div>
+
+                    <h3><i class="fas fa-project-diagram"></i> Lưu đồ thuật toán</h3>
+                    <div class="flowchart">
+                        <img src="./img/for.png" alt="Lưu đồ vòng lặp for">
+                        <br>
+                    </div>
+
+                    <h3><i class="fas fa-code"></i> Cú pháp</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cú pháp cơ bản</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">for</span> (<span class="keyword">let</span> i = start; condition; increment) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// code thực thi mỗi lần lặp</span><br>
+                        }
+                    </div>
+
+                    <div class="step-box">
+                        <h5><i class="fas fa-play-circle"></i> Cách hoạt động:</h5>
+                        <ol class="steps-list">
+                            <li><strong>Khởi tạo</strong>: Chạy một lần duy nhất khi bắt đầu</li>
+                            <li><strong>Kiểm tra điều kiện</strong>: Nếu đúng → vào thân vòng lặp, nếu sai → thoát</li>
+                            <li><strong>Thực thi code trong thân vòng lặp</strong></li>
+                            <li><strong>Cập nhật biến đếm</strong>: Tăng/giảm giá trị biến</li>
+                            <li><strong>Quay lại bước 2</strong> cho đến khi điều kiện sai</li>
+                        </ol>
+                    </div>
+
+                    <h3><i class="fas fa-laptop-code"></i> Ví dụ thực tế</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ: In ra 5 lần lặp</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">for</span> (<span class="keyword">let</span> i = 1; i <= 5; i++) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">`Lần thứ ${i}`</span>);<br>
+                        }<br>
+                        <span class="comment">// Output:</span><br>
+                        <span class="comment">// Lần thứ 1</span><br>
+                        <span class="comment">// Lần thứ 2</span><br>
+                        <span class="comment">// ...</span><br>
+                        <span class="comment">// Lần thứ 5</span>
+                    </div>
+
+                    <div class="warning-box">
+                        <h5><i class="fas fa-exclamation-triangle"></i> Lưu ý quan trọng</h5>
+                        <p>Nếu điều kiện <span class="highlight">sai ngay từ đầu</span>, vòng lặp sẽ không chạy lần nào.</p>
+                        <div class="code-block" style="margin-top: 10px; font-size: 0.9rem;">
+                            <span class="keyword">for</span> (<span class="keyword">let</span> i = 10; i < 5; i++) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Không chạy vì 10 < 5 là SAI</span><br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"Không bao giờ chạy"</span>);<br>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm vòng lặp for</h4>
+                        <div class="input-group">
+                            <label for="forStart"><i class="fas fa-play"></i> Bắt đầu từ:</label>
+                            <input type="number" id="forStart" value="1" min="0" max="100">
+                        </div>
+                        <div class="input-group">
+                            <label for="forEnd"><i class="fas fa-stop"></i> Kết thúc tại:</label>
+                            <input type="number" id="forEnd" value="10" min="1" max="100">
+                        </div>
+                        <div class="input-group">
+                            <label for="forStep"><i class="fas fa-step-forward"></i> Bước nhảy:</label>
+                            <input type="number" id="forStep" value="1" min="1" max="10">
+                        </div>
+                        
+                        <div class="btn-group">
+                            <button class="btn btn-primary" onclick="runForLoop()">
+                                <i class="fas fa-play"></i> Chạy vòng lặp
+                            </button>
+                            <button class="btn btn-warning" onclick="resetForLoop()">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                        
+                        <div class="result" id="forLoopResult">
+                            <h5><i class="fas fa-chart-line"></i> Kết quả:</h5>
+                            <div class="result-content" id="forLoopResultContent">Kết quả sẽ hiển thị ở đây...</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN VÒNG LẶP WHILE -->
+                <section id="while-loop" class="section">
+                    <h2><i class="fas fa-sync"></i> Vòng lặp while</h2>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Định nghĩa</h4>
+                        <p>Lặp lại khi <span class="highlight">điều kiện còn đúng</span>, không biết trước số lần lặp.</p>
+                    </div>
+
+                    <h3><i class="fas fa-project-diagram"></i> Lưu đồ thuật toán</h3>
+                    <div class="flowchart">
+                        <img src="./img/while.png" alt="Lưu đồ vòng lặp while">
+                    </div>
+
+                    <h3><i class="fas fa-code"></i> Cú pháp</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cú pháp cơ bản</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">while</span> (condition) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// code thực thi nếu điều kiện đúng</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// phải có code thay đổi điều kiện để tránh lặp vô hạn</span><br>
+                        }
+                    </div>
+<div class="step-box">
+    <h5><i class="fas fa-sync-alt"></i> Cách hoạt động (while loop):</h5>
+    <ol class="steps-list">
+        <li><strong>Kiểm tra điều kiện</strong>: Nếu đúng → vào thân vòng lặp, nếu sai → thoát</li>
+        <li><strong>Thực thi code trong thân vòng lặp</strong></li>
+        <li><strong>Cập nhật biến điều kiện</strong>: Tăng/giảm giá trị biến liên quan</li>
+        <li><strong>Quay lại bước 1</strong> để kiểm tra điều kiện lần nữa</li>
+        <li><strong>Kết thúc</strong> khi điều kiện trả về false</li>
+    </ol>
+</div>
+
+                    <h3><i class="fas fa-laptop-code"></i> Ví dụ thực tế</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ: Đếm từ 0 đến 2</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">let</span> i = 0;<br>
+                        <span class="keyword">while</span> (i < 3) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">`i = ${i}`</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;i++; <span class="comment">// QUAN TRỌNG: Cập nhật biến điều kiện</span><br>
+                        }<br>
+                        <span class="comment">// Output: i = 0, i = 1, i = 2</span>
+                    </div>
+
+                    <div class="warning-box">
+                        <h5><i class="fas fa-exclamation-triangle"></i> CẢNH BÁO: Vòng lặp vô hạn</h5>
+                        <p>Nếu <span class="highlight">không cập nhật điều kiện</span>, vòng lặp sẽ chạy mãi mãi!</p>
+                        <div class="code-block" style="margin-top: 10px; font-size: 0.9rem; background: #ff000015; border-color: #ff0000;">
+                            <span class="keyword">let</span> i = 0;<br>
+                            <span class="keyword">while</span> (i < 3) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">"VÒNG LẶP VÔ HẠN!"</span>);<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// QUÊN: i++</span><br>
+                            <span class="comment">// i luôn = 0 < 3 → điều kiện luôn đúng</span><br>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm vòng lặp while</h4>
+                        <div class="input-group">
+                            <label for="whileValue"><i class="fas fa-sort-numeric-up"></i> Giá trị ban đầu:</label>
+                            <input type="number" id="whileValue" value="0" min="0" max="100">
+                        </div>
+                        <div class="input-group">
+                            <label for="whileCondition"><i class="fas fa-filter"></i> Điều kiện dừng (i < ...):</label>
+                            <input type="number" id="whileCondition" value="5" min="1" max="100">
+                        </div>
+                        
+                        <div class="btn-group">
+                            <button class="btn btn-primary" onclick="runWhileLoop()">
+                                <i class="fas fa-play"></i> Chạy vòng lặp
+                            </button>
+                            <button class="btn btn-warning" onclick="resetWhileLoop()">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                        
+                        <div class="result" id="whileLoopResult">
+                            <h5><i class="fas fa-chart-line"></i> Kết quả:</h5>
+                            <div class="result-content" id="whileLoopResultContent">Kết quả sẽ hiển thị ở đây...</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PHẦN VÒNG LẶP DO-WHILE -->
+                <section id="do-while" class="section">
+                    <h2><i class="fas fa-history"></i> Vòng lặp do-while</h2>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Định nghĩa</h4>
+                        <p>Lặp lại khối lệnh <span class="highlight">ít nhất 1 lần</span>, sau đó tiếp tục nếu điều kiện đúng.</p>
+                    </div>
+
+                    <h3><i class="fas fa-project-diagram"></i> Lưu đồ thuật toán</h3>
+                    <div class="flowchart">
+                        <img src="./img/doWhilr.png" alt="Lưu đồ vòng lặp do-while">
+                    </div>
+
+                    <h3><i class="fas fa-code"></i> Cú pháp</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Cú pháp cơ bản</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">do</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// thực thi ít nhất 1 lần</span><br>
+                        } <span class="keyword">while</span> (condition);
+                    </div>
+<div class="step-box">
+    <h5><i class="fas fa-redo"></i> Cách hoạt động (do...while loop):</h5>
+    <ol class="steps-list">
+        <li><strong>Thực thi code trong thân vòng lặp</strong>: Chạy ít nhất 1 lần</li>
+        <li><strong>Kiểm tra điều kiện</strong>: Nếu đúng → tiếp tục lặp, nếu sai → thoát</li>
+        <li><strong>Quay lại bước 1</strong> nếu điều kiện vẫn còn đúng</li>
+        <li><strong>Kết thúc</strong> khi điều kiện trả về false</li>
+    </ol>
+</div>
+
+                    <h3><i class="fas fa-laptop-code"></i> Ví dụ thực tế</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ: Luôn chạy ít nhất 1 lần</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">let</span> i = 5;<br>
+                        <span class="keyword">do</span> {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(i);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;i++;<br>
+                        } <span class="keyword">while</span> (i < 3);<br>
+                        <span class="comment">// Output: 5 (chạy 1 lần dù điều kiện sai)</span>
+                    </div>
+
+                    <div class="note-box">
+                        <h5><i class="fas fa-check-circle"></i> Điểm khác biệt với while</h5>
+                        <ul>
+                            <li><span class="highlight">do-while</span>: Thực thi → kiểm tra điều kiện</li>
+                            <li><span class="highlight">while</span>: Kiểm tra điều kiện → thực thi</li>
+                            <li><span class="highlight">do-while luôn chạy ít nhất 1 lần</span>, kể cả khi điều kiện sai ngay từ đầu</li>
+                        </ul>
+                    </div>
+
+                    <h3><i class="fas fa-th-list"></i> So sánh các vòng lặp</h3>
+                    <div class="table-container">
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Đặc điểm</th>
+                                    <th>for</th>
+                                    <th>while</th>
+                                    <th>do-while</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Kiểm tra điều kiện</strong></td>
+                                    <td>Trước mỗi lần lặp</td>
+                                    <td>Trước mỗi lần lặp</td>
+                                    <td>Sau mỗi lần lặp</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Số lần thực thi ít nhất</strong></td>
+                                    <td>0 lần</td>
+                                    <td>0 lần</td>
+                                    <td>1 lần</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Thích hợp khi</strong></td>
+                                    <td>Biết trước số lần lặp</td>
+                                    <td>Không biết số lần lặp</td>
+                                    <td>Luôn cần chạy ít nhất 1 lần</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Ví dụ ứng dụng</strong></td>
+                                    <td>Duyệt mảng, tính toán định sẵn</td>
+                                    <td>Đọc file, xử lý sự kiện</td>
+                                    <td>Menu, xác thực đầu vào</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm vòng lặp do-while</h4>
+                        <div class="input-group">
+                            <label for="doWhileValue"><i class="fas fa-sort-numeric-up"></i> Giá trị ban đầu:</label>
+                            <input type="number" id="doWhileValue" value="10" min="0" max="100">
+                        </div>
+                        <div class="input-group">
+                            <label for="doWhileCondition"><i class="fas fa-filter"></i> Tiếp tục khi (i > ...):</label>
+                            <input type="number" id="doWhileCondition" value="5" min="0" max="100">
+                        </div>
+                        
+                        <div class="btn-group">
+                            <button class="btn btn-primary" onclick="runDoWhileLoop()">
+                                <i class="fas fa-play"></i> Chạy vòng lặp
+                            </button>
+                            <button class="btn btn-warning" onclick="resetDoWhileLoop()">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                        
+                        <div class="result" id="doWhileLoopResult">
+                            <h5><i class="fas fa-chart-line"></i> Kết quả:</h5>
+                            <div class="result-content" id="doWhileLoopResultContent">Kết quả sẽ hiển thị ở đây...</div>
+                        </div>
+                    </div>
+                </section>
+                          <!-- PHẦN BREAK & CONTINUE -->
+                <section id="break-continue" class="section">
+                    <h2><i class="fas fa-stop-circle"></i> Break & Continue</h2>
+
+                    <div class="info-box">
+                        <h4><i class="fas fa-info-circle"></i> Định nghĩa</h4>
+                        <p><span class="highlight">break</span> và <span class="highlight">continue</span> là hai từ khóa điều khiển vòng lặp, giúp thay đổi luồng thực thi bên trong vòng lặp.</p>
+                    </div>
+
+                   
+                    <h3><i class="fas fa-stop-circle"></i> 1. break - Thoát vòng lặp</h3>
+                     <div class="flowchart">
+                        <img src="./img/break.png" alt="So sánh break và continue">
+                    </div>
+
+                    <div class="definition-box">
+                        <h5><i class="fas fa-ban"></i> Mục đích:</h5>
+                        <p>Thoát <span class="highlight">hoàn toàn khỏi vòng lặp</span> ngay lập tức khi gặp điều kiện nhất định.</p>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ: break trong vòng lặp for</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">for</span> (<span class="keyword">let</span> i = 1; i <= 10; i++) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (i === 5) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>; <span class="comment">// Thoát vòng lặp khi i = 5</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">`Số: ${i}`</span>);<br>
+                        }<br>
+                        console.log(<span class="string">"Đã thoát vòng lặp"</span>);<br>
+                        <span class="comment">// Output: 1, 2, 3, 4, "Đã thoát vòng lặp"</span>
+                    </div>
+
+                    <h4><i class="fas fa-laptop-code"></i> Ứng dụng thực tế của break</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Tìm số đầu tiên chia hết cho 7</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">for</span> (<span class="keyword">let</span> i = 1; i <= 100; i++) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (i % 7 === 0) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">`Số đầu tiên chia hết cho 7 là: ${i}`</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>; <span class="comment">// Tìm thấy rồi, không cần tìm tiếp</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        }<br>
+                        <span class="comment">// Output: "Số đầu tiên chia hết cho 7 là: 7"</span>
+                    </div>
+
+                    <h3><i class="fas fa-forward"></i> 2. continue - Bỏ qua vòng lặp hiện tại</h3>
+                       <div class="flowchart">
+                        <img src="./img/continuw.png" alt="So sánh break và continue">
+                    </div>
+                    <div class="definition-box">
+                        <h5><i class="fas fa-step-forward"></i> Mục đích:</h5>
+                        <p><span class="highlight">Bỏ qua phần còn lại</span> của vòng lặp hiện tại và chuyển sang vòng lặp tiếp theo.</p>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>Ví dụ: continue trong vòng lặp for</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">for</span> (<span class="keyword">let</span> i = 1; i <= 5; i++) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (i === 3) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">continue</span>; <span class="comment">// Bỏ qua khi i = 3</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">`Số: ${i}`</span>);<br>
+                        }<br>
+                        <span class="comment">// Output: 1, 2, 4, 5 (bỏ qua số 3)</span>
+                    </div>
+
+                    <h4><i class="fas fa-laptop-code"></i> Ứng dụng thực tế của continue</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>In chỉ số lẻ</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">for</span> (<span class="keyword">let</span> i = 1; i <= 10; i++) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (i % 2 === 0) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">continue</span>; <span class="comment">// Bỏ qua số chẵn</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">`Số lẻ: ${i}`</span>);<br>
+                        }<br>
+                        <span class="comment">// Output: 1, 3, 5, 7, 9</span>
+                    </div>
+
+                    <h3><i class="fas fa-balance-scale"></i> 3. So sánh break và continue</h3>
+                    <div class="table-container">
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Tiêu chí</th>
+                                    <th><i class="fas fa-stop-circle"></i> break</th>
+                                    <th><i class="fas fa-forward"></i> continue</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Tác dụng</strong></td>
+                                    <td>Thoát hoàn toàn khỏi vòng lặp</td>
+                                    <td>Bỏ qua vòng lặp hiện tại</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Vòng lặp tiếp theo</strong></td>
+                                    <td>Không thực hiện</td>
+                                    <td>Vẫn thực hiện</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Khi nào dùng</strong></td>
+                                    <td>Khi đã tìm thấy kết quả hoặc gặp lỗi</td>
+                                    <td>Khi muốn bỏ qua một số trường hợp đặc biệt</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Ví dụ</strong></td>
+                                    <td>Tìm kiếm, xử lý lỗi, điều kiện dừng</td>
+                                    <td>Lọc dữ liệu, bỏ qua giá trị không hợp lệ</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="note-box">
+                        <h5><i class="fas fa-exclamation-triangle"></i> Lưu ý quan trọng</h5>
+                        <ul>
+                            <li>Cả <span class="highlight">break</span> và <span class="highlight">continue</span> chỉ có tác dụng trong vòng lặp chứa nó</li>
+                            <li>Không thể dùng break/continue bên ngoài vòng lặp</li>
+                            <li>Trong vòng lặp lồng nhau, break/continue chỉ ảnh hưởng đến vòng lặp gần nhất</li>
+                        </ul>
+                    </div>
+
+                    <h3><i class="fas fa-sync"></i> 4. break và continue trong while</h3>
+                    
+                    <h4><i class="fas fa-stop-circle"></i> break trong vòng lặp while</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>break trong while</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">let</span> i = 1;<br>
+                        <span class="keyword">while</span> (i <= 5) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (i === 4) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>; <span class="comment">// Thoát khi i = 4</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">`i = ${i}`</span>);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;i++;<br>
+                        }<br>
+                        <span class="comment">// Output: 1, 2, 3</span>
+                    </div>
+
+                    <h4><i class="fas fa-forward"></i> continue trong vòng lặp while</h4>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span>continue trong while</span>
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                        </div>
+                        <span class="keyword">let</span> i = 0;<br>
+                        <span class="keyword">while</span> (i < 5) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;i++;<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (i === 3) {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">continue</span>; <span class="comment">// Bỏ qua khi i = 3</span><br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">`i = ${i}`</span>);<br>
+                        }<br>
+                        <span class="comment">// Output: 1, 2, 4, 5</span>
+                    </div>
+
+                    <div class="warning-box">
+                        <h5><i class="fas fa-exclamation-circle"></i> Cảnh báo với continue trong while</h5>
+                        <p>Khi dùng <span class="highlight">continue</span> trong vòng lặp while, phải đảm bảo biến điều kiện được cập nhật <span class="highlight">trước</span> khi gọi continue, nếu không sẽ gây vòng lặp vô hạn!</p>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm break & continue</h4>
+                        <div class="input-group">
+                            <label for="bcType"><i class="fas fa-list"></i> Chọn loại:</label>
+                            <select id="bcType">
+                                <option value="break">break - Thoát vòng lặp</option>
+                                <option value="continue">continue - Bỏ qua vòng lặp</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="bcValue"><i class="fas fa-filter"></i> Giá trị áp dụng (khi i = ...):</label>
+                            <input type="number" id="bcValue" value="5" min="1" max="20">
+                        </div>
+                        <div class="input-group">
+                            <label for="bcLoopType"><i class="fas fa-redo-alt"></i> Loại vòng lặp:</label>
+                            <select id="bcLoopType">
+                                <option value="for">for</option>
+                                <option value="while">while</option>
+                                <option value="do-while">do-while</option>
+                            </select>
+                        </div>
+
+                        <div class="btn-group">
+                            <button class="btn btn-primary" onclick="runBreakContinue()">
+                                <i class="fas fa-play"></i> Chạy thử nghiệm
+                            </button>
+                            <button class="btn btn-warning" onclick="resetBreakContinue()">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+
+                        <div class="result" id="breakContinueResult">
+                            <h5><i class="fas fa-chart-line"></i> Kết quả:</h5>
+                            <div class="result-content" id="breakContinueResultContent">Kết quả sẽ hiển thị ở đây...</div>
+                        </div>
+                    </div>
+
+                    <div class="tip-box">
+                        <h5><i class="fas fa-lightbulb"></i> Ghi nhớ nhanh</h5>
+                        <ul>
+                            <li><span class="highlight">break</span>: Dừng toàn bộ vòng lặp (như nút DỪNG)</li>
+                            <li><span class="highlight">continue</span>: Bỏ qua vòng hiện tại (như nút BỎ QUA)</li>
+                            <li>Dùng được cho: <span class="highlight">for, while, do-while</span></li>
+                            <li>Hữu ích cho: <span class="highlight">lọc dữ liệu, tìm kiếm, xử lý ngoại lệ</span></li>
+                        </ul>
+                    </div>
+                </section>
+                <!-- PHẦN BÀI TẬP DEMO -->
+                <section id="demo" class="section">
+                    <h2><i class="fas fa-code"></i> Bài tập demo</h2>
+
+                    <div class="exercise-box">
+                        <h3><i class="fas fa-calculator"></i> Bài 1: Tính tổng từ 1 đến n</h3>
+                        
+                        <h4><i class="fas fa-question-circle"></i> Đề bài:</h4>
+                        <p>Nhập vào số nguyên dương n, tính và in tổng các số từ 1 đến n.</p>
+                        
+                        <h4><i class="fas fa-tasks"></i> Yêu cầu:</h4>
+                        <ul>
+                            <li>Nhập n từ người dùng</li>
+                            <li>Tính tổng từ 1 đến n</li>
+                            <li>In ra kết quả</li>
+                        </ul>
+                        
+                        <div class="test-case">
+                            <h6><i class="fas fa-vial"></i> Test case:</h6>
+                            <div class="test-case-content">
+                                Input: n = 4<br>
+                                Expected Output: Tổng = 10
+                            </div>
+                        </div>
+                        
+                        <h4><i class="fas fa-lightbulb"></i> Lời giải:</h4>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>sum.js</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                            </div>
+                            <span class="keyword">let</span> n = parseInt(prompt(<span class="string">"Nhập số nguyên n:"</span>));<br>
+                            <span class="keyword">let</span> sum = 0;<br>
+                            <br>
+                            <span class="keyword">for</span> (<span class="keyword">let</span> i = 1; i <= n; i++) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;sum += i; <span class="comment">// sum = sum + i</span><br>
+                            }<br>
+                            <br>
+                            console.log(<span class="string">"Tổng ="</span>, sum);
+                        </div>
+                    </div>
+
+                    <div class="exercise-box">
+                        <h3><i class="fas fa-times-circle"></i> Bài 2: In bảng cửu chương n</h3>
+                        
+                        <h4><i class="fas fa-question-circle"></i> Đề bài:</h4>
+                        <p>Viết chương trình yêu cầu người dùng nhập số n, in bảng cửu chương từ n × 1 đến n × 10.</p>
+                        
+                        <h4><i class="fas fa-tasks"></i> Yêu cầu:</h4>
+                        <ul>
+                            <li>Nhập n từ prompt()</li>
+                            <li>In ra bảng cửu chương từ 1 đến 10</li>
+                            <li>Định dạng: n x i = kết_quả</li>
+                        </ul>
+                        
+                        <div class="test-case">
+                            <h6><i class="fas fa-vial"></i> Test case:</h6>
+                            <div class="test-case-content">
+                                Input: n = 5<br>
+                                Expected Output:<br>
+                                5 x 1 = 5<br>
+                                5 x 2 = 10<br>
+                                ...<br>
+                                5 x 10 = 50
+                            </div>
+                        </div>
+                        
+                        <h4><i class="fas fa-lightbulb"></i> Lời giải:</h4>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>multiplicationTable.js</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                            </div>
+                            <span class="keyword">let</span> n = parseInt(prompt(<span class="string">"Nhập số cần in bảng cửu chương:"</span>));<br>
+                            <br>
+                            <span class="keyword">for</span> (<span class="keyword">let</span> i = 1; i <= 10; i++) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;console.log(<span class="string">`${n} x ${i} = ${n * i}`</span>);<br>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="exercise-box">
+                        <h3><i class="fas fa-star"></i> Bài 3: Kiểm tra số nguyên tố</h3>
+                        
+                        <h4><i class="fas fa-question-circle"></i> Đề bài:</h4>
+                        <p>Viết chương trình kiểm tra xem một số có phải số nguyên tố hay không.</p>
+                        
+                        <div class="info-box">
+                            <h5><i class="fas fa-info-circle"></i> Số nguyên tố là gì?</h5>
+                            <p>Số nguyên tố là số tự nhiên <span class="highlight">lớn hơn 1</span> chỉ có <span class="highlight">hai ước số</span> là 1 và chính nó.</p>
+                            <p>Ví dụ: 2, 3, 5, 7, 11, 13, 17, 19, 23, 29...</p>
+                        </div>
+                        
+                        <div class="step-box">
+                            <h5><i class="fas fa-football-ball"></i> Cách kiểm tra số nguyên tố:</h5>
+                            <ol class="steps-list">
+                                <li>Nếu n < 2 → không phải số nguyên tố</li>
+                                <li>Duyệt tất cả các số từ 2 đến √n</li>
+                                <li>Nếu n chia hết cho bất kỳ số nào → không phải số nguyên tố</li>
+                                <li>Ngược lại → là số nguyên tố</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="test-case">
+                            <h6><i class="fas fa-vial"></i> Test case:</h6>
+                            <div class="test-case-content">
+                                Input: n = 7 → Output: Là số nguyên tố<br>
+                                Input: n = 10 → Output: Không phải số nguyên tố
+                            </div>
+                        </div>
+                        
+                        <h4><i class="fas fa-lightbulb"></i> Lời giải:</h4>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span>primeNumber.js</span>
+                                <button class="copy-btn" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy</button>
+                            </div>
+                            <span class="keyword">let</span> n = parseInt(prompt(<span class="string">"Nhập số nguyên dương:"</span>));<br>
+                            <span class="keyword">let</span> isPrime = <span class="keyword">true</span>;<br>
+                            <br>
+                            <span class="keyword">if</span> (n < 2) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;isPrime = <span class="keyword">false</span>;<br>
+                            } <span class="keyword">else</span> {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">let</span> i = 2; i <= Math.sqrt(n); i++) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (n % i === 0) {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;isPrime = <span class="keyword">false</span>;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span>;<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                            }<br>
+                            <br>
+                            console.log(isPrime ? <span class="string">"Là số nguyên tố"</span> : <span class="string">"Không phải số nguyên tố"</span>);
+                        </div>
+                    </div>
+
+                    <div class="interactive-section">
+                        <h4><i class="fas fa-play-circle"></i> Thử nghiệm bài tập demo</h4>
+                        
+                        <div class="input-group">
+                            <label for="demoExercise"><i class="fas fa-list"></i> Chọn bài tập:</label>
+                            <select id="demoExercise">
+                                <option value="1">Bài 1: Tính tổng từ 1 đến n</option>
+                                <option value="2">Bài 2: Bảng cửu chương</option>
+                                <option value="3">Bài 3: Kiểm tra số nguyên tố</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="demoInput"><i class="fas fa-keyboard"></i> Nhập giá trị n:</label>
+                            <input type="number" id="demoInput" value="5" min="1" max="100">
+                        </div>
+                        
+                        <div class="btn-group">
+                            <button class="btn btn-primary" onclick="runDemoExercise()">
+                                <i class="fas fa-play"></i> Chạy bài tập
+                            </button>
+                            <button class="btn btn-warning" onclick="resetDemoExercise()">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                        
+                        <div class="result" id="demoResult">
+                            <h5><i class="fas fa-chart-line"></i> Kết quả:</h5>
+                            <div class="result-content" id="demoResultContent">Kết quả sẽ hiển thị ở đây...</div>
+                        </div>
+                    </div>
+                </section>
+                <section id="practice" class="section">
+                    <!-- ===================== BÀI 1 ===================== -->
+<div class="exercise-box">
+    <h3>Bài 1: In số đảo ngược</h4>
+    <p><strong>Đề bài:</strong> Nhập vào một số nguyên dương n, in ra số đảo ngược.</p>
+    <p><strong>Yêu cầu:</strong></p>
+    <ul>
+        <li>Dùng while hoặc do...while</li>
+        <li>Ví dụ: n = 1234 → Output: 4321</li>
+    </ul>
+
+    <table border="1">
+        <tr>
+            <th>Input</th>
+            <th>Expected Output</th>
+        </tr>
+        <tr>
+            <td>n = 123</td>
+            <td>321</td>
+        </tr>
+        <tr>
+            <td>n = 100</td>
+            <td>1</td>
+        </tr>
+    </table>
+</div>
+
+<!-- ===================== BÀI 2 ===================== -->
+<div class="exercise-box">
+    <h3>Bài 2: Tính tổng các số lẻ từ 1 đến n</h3>
+    <p><strong>Đề bài:</strong> Nhập số nguyên dương n, tính tổng các số lẻ từ 1 đến n.</p>
+    <p><strong>Yêu cầu:</strong></p>
+    <ul>
+        <li>Dùng vòng lặp for hoặc while</li>
+        <li>Chỉ cộng các số lẻ</li>
+    </ul>
+
+    <table border="1">
+        <tr>
+            <th>Input</th>
+            <th>Expected Output</th>
+        </tr>
+        <tr>
+            <td>n = 10</td>
+            <td>Tổng số lẻ = 25 (1+3+5+7+9)</td>
+        </tr>
+        <tr>
+            <td>n = 5</td>
+            <td>Tổng số lẻ = 9 (1+3+5)</td>
+        </tr>
+    </table>
+</div>
+
+<!-- ===================== BÀI 3 ===================== -->
+<div class="exercise-box">
+    <h3>Bài 3: Tính giai thừa n!</h3>
+    <p><strong>Đề bài:</strong> Nhập số nguyên n, tính giai thừa n! = 1 × 2 × 3 × ... × n</p>
+    <p><strong>Yêu cầu:</strong></p>
+    <ul>
+        <li>Dùng vòng lặp for</li>
+        <li>In theo định dạng: n! = ...</li>
+    </ul>
+
+    <table border="1">
+        <tr>
+            <th>Input</th>
+            <th>Expected Output</th>
+        </tr>
+        <tr>
+            <td>n = 5</td>
+            <td>5! = 120</td>
+        </tr>
+        <tr>
+            <td>n = 3</td>
+            <td>3! = 6</td>
+        </tr>
+    </table>
+</div>
+
+<!-- ===================== BÀI 4 ===================== -->
+<div class="exercise-box">
+    <h3>Bài 4: Đếm số chia hết cho 3 trong đoạn 1 đến n</h3>
+    <p><strong>Đề bài:</strong> Đếm xem có bao nhiêu số chia hết cho 3 trong khoảng từ 1 đến n.</p>
+    <p><strong>Yêu cầu:</strong></p>
+    <ul>
+        <li>Dùng vòng lặp for</li>
+        <li>In: Có ... số chia hết cho 3</li>
+    </ul>
+
+    <table border="1">
+        <tr>
+            <th>Input</th>
+            <th>Expected Output</th>
+        </tr>
+        <tr>
+            <td>n = 10</td>
+            <td>Có 3 số chia hết cho 3 (3, 6, 9)</td>
+        </tr>
+        <tr>
+            <td>n = 5</td>
+            <td>Có 1 số chia hết cho 3 (3)</td>
+        </tr>
+    </table>
+</div>
+
+<!-- ===================== BÀI 5 ===================== -->
+<div class="exercise-box">
+    <h3>Bài 5: Đếm chữ số lớn nhất</h3>
+    <p><strong>Đề bài:</strong></p>
+    <ul>
+        <li>Tìm chữ số lớn nhất trong n</li>
+        <li>Đếm số lần xuất hiện của chữ số đó</li>
+    </ul>
+
+    <p><strong>Ví dụ:</strong> n = 987439389 → chữ số lớn nhất là 9, xuất hiện 2 lần</p>
+
+    <table border="1">
+        <tr>
+            <th>Input (n)</th>
+            <th>Expected Output</th>
+        </tr>
+        <tr>
+            <td>987439389</td>
+            <td>Chữ số lớn nhất: 9, Số lần xuất hiện: 2</td>
+        </tr>
+        <tr>
+            <td>1234567899</td>
+            <td>Chữ số lớn nhất: 9, Số lần xuất hiện: 2</td>
+        </tr>
+        <tr>
+            <td>88888888</td>
+            <td>Chữ số lớn nhất: 8, Số lần xuất hiện: 8</td>
+        </tr>
+    </table>
+
+    <p><strong>Gợi ý:</strong></p>
+    <ul>
+        <li>Dùng while (n > 0)</li>
+        <li>Lấy chữ số cuối: n % 10</li>
+        <li>So sánh với maxDigit</li>
+        <li>Nếu bằng maxDigit → tăng biến đếm</li>
+    </ul>
+</div>
+
+<!-- ===================== BÀI 6 ===================== -->
+<div class="exercise-box">
+    <h3>Bài 6: Kiểm tra số hoàn hảo</h3>
+    <p><strong>Đề bài:</strong> Kiểm tra số nguyên dương n có phải số hoàn hảo không.</p>
+    <p>Số hoàn hảo là số có tổng các ước số thật (không tính chính nó) bằng chính nó.</p>
+
+    <p><strong>Ví dụ:</strong></p>
+    <ul>
+        <li>6 → 1 + 2 + 3 = 6 → hoàn hảo</li>
+        <li>28 → 1 + 2 + 4 + 7 + 14 = 28 → hoàn hảo</li>
+    </ul>
+
+    <table border="1">
+        <tr>
+            <th>Input (n)</th>
+            <th>Output</th>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>Là số hoàn hảo</td>
+        </tr>
+        <tr>
+            <td>28</td>
+            <td>Là số hoàn hảo</td>
+        </tr>
+        <tr>
+            <td>12</td>
+            <td>Không phải số hoàn hảo</td>
+        </tr>
+        <tr>
+            <td>496</td>
+            <td>Là số hoàn hảo</td>
+        </tr>
+    </table>
+
+    <p><strong>Gợi ý:</strong></p>
+    <ul>
+        <li>Duyệt i từ 1 đến n-1</li>
+        <li>Nếu n % i === 0 → cộng i vào tổng</li>
+        <li>Sau vòng lặp, nếu tổng == n → là số hoàn hảo</li>
+    </ul>
+</div>
+
+                </section>
+            </main>
+        </div>
+
+        <footer>
+            <p>Bài 3: Vòng lặp &copy; GV: Nguyễn Đình Mạnh</p>
+        </footer>
+    </div>
+
+    <script>
+        // ========== XỬ LÝ ĐIỀU HƯỚNG ==========
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.section');
+            
+            // Khởi tạo active cho section đầu tiên
+            document.querySelector('.nav-link.active').click();
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    // Xóa class active từ tất cả
+                    navLinks.forEach(item => item.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+                    
+                    // Thêm class active cho link được click
+                    this.classList.add('active');
+                    
+                    // Hiển thị section tương ứng với hiệu ứng mượt
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    targetSection.classList.add('active');
+                    
+                    // Scroll mượt đến section
+                    setTimeout(() => {
+                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
+                });
+            });
+        });
+
+        // ========== COPY CODE ==========
+        function copyCode(button) {
+            const codeBlock = button.parentElement.parentElement;
+            const text = codeBlock.innerText;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const originalHTML = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> Đã copy!';
+                button.style.background = '#10b981';
+                button.style.borderColor = '#10b981';
+                
+                setTimeout(() => {
+                    button.innerHTML = originalHTML;
+                    button.style.background = '';
+                    button.style.borderColor = '';
+                }, 2000);
+            });
+        }
+
+        // ========== VÒNG LẶP FOR ==========
+        function runForLoop() {
+            const start = parseInt(document.getElementById('forStart').value) || 1;
+            const end = parseInt(document.getElementById('forEnd').value) || 10;
+            const step = parseInt(document.getElementById('forStep').value) || 1;
+            
+            const result = document.getElementById('forLoopResult');
+            const output = document.getElementById('forLoopResultContent');
+            
+            result.classList.add('active');
+            
+            let outputText = `Vòng lặp for: từ ${start} đến ${end}, bước nhảy ${step}\n`;
+            outputText += "=".repeat(50) + "\n\n";
+            
+            let sum = 0;
+            for (let i = start; i <= end; i += step) {
+                outputText += `Lần lặp thứ ${i - start + 1}: i = ${i}\n`;
+                sum += i;
+            }
+            
+            outputText += "\n" + "=".repeat(50) + "\n";
+            outputText += `Tổng các số: ${sum}\n`;
+            outputText += `Số lần lặp: ${Math.floor((end - start) / step) + 1}`;
+            
+            output.textContent = outputText;
+            
+            // Tự động scroll đến kết quả
+            setTimeout(() => {
+                result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+
+        function resetForLoop() {
+            document.getElementById('forStart').value = 1;
+            document.getElementById('forEnd').value = 10;
+            document.getElementById('forStep').value = 1;
+            document.getElementById('forLoopResult').classList.remove('active');
+        }
+
+        // ========== VÒNG LẶP WHILE ==========
+        function runWhileLoop() {
+            const startValue = parseInt(document.getElementById('whileValue').value) || 0;
+            const condition = parseInt(document.getElementById('whileCondition').value) || 5;
+            
+            const result = document.getElementById('whileLoopResult');
+            const output = document.getElementById('whileLoopResultContent');
+            
+            result.classList.add('active');
+            
+            let outputText = `Vòng lặp while: i = ${startValue}, tiếp tục khi i < ${condition}\n`;
+            outputText += "=".repeat(50) + "\n\n";
+            
+            let i = startValue;
+            let count = 0;
+            
+            while (i < condition) {
+                outputText += `Lần lặp thứ ${++count}: i = ${i}\n`;
+                i++;
+            }
+            
+            outputText += "\n" + "=".repeat(50) + "\n";
+            outputText += `Kết thúc khi i = ${i} (${i} < ${condition} là ${i < condition ? 'ĐÚNG' : 'SAI'})\n`;
+            outputText += `Số lần lặp: ${count}`;
+            
+            output.textContent = outputText;
+            
+            setTimeout(() => {
+                result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+
+        function resetWhileLoop() {
+            document.getElementById('whileValue').value = 0;
+            document.getElementById('whileCondition').value = 5;
+            document.getElementById('whileLoopResult').classList.remove('active');
+        }
+
+        // ========== VÒNG LẶP DO-WHILE ==========
+        function runDoWhileLoop() {
+            const startValue = parseInt(document.getElementById('doWhileValue').value) || 10;
+            const condition = parseInt(document.getElementById('doWhileCondition').value) || 5;
+            
+            const result = document.getElementById('doWhileLoopResult');
+            const output = document.getElementById('doWhileLoopResultContent');
+            
+            result.classList.add('active');
+            
+            let outputText = `Vòng lặp do-while: i = ${startValue}, tiếp tục khi i > ${condition}\n`;
+            outputText += "=".repeat(50) + "\n\n";
+            
+            let i = startValue;
+            let count = 0;
+            
+            do {
+                outputText += `Lần lặp thứ ${++count}: i = ${i}\n`;
+                i--;
+            } while (i > condition);
+            
+            outputText += "\n" + "=".repeat(50) + "\n";
+            outputText += `Kết thúc khi i = ${i} (${i} > ${condition} là ${i > condition ? 'ĐÚNG' : 'SAI'})\n`;
+            outputText += `Số lần lặp: ${count}`;
+            
+            output.textContent = outputText;
+            
+            setTimeout(() => {
+                result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+
+        function resetDoWhileLoop() {
+            document.getElementById('doWhileValue').value = 10;
+            document.getElementById('doWhileCondition').value = 5;
+            document.getElementById('doWhileLoopResult').classList.remove('active');
+        }
+
+        // ========== BÀI TẬP DEMO ==========
+        function runDemoExercise() {
+            const exercise = document.getElementById('demoExercise').value;
+            const input = parseInt(document.getElementById('demoInput').value) || 5;
+            
+            const result = document.getElementById('demoResult');
+            const output = document.getElementById('demoResultContent');
+            
+            result.classList.add('active');
+            
+            let outputText = "";
+            
+            switch(exercise) {
+                case "1": // Bài 1: Tính tổng
+                    outputText = `Bài 1: Tính tổng từ 1 đến ${input}\n`;
+                    outputText += "=".repeat(50) + "\n\n";
+                    
+                    let sum = 0;
+                    for (let i = 1; i <= input; i++) {
+                        sum += i;
+                        outputText += `i = ${i}, tổng tạm thời = ${sum}\n`;
+                    }
+                    
+                    outputText += "\n" + "=".repeat(50) + "\n";
+                    outputText += `Kết quả: Tổng từ 1 đến ${input} = ${sum}`;
+                    break;
+                    
+                case "2": // Bài 2: Bảng cửu chương
+                    outputText = `Bài 2: Bảng cửu chương của ${input}\n`;
+                    outputText += "=".repeat(50) + "\n\n";
+                    
+                    for (let i = 1; i <= 10; i++) {
+                        outputText += `${input} × ${i} = ${input * i}\n`;
+                    }
+                    break;
+                    
+                case "3": // Bài 3: Số nguyên tố
+                    outputText = `Bài 3: Kiểm tra số ${input} có phải số nguyên tố không?\n`;
+                    outputText += "=".repeat(50) + "\n\n";
+                    
+                    let isPrime = true;
+                    
+                    if (input < 2) {
+                        isPrime = false;
+                    } else {
+                        outputText += `Kiểm tra các ước từ 2 đến ${Math.floor(Math.sqrt(input))}:\n`;
+                        for (let i = 2; i <= Math.sqrt(input); i++) {
+                            if (input % i === 0) {
+                                outputText += `  ${input} chia hết cho ${i} → KHÔNG phải số nguyên tố\n`;
+                                isPrime = false;
+                                break;
+                            } else {
+                                outputText += `  ${input} không chia hết cho ${i}\n`;
+                            }
+                        }
+                    }
+                    
+                    outputText += "\n" + "=".repeat(50) + "\n";
+                    outputText += `Kết luận: ${input} ${isPrime ? "LÀ" : "KHÔNG PHẢI"} số nguyên tố`;
+                    break;
+            }
+            
+            output.textContent = outputText;
+            
+            setTimeout(() => {
+                result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+
+        function resetDemoExercise() {
+            document.getElementById('demoInput').value = 5;
+            document.getElementById('demoResult').classList.remove('active');
+        }
+
+        // ========== BÀI TẬP VỀ NHÀ ==========
+        function checkHomework() {
+            const exercise = document.getElementById('homeworkNumber').value;
+            const input = document.getElementById('homeworkInput').value;
+            
+            const result = document.getElementById('homeworkResult');
+            const output = document.getElementById('homeworkResultContent');
+            
+            result.classList.add('active');
+            
+            let outputText = "";
+            let n = parseInt(input);
+            
+            switch(exercise) {
+                case "1": // In số đảo ngược
+                    let original = n;
+                    let reversed = 0;
+                    let steps = "";
+                    
+                    while (n > 0) {
+                        let digit = n % 10;
+                        reversed = reversed * 10 + digit;
+                        steps += `  Lấy ${digit}, số đảo ngược tạm thời: ${reversed}\n`;
+                        n = Math.floor(n / 10);
+                    }
+                    
+                    outputText = `Bài 1: In số đảo ngược của ${original}\n`;
+                    outputText += "=".repeat(50) + "\n\n";
+                    outputText += steps;
+                    outputText += "\n" + "=".repeat(50) + "\n";
+                    outputText += `Số đảo ngược của ${original} là: ${reversed}`;
+                    break;
+                    
+                case "2": // Tổng số lẻ
+                    outputText = `Bài 2: Tính tổng các số lẻ từ 1 đến ${n}\n`;
+                    outputText += "=".repeat(50) + "\n\n";
+                    
+                    let sumOdd = 0;
+                    let oddNumbers = [];
+                    
+                    for (let i = 1; i <= n; i++) {
+                        if (i % 2 !== 0) {
+                            sumOdd += i;
+                            oddNumbers.push(i);
+                        }
+                    }
+                    
+                    outputText += `Các số lẻ từ 1 đến ${n}: ${oddNumbers.join(', ')}\n\n`;
+                    outputText += `Tổng: ${oddNumbers.join(' + ')} = ${sumOdd}`;
+                    break;
+                    
+                case "3": // Giai thừa
+                    outputText = `Bài 3: Tính ${n}!\n`;
+                    outputText += "=".repeat(50) + "\n\n";
+                    
+                    let factorial = 1;
+                    let factorialSteps = [];
+                    
+                    for (let i = 1; i <= n; i++) {
+                        factorial *= i;
+                        factorialSteps.push(i);
+                    }
+                    
+                    outputText += `${n}! = ${factorialSteps.join(' × ')} = ${factorial}`;
+                    break;
+                    
+                case "4": // Đếm chia hết cho 3
+                    outputText = `Bài 4: Đếm số chia hết cho 3 từ 1 đến ${n}\n`;
+                    outputText += "=".repeat(50) + "\n\n";
+                    
+                    let countDiv3 = 0;
+                    let div3Numbers = [];
+                    
+                    for (let i = 1; i <= n; i++) {
+                        if (i % 3 === 0) {
+                            countDiv3++;
+                            div3Numbers.push(i);
+                        }
+                    }
+                    
+                    outputText += `Các số chia hết cho 3: ${div3Numbers.join(', ')}\n\n`;
+                    outputText += `Có ${countDiv3} số chia hết cho 3 từ 1 đến ${n}`;
+                    break;
+                    
+                case "5": // Chữ số lớn nhất
+                    outputText = `Bài 5: Tìm chữ số lớn nhất trong ${n}\n`;
+                    outputText += "=".repeat(50) + "\n\n";
+                    
+                    let temp = n;
+                    let maxDigit = 0;
+                    let digitCount = 0;
+                    let digitSteps = "";
+                    
+                    while (temp > 0) {
+                        let digit = temp % 10;
+                        digitSteps += `  Chữ số: ${digit}, Max hiện tại: ${maxDigit}\n`;
+                        
+                        if (digit > maxDigit) {
+                            maxDigit = digit;
+                            digitCount = 1;
+                            digitSteps += `    → Cập nhật maxDigit = ${digit}, reset count = 1\n`;
+                        } else if (digit === maxDigit) {
+                            digitCount++;
+                            digitSteps += `    → Tăng count lên ${digitCount}\n`;
+                        }
+                        
+                        temp = Math.floor(temp / 10);
+                    }
+                    
+                    outputText += digitSteps + "\n";
+                    outputText += "=".repeat(50) + "\n";
+                    outputText += `Chữ số lớn nhất: ${maxDigit}, xuất hiện ${digitCount} lần`;
+                    break;
+                    
+                case "6": // Số hoàn hảo
+                    outputText = `Bài 6: Kiểm tra ${n} có phải số hoàn hảo?\n`;
+                    outputText += "=".repeat(50) + "\n\n";
+                    
+                    let sumDivisors = 0;
+                    let divisors = [];
+                    
+                    for (let i = 1; i <= n / 2; i++) {
+                        if (n % i === 0) {
+                            sumDivisors += i;
+                            divisors.push(i);
+                        }
+                    }
+                    
+                    outputText += `Các ước số của ${n} (không tính chính nó): ${divisors.join(', ')}\n`;
+                    outputText += `Tổng các ước: ${divisors.join(' + ')} = ${sumDivisors}\n\n`;
+                    outputText += "=".repeat(50) + "\n";
+                    outputText += `Kết luận: ${n} ${sumDivisors === n ? "LÀ" : "KHÔNG PHẢI"} số hoàn hảo`;
+                    break;
+            }
+            
+            output.textContent = outputText;
+            
+            setTimeout(() => {
+                result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+
+        function showHomeworkSolution() {
+            const exercise = document.getElementById('homeworkNumber').value;
+            
+            const result = document.getElementById('homeworkResult');
+            const output = document.getElementById('homeworkResultContent');
+            
+            result.classList.add('active');
+            
+            let outputText = "";
+            
+            switch(exercise) {
+                case "1":
+                    outputText = `// Bài 1: In số đảo ngược
+let n = 123;
+let reversed = 0;
+
+while (n > 0) {
+    let digit = n % 10;          // Lấy chữ số cuối
+    reversed = reversed * 10 + digit; // Thêm vào số đảo ngược
+    n = Math.floor(n / 10);      // Bỏ chữ số cuối
+}
+
+console.log(reversed); // Output: 321`;
+                    break;
+                    
+                case "2":
+                    outputText = `// Bài 2: Tính tổng số lẻ
+let n = 10;
+let sum = 0;
+
+for (let i = 1; i <= n; i++) {
+    if (i % 2 !== 0) {  // Kiểm tra số lẻ
+        sum += i;
+    }
+}
+
+console.log("Tổng số lẻ:", sum); // Output: 25`;
+                    break;
+                    
+                case "3":
+                    outputText = `// Bài 3: Tính giai thừa
+let n = 5;
+let factorial = 1;
+
+for (let i = 1; i <= n; i++) {
+    factorial *= i;  // factorial = factorial * i
+}
+
+console.log(n + "! =", factorial); // Output: 120`;
+                    break;
+                    
+                case "4":
+                    outputText = `// Bài 4: Đếm số chia hết cho 3
+let n = 10;
+let count = 0;
+
+for (let i = 1; i <= n; i++) {
+    if (i % 3 === 0) {  // Kiểm tra chia hết cho 3
+        count++;
+    }
+}
+
+console.log("Có", count, "số chia hết cho 3"); // Output: 3`;
+                    break;
+                    
+                case "5":
+                    outputText = `// Bài 5: Tìm chữ số lớn nhất
+let n = 987439389;
+let maxDigit = 0;
+let maxCount = 0;
+
+while (n > 0) {
+    let digit = n % 10;
+    
+    if (digit > maxDigit) {
+        maxDigit = digit;
+        maxCount = 1;
+    } else if (digit === maxDigit) {
+        maxCount++;
+    }
+    
+    n = Math.floor(n / 10);
+}
+
+console.log("Chữ số lớn nhất:", maxDigit);
+console.log("Số lần xuất hiện:", maxCount);`;
+                    break;
+                    
+                case "6":
+                    outputText = `// Bài 6: Kiểm tra số hoàn hảo
+let n = 28;
+let sum = 0;
+
+for (let i = 1; i <= n / 2; i++) {
+    if (n % i === 0) {
+        sum += i;
+    }
+}
+
+if (sum === n) {
+    console.log(n, "là số hoàn hảo");
+} else {
+    console.log(n, "không phải số hoàn hảo");
+}`;
+                    break;
+            }
+            
+            output.textContent = outputText;
+            
+            setTimeout(() => {
+                result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+
+        // ========== KHU VỰC THỰC HÀNH ==========
+        function runPracticeCode() {
+            const code = document.getElementById('practiceCode').value;
+            const result = document.getElementById('practiceResult');
+            const output = document.getElementById('practiceResultContent');
+            
+            result.classList.add('active');
+            
+            // Lưu lại console.log gốc
+            const originalLog = console.log;
+            let logOutput = "";
+            
+            // Ghi đè console.log để bắt output
+            console.log = function(...args) {
+                logOutput += args.join(' ') + '\n';
+                originalLog.apply(console, args);
+            };
+            
+            try {
+                // Thực thi code
+                eval(code);
+                output.textContent = logOutput || "Code chạy thành công nhưng không có output (không có console.log)";
+            } catch (error) {
+                output.textContent = `Lỗi: ${error.message}\n\nStack trace:\n${error.stack}`;
+            } finally {
+                // Khôi phục console.log gốc
+                console.log = originalLog;
+            }
+            
+            setTimeout(() => {
+                result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+
+        function clearPracticeCode() {
+            document.getElementById('practiceCode').value = "";
+            document.getElementById('practiceResult').classList.remove('active');
+        }
+
+        function loadExampleCode() {
+            const examples = [
+                `// Ví dụ 1: Tính tổng bình phương từ 1 đến n
+let n = 10;
+let sumSquares = 0;
+
+for (let i = 1; i <= n; i++) {
+    sumSquares += i * i;
+}
+
+console.log("Tổng bình phương từ 1 đến", n, "là:", sumSquares);`,
+
+                `// Ví dụ 2: Tìm ước số chung lớn nhất (GCD)
+let a = 56;
+let b = 98;
+
+while (b !== 0) {
+    let temp = b;
+    b = a % b;
+    a = temp;
+}
+
+console.log("Ước số chung lớn nhất là:", a);`,
+
+                `// Ví dụ 3: In hình tam giác số
+let rows = 5;
+
+for (let i = 1; i <= rows; i++) {
+    let line = "";
+    for (let j = 1; j <= i; j++) {
+        line += j + " ";
+    }
+    console.log(line);
+}`,
+
+                `// Ví dụ 4: Kiểm tra số Armstrong
+let num = 153;
+let temp = num;
+let sum = 0;
+let digits = num.toString().length;
+
+while (temp > 0) {
+    let digit = temp % 10;
+    sum += Math.pow(digit, digits);
+    temp = Math.floor(temp / 10);
+}
+
+if (sum === num) {
+    console.log(num, "là số Armstrong");
+} else {
+    console.log(num, "không phải số Armstrong");
+}`
+            ];
+            
+            const randomExample = examples[Math.floor(Math.random() * examples.length)];
+            document.getElementById('practiceCode').value = randomExample;
+        }
+
+        // ========== PHÂN TRANG ==========
+        const sections = ['intro', 'for-loop', 'while-loop', 'do-while', 'demo', 'homework', 'practice'];
+        let currentSection = 0;
+
+        function nextSection() {
+            if (currentSection < sections.length - 1) {
+                currentSection++;
+                document.querySelector(`[href="#${sections[currentSection]}"]`).click();
+            }
+        }
+
+        function prevSection() {
+            if (currentSection > 0) {
+                currentSection--;
+                document.querySelector(`[href="#${sections[currentSection]}"]`).click();
+            }
+        }
+
+        // Cập nhật currentSection khi click navigation
+        document.querySelectorAll('.nav-link').forEach((link, index) => {
+            link.addEventListener('click', () => {
+                currentSection = index;
+            });
+        });
+                // ========== BREAK & CONTINUE ==========
+        function runBreakContinue() {
+            const type = document.getElementById('bcType').value;
+            const value = parseInt(document.getElementById('bcValue').value) || 5;
+            const loopType = document.getElementById('bcLoopType').value;
+
+            const result = document.getElementById('breakContinueResult');
+            const output = document.getElementById('breakContinueResultContent');
+
+            result.classList.add('active');
+
+            let outputText = `Thử nghiệm ${type.toUpperCase()} trong vòng lặp ${loopType}\n`;
+            outputText += `Áp dụng ${type} khi i = ${value}\n`;
+            outputText += "=".repeat(50) + "\n\n";
+
+            switch (loopType) {
+                case "for":
+                    outputText += "Sử dụng vòng lặp for:\n";
+                    for (let i = 1; i <= 10; i++) {
+                        if (type === "break" && i === value) {
+                            outputText += `  i = ${i} → GẶP ${type.toUpperCase()} → THOÁT VÒNG LẶP\n`;
+                            break;
+                        }
+                        if (type === "continue" && i === value) {
+                            outputText += `  i = ${i} → GẶP ${type.toUpperCase()} → BỎ QUA\n`;
+                            continue;
+                        }
+                        outputText += `  i = ${i}\n`;
+                    }
+                    break;
+
+                case "while":
+                    outputText += "Sử dụng vòng lặp while:\n";
+                    let i = 1;
+                    while (i <= 10) {
+                        if (type === "break" && i === value) {
+                            outputText += `  i = ${i} → GẶP ${type.toUpperCase()} → THOÁT VÒNG LẶP\n`;
+                            break;
+                        }
+                        if (type === "continue" && i === value) {
+                            outputText += `  i = ${i} → GẶP ${type.toUpperCase()} → BỎ QUA\n`;
+                            i++;
+                            continue;
+                        }
+                        outputText += `  i = ${i}\n`;
+                        i++;
+                    }
+                    break;
+
+                case "do-while":
+                    outputText += "Sử dụng vòng lặp do-while:\n";
+                    let j = 1;
+                    do {
+                        if (type === "break" && j === value) {
+                            outputText += `  j = ${j} → GẶP ${type.toUpperCase()} → THOÁT VÒNG LẶP\n`;
+                            break;
+                        }
+                        if (type === "continue" && j === value) {
+                            outputText += `  j = ${j} → GẶP ${type.toUpperCase()} → BỎ QUA\n`;
+                            j++;
+                            continue;
+                        }
+                        outputText += `  j = ${j}\n`;
+                        j++;
+                    } while (j <= 10);
+                    break;
+            }
+
+            outputText += "\n" + "=".repeat(50) + "\n";
+            outputText += `Kết thúc thử nghiệm. ${type === "break" ? "Vòng lặp đã dừng sớm" : "Một số vòng lặp đã bị bỏ qua"}.`;
+
+            output.textContent = outputText;
+
+            setTimeout(() => {
+                result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+
+        function resetBreakContinue() {
+            document.getElementById('bcValue').value = 5;
+            document.getElementById('breakContinueResult').classList.remove('active');
+        }
+    </script>
+</body>
+
+</html>
