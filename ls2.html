@@ -344,7 +344,104 @@
         }
         #examplesHome>div{
             border-bottom: 2px solid green;
-        }
+        }/* CSS BỔ SUNG - DÙNG BỘ CHỌN RIÊNG CHO NỘI DUNG MỚI */
+
+/* Container chính của các bài tập mới */
+section#examplesHome.section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Định dạng chung cho các bài tập mới */
+section#examplesHome.section div[id^="bai"] {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(102, 126, 234, 0.15);
+}
+
+section#examplesHome.section div[id^="bai"]:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+    border-color: rgba(102, 126, 234, 0.3);
+}
+
+/* Tiêu đề h2 trong các bài mới */
+section#examplesHome.section div[id^="bai"] h2 {
+    color: #5a67d8;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid;
+    border-image: linear-gradient(90deg, #667eea, #764ba2) 1;
+    border-bottom-style: solid;
+    display: inline-block;
+}
+
+/* Tiêu đề h3 */
+section#examplesHome.section div[id^="bai"] h3 {
+    color: #764ba2;
+    font-size: 1.3rem;
+    margin: 20px 0 12px 0;
+    font-weight: 600;
+}
+
+/* Định dạng thẻ pre (code block) */
+section#examplesHome.section div[id^="bai"] pre {
+    background: #1e1e2e;
+    color: #cbd5e6;
+    padding: 16px;
+    border-radius: 12px;
+    font-family: 'Courier New', 'Fira Code', monospace;
+    font-size: 14px;
+    overflow-x: auto;
+    margin: 15px 0;
+    border-left: 4px solid #667eea;
+    line-height: 1.5;
+}
+
+/* Danh sách có thứ tự */
+section#examplesHome.section div[id^="bai"] ol {
+    margin: 15px 0;
+    padding-left: 28px;
+}
+
+section#examplesHome.section div[id^="bai"] li {
+    margin: 10px 0;
+    line-height: 1.65;
+    color: #2d3748;
+    font-size: 1rem;
+}
+
+/* Đường kẻ ngang */
+section#examplesHome.section hr {
+    margin: 0 0 30px 0;
+    border: none;
+    height: 2px;
+    background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+    opacity: 0.4;
+    border-radius: 2px;
+}
+
+/* Responsive cho mobile */
+@media (max-width: 768px) {
+    section#examplesHome.section div[id^="bai"] {
+        padding: 18px;
+    }
+    
+    section#examplesHome.section div[id^="bai"] h2 {
+        font-size: 1.4rem;
+    }
+    
+    section#examplesHome.section pre {
+        font-size: 11px;
+        padding: 12px;
+    }
+}
         @media (max-width: 768px) {
             .content-wrapper {
                 grid-template-columns: 1fr;
@@ -1987,218 +2084,116 @@
                         </ul>
                     </div>
                 </section>
-                <section id="examplesHome" class="section">
-                    <!-- BÀI TẬP 1: Diện tích, thể tích -->
-                    <div id="bai1">
-                        <h2>Bài tập 1: Diện tích, thể tích</h2>
-                        <p>Viết chương trình nhập từ bàn phím 1 số nguyên dương từ bàn phím và in ra kết quả tính diện
-                            tích, thể tích của hình cầu đó:</p>
-                        <p>Hướng dẫn: S = 4πR² và V = 4/3(πR³)</p>
-                    </div>
+           <section id="examplesHome" class="section">
+    <!-- BÀI TẬP 1: Chuỗi hỗn độn -->
+    <div id="bai1">
+        <h2>Bài tập 1: Chuỗi hỗn độn</h2>
+        <p>Cho chuỗi sau:</p>
+        <pre>let messy = "  ...JavaScript is Fun!!!   ";</pre>
+        <p>Thực hiện lần lượt các yêu cầu sau (mỗi yêu cầu dựa trên kết quả của yêu cầu trước, trừ khi có chỉ dẫn khác):</p>
+        <ol>
+            <li>Loại bỏ khoảng trắng ở đầu và cuối chuỗi. Lưu vào biến step1.</li>
+            <li>Từ step1, thay thế từ "Fun" bằng từ "Awesome". Lưu vào step2.</li>
+            <li>Từ step2, chuyển toàn bộ thành chữ in hoa. Lưu vào step3.</li>
+            <li>Từ step3, lấy 3 ký tự đầu tiên. Lưu vào step4.</li>
+            <li>Từ step3 (không phải từ step4), lấy ký tự cuối cùng. Lưu vào step5.</li>
+            <li>Từ step3, kiểm tra xem có chứa từ "AWESOME" hay không. Lưu kết quả (true/false) vào step6.</li>
+            <li>Từ step3, tìm vị trí đầu tiên của chữ "J". Lưu vào step7.</li>
+            <li>Từ step3, tìm vị trí cuối cùng của chữ "S". Lưu vào step8.</li>
+            <li>Kiểm tra xem step3 có kết thúc bằng dấu "!" hay không. Lưu vào step9.</li>
+            <li>Từ step2 (bản chưa in hoa), lấy 3 ký tự cuối cùng. Lưu vào step10.</li>
+        </ol>
+    </div>
 
-                    <hr>
+    <hr>
 
-                    <!-- BÀI TẬP 2: Kiểm tra chẵn lẻ -->
-                    <div id="bai2">
-                        <h2>Bài tập 2: Kiểm tra chẵn lẻ</h2>
-                        <p>Cho một số nguyên dương N không quá 5 chữ số, hãy kiểm tra và in ra số đó chẵn hay lẻ. Nếu
-                            chẵn ghi ra chữ CHAN, nếu ngược lại ghi ra chữ LE.</p>
+    <!-- BÀI TẬP 2: Số lộn xộn -->
+    <div id="bai2">
+        <h2>Bài tập 2: Số lộn xộn</h2>
+        <p>Cho:</p>
+        <pre>
+let price = "  99.99  "
+let tax = "  0.1  "
+let discount = "  5  "
+        </pre>
+        <ol>
+            <li>Chuyển price, tax, discount thành số (loại bỏ khoảng trắng trước khi chuyển nếu cần). Lưu thành priceNum, taxNum, discountNum.</li>
+            <li>Tính: priceNum * (1 + taxNum) sau đó trừ đi discountNum. Lưu kết quả vào total.</li>
+            <li>Làm tròn total đến 2 chữ số thập phân. Lưu vào totalRounded.</li>
+            <li>Chuyển totalRounded thành chuỗi và thêm ký tự "$" vào đầu. Lưu vào totalStr.</li>
+            <li>Kiểm tra xem totalStr có bắt đầu bằng "$" hay không. Lưu vào startsWithDollar.</li>
+            <li>Tìm vị trí của dấu chấm (.) trong totalStr. Lưu vào dotPosition.</li>
+        </ol>
+    </div>
 
-                        <h3>Input</h3>
-                        <p>Chỉ có một dòng ghi số N</p>
+    <hr>
 
-                        <h3>Output</h3>
-                        <p>Ghi ra kết quả trên một dòng.</p>
+    <!-- BÀI TẬP 3: Kiểm tra và xử lý -->
+    <div id="bai3">
+        <h2>Bài tập 3: Kiểm tra và xử lý</h2>
+        <p>Cho:</p>
+        <pre>
+let input1 = "  hello  "
+let input2 = "  HELLO  "
+let input3 = "  hello world  "
+        </pre>
+        <ol>
+            <li>Kiểm tra xem input1 sau khi bỏ khoảng trắng hai đầu có giống input2 sau khi bỏ khoảng trắng hai đầu hay không (phân biệt hoa thường). Lưu kết quả vào isSame1.</li>
+            <li>Kiểm tra xem input1 sau khi bỏ khoảng trắng hai đầu và chuyển thành chữ in hoa có giống input2 sau khi bỏ khoảng trắng hai đầu hay không. Lưu vào isSame2.</li>
+            <li>Kiểm tra xem input3 sau khi bỏ khoảng trắng hai đầu có chứa chữ "world" hay không. Lưu vào hasWorld.</li>
+            <li>Từ input3, bỏ khoảng trắng hai đầu, sau đó thay thế "world" bằng "JavaScript". Lưu vào replaced.</li>
+            <li>Từ replaced, lấy 3 ký tự đầu tiên và 3 ký tự cuối cùng, sau đó nối chúng lại với nhau (dùng toán tử +). Lưu vào combined.</li>
+            <li>Kiểm tra xem combined có độ dài bằng 6 hay không. Lưu vào isLength6.</li>
+        </ol>
+    </div>
 
-                        <table border="1" cellpadding="10" cellspacing="0">
-                            <tr>
-                                <th>Input</th>
-                                <th>Output</th>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>CHAN</td>
-                            </tr>
-                            <tr>
-                                <td>9999</td>
-                                <td>LE</td>
-                            </tr>
-                        </table>
-                    </div>
+    <hr>
 
-                    <hr>
+    <!-- BÀI TẬP 4: Boolean và so sánh -->
+    <div id="bai4">
+        <h2>Bài tập 4: Boolean và so sánh</h2>
+        <p>Cho:</p>
+        <pre>
+let a = "  123  "
+let b = "  456  "
+let c = "  abc  "
+let d = "  0  "
+        </pre>
+        <ol>
+            <li>Chuyển a, b, c, d thành số (sau khi bỏ khoảng trắng). Lần lượt lưu vào numA, numB, numC, numD.</li>
+            <li>Kiểm tra xem numA có lớn hơn numB hay không. Lưu vào greaterAB.</li>
+            <li>Kiểm tra xem numA cộng numB có bằng 579 hay không. Lưu vào sum579.</li>
+            <li>Kiểm tra xem numD có bằng 0 hay không. Lưu vào isZero.</li>
+            <li>Kiểm tra xem numC có phải là NaN hay không (gợi ý: dùng Number.isNaN() hoặc so sánh với chính nó). Lưu vào isNaNC.</li>
+            <li>Kiểm tra xem numA có bằng "123" (so sánh không nghiêm ngặt) hay không. Lưu vào looseEqual.</li>
+            <li>Kiểm tra xem numA có bằng "123" (so sánh nghiêm ngặt) hay không. Lưu vào strictEqual.</li>
+        </ol>
+    </div>
 
-                    <!-- BÀI TẬP 3: Tìm thứ trong tuần -->
-                    <div id="bai3">
-                        <h2>Bài tập 3: Tìm thứ trong tuần dựa vào ngày tháng năm</h2>
-                        <p>Công thức:</p>
-                        <p>n = (ngày + 2*tháng + (3*(tháng+1)) div 5 + năm + (năm div 4)) mod 7</p>
-                        <p>Trong đó, div là phép chia lấy số nguyên và mod là phép chia lấy số dư.</p>
-                        <p>Nếu : n = 0 → Chủ Nhật, n = 1 → Thứ 2, n = 2 → Thứ 3…</p>
-                        <p>Hãy viết viết chương trình cho phép người dùng nhập vào 3 giá trị ngày tháng năm bằng hàm
-                            prompt, sau đó in ra màn hình số thứ tự ngày trong tuần đó.</p>
+    <hr>
 
-                        <table border="1" cellpadding="10" cellspacing="0">
-                            <tr>
-                                <th colspan="3">Input</th>
-                                <th>Output (n)</th>
-                            </tr>
-                            <tr>
-                                <th>Day</th>
-                                <th>Month</th>
-                                <th>Year</th>
-                                <th></th>
-                            </tr>
-                            <tr>
-                                <td>13</td>
-                                <td>6</td>
-                                <td>2023</td>
-                                <td>2</td>
-                            </tr>
-                            <tr>
-                                <td>12</td>
-                                <td>10</td>
-                                <td>2023</td>
-                                <td>4</td>
-                            </tr>
-                        </table>
-                    </div>
-
-                    <hr>
-
-                    <!-- BÀI TẬP 4: Số phát lộc -->
-                    <div id="bai4">
-                        <h2>Bài tập 4: Số phát lộc</h2>
-                        <p>Một số kết thúc bởi hai chữ số 86 được gọi là số phát lộc. Cho một số nguyên dương không quá
-                            500 chữ số, hãy kiểm tra số đó có phải số phát lộc hay không.</p>
-
-                        <h3>Input</h3>
-                        <p>Mỗi bộ test ghi số nguyên dương cần kiểm tra (không quá 500 chữ số)</p>
-
-                        <h3>Output</h3>
-                        <p>Ghi ra kết quả kiểm tra tương ứng (YES hoặc NO)</p>
-
-                        <table border="1" cellpadding="10" cellspacing="0">
-                            <tr>
-                                <th>Input</th>
-                                <th>Output</th>
-                            </tr>
-                            <tr>
-                                <td>1539786</td>
-                                <td>YES</td>
-                            </tr>
-                            <tr>
-                                <td>1234789</td>
-                                <td>NO</td>
-                            </tr>
-                            <tr>
-                                <td>8686</td>
-                                <td>YES</td>
-                            </tr>
-                        </table>
-                    </div>
-
-                    <hr>
-
-                    <!-- BÀI TẬP 5: Phép cộng -->
-                    <div id="bai5">
-                        <h2>Bài tập 5: Phép cộng</h2>
-                        <p>Cho một phép toán có dạng a + b = c với a,b,c chỉ là các số nguyên dương có một chữ số. Hãy
-                            kiểm tra xem phép toán đó có đúng hay không.</p>
-
-                        <h3>Input</h3>
-                        <p>Chỉ có một dòng ghi ra phép toán (gồm đúng 9 ký tự)</p>
-
-                        <h3>Output</h3>
-                        <p>Ghi ra YES nếu phép toán đó đúng. Ghi ra NO nếu sai.</p>
-
-                        <table border="1" cellpadding="10" cellspacing="0">
-                            <tr>
-                                <th colspan="2">Sample test</th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <strong>Test 1</strong><br>
-                                    Input: 1 + 2 = 3<br>
-                                    Output: YES
-                                </td>
-                                <td>
-                                    <strong>Test 2</strong><br>
-                                    Input: 2 + 2 = 5<br>
-                                    Output: NO
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-
-                    <hr>
-
-                    <!-- BÀI TẬP NÂNG CAO - Bài 6: Đầu cuối -->
-                    <div id="bai6">
-                        <h2>Bài tập 6: Đầu cuối</h2>
-                        <p>Viết chương trình kiểm tra xem số nguyên dương N có thỏa mãn tính chất: nếu ta lấy hai chữ số
-                            đầu và hai chữ số cuối của nó thì sẽ tạo ra số có hai chữ số giống nhau hay không?</p>
-
-                        <h3>Input</h3>
-                        <p>Mỗi test là 1 số nguyên dương N có ít nhất 4 chữ số, nhưng không quá 18 chữ số.</p>
-
-                        <h3>Output</h3>
-                        <p>Ghi ra YES hoặc NO</p>
-
-                        <table border="1" cellpadding="10" cellspacing="0">
-                            <tr>
-                                <th>Input</th>
-                                <th>Output</th>
-                            </tr>
-                            <tr>
-                                <td>12321</td>
-                                <td>NO</td>
-                            </tr>
-                            <tr>
-                                <td>1234512</td>
-                                <td>YES</td>
-                            </tr>
-                            <tr>
-                                <td>10233211111</td>
-                                <td>NO</td>
-                            </tr>
-                        </table>
-                    </div>
-
-                    <hr>
-
-                    <!-- BÀI TẬP NÂNG CAO - Bài 7: Nhận biết số bí mật -->
-                    <div id="bai7">
-                        <h2>Bài 7: Nhận biết số bí mật</h2>
-                        <p>Viết chương trình kiểm tra xem số nguyên dương N có thỏa mãn tính chất sau không: chữ số đầu
-                            tiên cộng với chữ số cuối cùng bằng chữ số thứ hai cộng với chữ số kế cuối.</p>
-
-                        <h3>Input</h3>
-                        <p>Mỗi test là một số nguyên dương N có ít nhất 4 chữ số và không quá 9 chữ số.</p>
-
-                        <h3>Output</h3>
-                        <p>Ghi ra YES nếu tính chất trên thỏa mãn, ngược lại ghi ra NO.</p>
-
-                        <table border="1" cellpadding="10" cellspacing="0">
-                            <tr>
-                                <th>Input</th>
-                                <th>Output</th>
-                            </tr>
-                            <tr>
-                                <td>1234</td>
-                                <td>YES</td>
-                            </tr>
-                            <tr>
-                                <td>5675</td>
-                                <td>NO</td>
-                            </tr>
-                            <tr>
-                                <td>8929</td>
-                                <td>NO</td>
-                            </tr>
-                        </table>
-                    </div>
-                </section>
+    <!-- BÀI TẬP 5: Tổng hợp -->
+    <div id="bai5">
+        <h2>Bài tập 5: Tổng hợp</h2>
+        <p>Cho:</p>
+        <pre>
+let raw = "  ---JavaScript---  "
+let version = "  ES6  "
+        </pre>
+        <ol>
+            <li>Loại bỏ khoảng trắng hai đầu của raw. Lưu vào clean.</li>
+            <li>Thay thế tất cả dấu "-" trong clean bằng "!". Lưu vào replacedDashes.</li>
+            <li>Chuyển replacedDashes thành chữ thường. Lưu vào lowered.</li>
+            <li>Lấy 6 ký tự đầu tiên của lowered. Lưu vào firstSix.</li>
+            <li>Lấy 4 ký tự cuối cùng của lowered. Lưu vào lastFour.</li>
+            <li>Nối firstSix với "***" với lastFour. Lưu vào final.</li>
+            <li>Kiểm tra xem final có chứa chữ "script" hay không. Lưu vào hasScript.</li>
+            <li>Tìm vị trí đầu tiên của chữ "!" trong replacedDashes. Lưu vào exclamationPos.</li>
+            <li>Kiểm tra xem final có bắt đầu bằng chữ "j" hay không. Lưu vào startsWithJ.</li>
+            <li>Kiểm tra xem version sau khi bỏ khoảng trắng có độ dài bằng 3 hay không. Lưu vào versionLength3.</li>
+        </ol>
+    </div>
+</section>
             </main>
         </div>
 
